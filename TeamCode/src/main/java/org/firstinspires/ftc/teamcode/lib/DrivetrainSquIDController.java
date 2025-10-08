@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.lib;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Transform2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.bylazar.configurables.annotations.Configurable;
 
-@Config
+@Configurable
+
 public class DrivetrainSquIDController {
     public static double looptimeAdjuster = 9;
 

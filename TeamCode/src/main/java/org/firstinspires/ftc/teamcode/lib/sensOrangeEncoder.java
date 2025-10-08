@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.lib;
 
 
 
+import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.ftclib.util.math.Rotation2d;
 
 public class sensOrangeEncoder {
 
@@ -14,10 +14,9 @@ public class sensOrangeEncoder {
     private double offset;
     private boolean inverted;
 
-    { 
-        // default to 360 degrees
-        maxAngle = 360;
+    private double lastVoltage = 0;
 
+    {
         // default to 0
         offset = 0;
 
@@ -25,7 +24,7 @@ public class sensOrangeEncoder {
         inverted = false;
     }
 
-    public AnalogEncoder(String key, HardwareMap hMap){
+    public sensOrangeEncoder(String key, HardwareMap hMap) {
         this.sensor = hMap.analogInput.get(key);
     }
 
@@ -44,13 +43,16 @@ public class sensOrangeEncoder {
      * @return Degrees
      */
     public double getDegrees(){
-        return AngleUnit.normalizeDegrees((inverted ? -1 : 1) * (sensor.getVoltage()-0.043)/3.1*360 + offset);
+        double voltage = sensor.getVoltage();
+
+        lastVoltage = voltage;
+        return AngleUnit.normalizeDegrees((inverted ? -1 : 1) * (voltage-0.043)/3.1*360 + offset);
     }
     /**
     * @return who would know
     */
     public double getRadians() {
-        return Math.toRadians(getAngle());
+        return Math.toRadians(getDegrees());
     }
     public Rotation2d getRotation2d() {
         return new Rotation2d(getRadians());
