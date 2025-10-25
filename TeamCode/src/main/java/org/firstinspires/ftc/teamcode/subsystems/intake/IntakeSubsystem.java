@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class IntakeSubsystem extends SubsystemBase {
     private CRServo intake;
-    public void init(HardwareMap hwMap) {
+    public IntakeSubsystem(HardwareMap hwMap) {
         intake = hwMap.get(CRServo.class, "intake");
     }
     public void takein(){

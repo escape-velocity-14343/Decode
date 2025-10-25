@@ -6,28 +6,25 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.subsystems.hood.HoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.transferArm.transferArmServo;
-import org.firstinspires.ftc.teamcode.subsystems.transferWheel.transferWheelServo;
+import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubsystem;
+
 
 @TeleOp(name = "TestShooter", group = "Linear OpMode")
 public class shooterTest extends LinearOpMode {
     private ShooterSubsystem shooter;
     private HoodSubsystem hood;
-    private transferArmServo transferArm;
-    private transferWheelServo transferWheel;
+    private TransferArmSubsystem transferArm;
+    private TransferWheelSubsystem transferWheel;
     private IntakeSubsystem intake;
 
     @Override
     public void runOpMode(){
         shooter = new ShooterSubsystem(hardwareMap);
         hood = new HoodSubsystem(hardwareMap);
-        transferArm = new transferArmServo();
-        transferWheel = new transferWheelServo();
-        intake = new IntakeSubsystem();
-
-        transferArm.init(hardwareMap);
-        transferWheel.init(hardwareMap);
-        intake.init(hardwareMap);
+        transferArm = new TransferArmSubsystem(hardwareMap);
+        transferWheel = new TransferWheelSubsystem(hardwareMap);
+        intake = new IntakeSubsystem(hardwareMap);
 
         waitForStart();
         intake.takein();
