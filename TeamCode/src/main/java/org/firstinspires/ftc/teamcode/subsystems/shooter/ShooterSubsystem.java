@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class shooterMotor  extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase {
     private DcMotor shooterMotorRight;
     private DcMotor shooterMotorLeft;
-    public void init(HardwareMap hwMap) {
+    public ShooterSubsystem(HardwareMap hwMap) {
         shooterMotorRight = hwMap.get(DcMotor.class, "shooterMotorRight");
         shooterMotorLeft = hwMap.get(DcMotor.class, "shooterMotorLeft");
         //reverse right motor
