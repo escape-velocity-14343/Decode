@@ -1,24 +1,25 @@
 package org.firstinspires.ftc.teamcode.subsystems.hood;
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class hoodServo {
+public class HoodSubsystem extends SubsystemBase {
     private Servo hood;
-    private ConstantsHood cnostats;
-    public void init(HardwareMap hwMap){
+    private ConstantsHood constants;
+    public HoodSubsystem (HardwareMap hwMap){
         hood = hwMap.get(Servo.class, "hood");
     }
     public void manual(Gamepad gamepad, Telemetry telemetry){
-        if (hood.getPosition() + gamepad.left_stick_y*0.3 < cnostats.max && hood.getPosition() + gamepad.left_stick_y*0.3 > cnostats.min) {
+        if (hood.getPosition() + gamepad.left_stick_y*0.3 < constants.max && hood.getPosition() + gamepad.left_stick_y*0.3 > constants.min) {
             hood.setPosition(hood.getPosition() + gamepad.left_stick_y * 0.3);
         } else if (hood.getPosition() + gamepad.left_stick_y*0.3 < 0.3) {
-            hood.setPosition(cnostats.min);
+            hood.setPosition(constants.min);
         } else {
-            hood.setPosition(cnostats.max);
+            hood.setPosition(constants.max);
         }
         telemetry.addData("current hood position is", hood.getPosition());
     }
