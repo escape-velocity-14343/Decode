@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.subsystems.transferWheel;
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class transferWheelServo {
+public class TransferWheelSubsystem extends SubsystemBase {
     private CRServo transferWheel;
-    public void init(HardwareMap hwMap){
+    public TransferWheelSubsystem(HardwareMap hwMap){
         transferWheel = hwMap.get(CRServo.class, "transferWheel");
     }
 

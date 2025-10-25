@@ -4,39 +4,44 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveFieldCentric;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.hood.HoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.transferArm.transferArmServo;
-import org.firstinspires.ftc.teamcode.subsystems.transferWheel.transferWheelServo;
+import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubsystem;
 
 @TeleOp (name = "TeleOp V1", group = "LinearOpMode")
 public class TeleOpV1 extends LinearOpMode {
     private MecanumDriveFieldCentric drive;
     private ShooterSubsystem shooter;
     private HoodSubsystem hood;
-    private transferArmServo transferArm;
-    private transferWheelServo transferWheel;
-    private IntakeSubsystem intake;
+    private TransferArmSubsystem transferArm;
+    private TransferWheelSubsystem transferWheel;
+    private IntakeSubsystem intakeWheel;
+    private SpindexerSubsystem spindexer;
+
+
 
     public void runOpMode(){
         drive = new MecanumDriveFieldCentric();
         shooter = new ShooterSubsystem(hardwareMap);
         hood = new HoodSubsystem(hardwareMap);
-        transferArm = new transferArmServo();
-        transferWheel = new transferWheelServo();
-        intake = new IntakeSubsystem();
+        transferArm = new TransferArmSubsystem(hardwareMap);
+        transferWheel = new TransferWheelSubsystem(hardwareMap);
+        intakeWheel = new IntakeSubsystem(hardwareMap);
+        spindexer = new SpindexerSubsystem(hardwareMap);
 
         drive.init(hardwareMap);
-        transferArm.init(hardwareMap);
-        transferWheel.init(hardwareMap);
-        intake.init(hardwareMap);
 
         waitForStart();
-        intake.takein();
+        intakeWheel.on();
         transferWheel.on();
         shooter.on();
+        drive.execute(gamepad1);
         while(opModeIsActive()){
+
 
         }
     }

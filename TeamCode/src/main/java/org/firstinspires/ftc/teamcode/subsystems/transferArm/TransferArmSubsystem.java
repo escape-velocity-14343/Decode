@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.subsystems.transferArm;
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class transferArmServo {
+public class TransferArmSubsystem extends SubsystemBase {
     private Servo transferArm;
     private ConstantsTransferArm constants;
 
-    public void init(HardwareMap hwMap) {
+    public TransferArmSubsystem(HardwareMap hwMap) {
         transferArm = hwMap.get(Servo.class, "transferArm");
         constants = new ConstantsTransferArm();
     }
