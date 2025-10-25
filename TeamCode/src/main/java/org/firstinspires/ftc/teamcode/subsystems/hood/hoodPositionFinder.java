@@ -5,10 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "hoodPositionFinder", group = "LinearOpMode")
 public class hoodPositionFinder extends LinearOpMode {
-    private hoodServo hood;
+    private HoodSubsystem hood;
     public void runOpMode(){
-        hood = new hoodServo();
-        hood.init(hardwareMap);
+        hood = new HoodSubsystem(hardwareMap);
 
 
         waitForStart();

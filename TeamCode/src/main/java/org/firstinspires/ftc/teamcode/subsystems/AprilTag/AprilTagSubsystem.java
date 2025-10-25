@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems.AprilTag;
 
 import android.util.Size;
 
@@ -13,7 +13,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AprilTagReader {
+public class AprilTagSubsystem {
     private WebcamName shooterCam;
     private VisionPortal visionPortal;
     private AprilTagProcessor tagProcessor;
@@ -24,7 +24,7 @@ public class AprilTagReader {
     double[] rtn = new double[3];
     Telemetry telemetry;
 
-    public void init(HardwareMap hwMap, Telemetry telemetry) {
+    public AprilTagSubsystem (HardwareMap hwMap, Telemetry telemetry) {
         shooterCam = null;
         shooterCam = hwMap.get(WebcamName.class, "shooterCam");
         tagProcessor = new AprilTagProcessor.Builder().setDrawAxes(true).setDrawCubeProjection(true).setDrawTagID(true).setDrawTagOutline(true).build();
