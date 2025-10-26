@@ -31,12 +31,12 @@ public class TeleOpV1 extends LinearOpMode {
         transferArm = new TransferArmSubsystem(hardwareMap);
         transferWheel = new TransferWheelSubsystem(hardwareMap);
         intakeWheel = new IntakeSubsystem(hardwareMap);
-        spindexer = new SpindexerSubsystem(hardwareMap);
+        spindexer = new SpindexerSubsystem(hardwareMap, telemetry);
 
         drive.init(hardwareMap);
 
         waitForStart();
-        intakeWheel.on();
+        intakeWheel.takein();
         transferWheel.on();
         shooter.on();
         drive.execute(gamepad1);

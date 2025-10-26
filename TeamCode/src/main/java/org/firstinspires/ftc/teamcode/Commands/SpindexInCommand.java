@@ -1,0 +1,11 @@
+package org.firstinspires.ftc.teamcode.Commands;
+
+import com.arcrobotics.ftclib.command.CommandBase;
+
+import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
+
+public class SpindexInCommand extends CommandBase {
+    public SpindexInCommand(SpindexerSubsystem spindexer, int ballNum){
+        spindexer.intake(ballNum);
+    }
+}
