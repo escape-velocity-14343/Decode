@@ -36,7 +36,6 @@ public abstract class Robot extends LinearOpMode {
         transferArm = new TransferArmSubsystem(hardwareMap);
         transferWheel = new TransferWheelSubsystem(hardwareMap);
         turret = new TurretSubsystem(hardwareMap);
-        telemetry = new JoinedTelemetry()
 //
 //        hubs = hardwareMap.getAll(LynxModule.class);
 //        for (LynxModule hub : hubs) {

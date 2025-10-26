@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Commands;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsystem;
@@ -10,7 +11,8 @@ import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubs
 
 public class ShootCommandGroup extends SequentialCommandGroup {
 
-    public ShootCommandGroup(SpindexerSubsystem spindexer, TransferArmSubsystem transferArm, TransferWheelSubsystem transferWheel, int ballNum) {
+    public ShootCommandGroup(SpindexerSubsystem spindexer, TransferArmSubsystem transferArm, TransferWheelSubsystem transferWheel, int ballNum, Telemetry telemetry) {
+        telemetry.addData("hello", 1);
         addCommands(
                 new TransferArmDownCommand(transferArm),
                 new SpindexOutCommand(spindexer, ballNum),
