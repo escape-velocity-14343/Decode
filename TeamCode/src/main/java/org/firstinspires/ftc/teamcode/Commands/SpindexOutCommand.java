@@ -12,6 +12,7 @@ public class SpindexOutCommand extends CommandBase {
     }
     @Override
     public boolean isFinished() {
-        return spindexer.isClose();
+        //return spindexer.isClose(targetPosition, spindexerEncoder.getDegrees(), 5);
+        return true;
     }
 }

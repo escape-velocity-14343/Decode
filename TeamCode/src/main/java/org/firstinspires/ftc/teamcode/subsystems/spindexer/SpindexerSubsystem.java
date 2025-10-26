@@ -31,15 +31,15 @@ public class SpindexerSubsystem extends SubsystemBase {
         this.telemtry = telemetry;
     }
     public void intake(int ballNum){
-        setTargetPosition(60*(ballNum - 1));
+        //setTargetPosition(60*(ballNum - 1));
     }
 
     public void outake(int ballNum) {
-        setTargetPosition(Math.abs((120*(ballNum - 1) + 180) - 360));
+        //setTargetPosition(Math.abs((120*(ballNum - 1) + 180) - 360));
     }
 
     public void setTargetPosition(double targetPosition) {
-        this.targetPosition = targetPosition;
+        //this.targetPosition = targetPosition;
     }
 
 
@@ -48,11 +48,14 @@ public class SpindexerSubsystem extends SubsystemBase {
     }
 
     public double getDegrees() {
-        return spindexerEncoder.getDegrees();
+        //return spindexerEncoder.getDegrees();
+        return 0;
     }
-    public boolean isClose() {
-        return Util.inRange(targetPosition, getDegrees(), 10);
+    public boolean isClose(double a, double b, double thres) {
+        //return Util.inRange(targetPosition, getDegrees(), 10);
+        return Math.abs(a - b) < thres;
     }
+
 
 
     @Override
@@ -60,7 +63,12 @@ public class SpindexerSubsystem extends SubsystemBase {
         telemtry.addData("spidnexer encoder pos", spindexerEncoder.getDegrees());
         telemtry.addData("targetposis", targetPosition);
         telemtry.addData("power", squIDController.calculate(targetPosition, spindexerEncoder.getDegrees()));
-        setPower(squIDController.calculate(targetPosition, spindexerEncoder.getDegrees()));
+        telemtry.addData("the statement it is close is:", isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
+        if (!isClose(targetPosition, spindexerEncoder.getDegrees(), 5)) {
+            telemtry.addData("not clolse", !isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
+            setPower(squIDController.calculate(targetPosition, spindexerEncoder.getDegrees()));
+        }
+        //setPower(squIDController.calculate(0.0, spindexerEncoder.getDegrees()));
 //        if (Util.inRange(spindexerEncoder.getDegrees() % 120, 0, 10)) {
 //            if (artifactSensor.proximityDetected()) {
 //                ballsInSpindexer[(int) (spindexerEncoder.getDegrees() / 120)] = (byte) (artifactSensor.greenDetected() ? 2 : 1);
