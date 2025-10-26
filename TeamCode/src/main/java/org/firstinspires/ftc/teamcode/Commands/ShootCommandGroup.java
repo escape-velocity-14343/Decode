@@ -12,6 +12,7 @@ public class ShootCommandGroup extends SequentialCommandGroup {
 
     public ShootCommandGroup(SpindexerSubsystem spindexer, TransferArmSubsystem transferArm, TransferWheelSubsystem transferWheel, int ballNum) {
         addCommands(
+                new TransferArmDownCommand(transferArm),
                 new SpindexOutCommand(spindexer, ballNum),
                 new TransferWheelOnCommand(transferWheel),
                 new TransferArmUpCommand(transferArm),

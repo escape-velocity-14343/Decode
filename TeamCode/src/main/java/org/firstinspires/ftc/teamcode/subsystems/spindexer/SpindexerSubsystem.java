@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems.spindexer;
 
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -21,19 +22,20 @@ public class SpindexerSubsystem extends SubsystemBase {
     Telemetry telemtry;
 
     public SpindexerSubsystem(HardwareMap hwMap, Telemetry telemetry) {
+        CommandScheduler.getInstance().registerSubsystem();
         spindexer = hwMap.get(DcMotor.class, "spindexerMotor");
-        spindexerEncoder = new sensOrangeEncoder("turretEncoder", hwMap);
+        spindexerEncoder = new sensOrangeEncoder("spindexerEncoder", hwMap);
         spindexerEncoder.setPositionOffset(ConstantsSpindexer.offset);
         artifactSensor = new RevColorSensorDetector(hwMap); //@WILLIAM IS THIS PEAK RUNTIME POLYMORPHISM
         squIDController.setPID(ConstantsSpindexer.spindexerP);
         this.telemtry = telemetry;
     }
     public void intake(int ballNum){
-        spindexer.setTargetPosition(60*(ballNum - 1));
+        setTargetPosition(60*(ballNum - 1));
     }
 
     public void outake(int ballNum) {
-        spindexer.setTargetPosition(Math.abs((120*(ballNum - 1) + 180) - 360));
+        setTargetPosition(Math.abs((120*(ballNum - 1) + 180) - 360));
     }
 
     public void setTargetPosition(double targetPosition) {
@@ -56,15 +58,17 @@ public class SpindexerSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         telemtry.addData("spidnexer encoder pos", spindexerEncoder.getDegrees());
-        setPower(squIDController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
-        if (Util.inRange(spindexerEncoder.getDegrees() % 120, 0, 10)) {
-            if (artifactSensor.proximityDetected()) {
-                ballsInSpindexer[(int) (spindexerEncoder.getDegrees() / 120)] = (byte) (artifactSensor.greenDetected() ? 2 : 1);
-            }
-            else
-            {
-                ballsInSpindexer[(int) (spindexerEncoder.getDegrees() / 120)] = 0;
-            }
-        }
+        telemtry.addData("targetposis", targetPosition);
+        telemtry.addData("power", squIDController.calculate(targetPosition, spindexerEncoder.getDegrees()));
+        setPower(squIDController.calculate(targetPosition, spindexerEncoder.getDegrees()));
+//        if (Util.inRange(spindexerEncoder.getDegrees() % 120, 0, 10)) {
+//            if (artifactSensor.proximityDetected()) {
+//                ballsInSpindexer[(int) (spindexerEncoder.getDegrees() / 120)] = (byte) (artifactSensor.greenDetected() ? 2 : 1);
+//            }
+//            else
+//            {
+//                ballsInSpindexer[(int) (spindexerEncoder.getDegrees() / 120)] = 0;
+//            }
+//        }
     }
 }
