@@ -16,7 +16,7 @@ public class ShootTeleOp extends Robot {
         initialize();
         GamepadEx controller = new GamepadEx(gamepad1);
         waitForStart();
-        controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(new ShootCommandGroup(spindexer, transferArm, transferWheel, 1));
+        controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(new ShootCommandGroup(spindexer, transferArm, transferWheel, 1, telemetry));
         while (opModeIsActive()){
             update();
         }
