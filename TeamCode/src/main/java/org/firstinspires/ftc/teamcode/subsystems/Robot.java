@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.bylazar.panels.Panels;
+import com.bylazar.telemetry.JoinedTelemetry;
+import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -29,6 +32,7 @@ public abstract class Robot extends LinearOpMode {
 
     public void initialize(){
 //        apriltag = new AprilTagSubsystem(hardwareMap, telemetry);
+        telemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
         hood = new HoodSubsystem(hardwareMap);
         intake = new IntakeSubsystem(hardwareMap);
         shooter = new ShooterSubsystem(hardwareMap);
