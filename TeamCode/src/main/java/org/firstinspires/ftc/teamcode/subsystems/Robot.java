@@ -25,7 +25,7 @@ public abstract class Robot extends LinearOpMode {
     public TransferArmSubsystem transferArm;
     public TransferWheelSubsystem transferWheel;
     public TurretSubsystem turret;
-    public List<LynxModule> hubs;
+//    public List<LynxModule> hubs;
 
     public void initialize(){
 //        apriltag = new AprilTagSubsystem(hardwareMap, telemetry);
@@ -36,17 +36,18 @@ public abstract class Robot extends LinearOpMode {
         transferArm = new TransferArmSubsystem(hardwareMap);
         transferWheel = new TransferWheelSubsystem(hardwareMap);
         turret = new TurretSubsystem(hardwareMap);
-
-        hubs = hardwareMap.getAll(LynxModule.class);
-        for (LynxModule hub : hubs) {
-            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-        }
+        telemetry = new JoinedTelemetry()
+//
+//        hubs = hardwareMap.getAll(LynxModule.class);
+//        for (LynxModule hub : hubs) {
+//            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+//        }
     }
 
     public void update() {
-        for (LynxModule hub : hubs) {
-            hub.clearBulkCache();
-        }
+//        for (LynxModule hub : hubs) {
+//            hub.clearBulkCache();
+//        }
         CommandScheduler.getInstance().run();
         telemetry.update();
     }
