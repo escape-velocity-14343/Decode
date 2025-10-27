@@ -25,4 +25,5 @@ public class TransferWheelSubsystem extends SubsystemBase {
             transferWheel.setPower(0);
         }
     }
+
 }

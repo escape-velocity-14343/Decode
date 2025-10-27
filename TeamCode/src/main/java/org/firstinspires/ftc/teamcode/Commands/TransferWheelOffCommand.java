@@ -8,4 +8,9 @@ public class TransferWheelOffCommand extends CommandBase {
     public TransferWheelOffCommand (TransferWheelSubsystem transferWheel){
         transferWheel.off();
     }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }

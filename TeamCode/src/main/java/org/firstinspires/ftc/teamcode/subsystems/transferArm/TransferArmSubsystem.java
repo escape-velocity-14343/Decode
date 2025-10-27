@@ -12,6 +12,7 @@ public class TransferArmSubsystem extends SubsystemBase {
     public TransferArmSubsystem(HardwareMap hwMap) {
         transferArm = hwMap.get(Servo.class, "transferArm");
         constants = new ConstantsTransferArm();
+        transferArm.setPosition(constants.down);
     }
 
     public void up() {

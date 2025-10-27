@@ -8,5 +8,5 @@ public class ConstantsSpindexer {
     public static double proximityThreshold = 3;
     public static double purpleHue = 270;
     public static double greenHue = 120;
-    public static double spindexerP = -0.025;
+    public static double spindexerP = -0.03;
 }

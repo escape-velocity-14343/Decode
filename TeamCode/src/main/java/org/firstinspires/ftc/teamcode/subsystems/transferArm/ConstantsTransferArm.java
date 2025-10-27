@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems.transferArm;
 
 public class ConstantsTransferArm {
-    public double up = -0.4;
-    public double down = 0.0;
+    public double up = 0.6;
+    public double down = 1;
 }
