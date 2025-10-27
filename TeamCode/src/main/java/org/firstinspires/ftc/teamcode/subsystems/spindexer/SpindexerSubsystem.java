@@ -27,7 +27,7 @@ public class SpindexerSubsystem extends SubsystemBase {
         spindexerEncoder = new sensOrangeEncoder("spindexerEncoder", hwMap);
         spindexerEncoder.setPositionOffset(ConstantsSpindexer.offset);
         artifactSensor = new RevColorSensorDetector(hwMap); //@WILLIAM IS THIS PEAK RUNTIME POLYMORPHISM
-        squIDController.setPID(ConstantsSpindexer.spindexerP);
+
         this.telemtry = telemetry;
     }
     public void intake(int ballNum){
@@ -55,11 +55,15 @@ public class SpindexerSubsystem extends SubsystemBase {
         //return Util.inRange(targetPosition, getDegrees(), 10);
         return Math.abs(a - b) < thres;
     }
+    public boolean isClose() {
+        return isClose(targetPosition, getDegrees(), 5);
+    }
 
 
 
     @Override
     public void periodic() {
+        squIDController.setPID(ConstantsSpindexer.spindexerP);
         telemtry.addData("spidnexer encoder pos", spindexerEncoder.getDegrees());
         telemtry.addData("targetposis", targetPosition);
         telemtry.addData("power", squIDController.calculate(targetPosition, spindexerEncoder.getDegrees()));

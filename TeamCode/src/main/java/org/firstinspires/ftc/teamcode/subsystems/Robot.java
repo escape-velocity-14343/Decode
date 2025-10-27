@@ -28,18 +28,22 @@ public abstract class Robot extends LinearOpMode {
     public TransferArmSubsystem transferArm;
     public TransferWheelSubsystem transferWheel;
     public TurretSubsystem turret;
+    public MecanumDriveSubsystem drive;
 //    public List<LynxModule> hubs;
 
     public void initialize(){
 //        apriltag = new AprilTagSubsystem(hardwareMap, telemetry);
         telemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
+
         hood = new HoodSubsystem(hardwareMap);
+        drive = new MecanumDriveSubsystem(hardwareMap, ()->0);
+        turret = new TurretSubsystem(hardwareMap);
         intake = new IntakeSubsystem(hardwareMap);
         shooter = new ShooterSubsystem(hardwareMap);
         spindexer = new SpindexerSubsystem(hardwareMap, telemetry);
         transferArm = new TransferArmSubsystem(hardwareMap);
         transferWheel = new TransferWheelSubsystem(hardwareMap);
-        turret = new TurretSubsystem(hardwareMap);
+
 //
 //        hubs = hardwareMap.getAll(LynxModule.class);
 //        for (LynxModule hub : hubs) {

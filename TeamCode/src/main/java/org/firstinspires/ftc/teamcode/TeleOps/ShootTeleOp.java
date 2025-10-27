@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOps;
 
+import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -16,8 +17,12 @@ public class ShootTeleOp extends Robot {
         initialize();
         GamepadEx controller = new GamepadEx(gamepad1);
         waitForStart();
-        controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(new ShootCommandGroup(spindexer, transferArm, transferWheel, 1, telemetry));
+        controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                new ShootCommandGroup(spindexer, transferArm, transferWheel, 1, telemetry)
+        );
+
         while (opModeIsActive()){
+            telemetry.addData("gamepad A pressed",controller.getGamepadButton(GamepadKeys.Button.A).get());
             update();
         }
     }
