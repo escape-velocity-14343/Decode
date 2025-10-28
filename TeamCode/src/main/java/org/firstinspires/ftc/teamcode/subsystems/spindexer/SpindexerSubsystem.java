@@ -33,15 +33,19 @@ public class SpindexerSubsystem extends SubsystemBase {
         this.telemtry = telemetry;
     }
     public void intake(int ballNum){
-        setTargetPosition(120*(ballNum + add - 1)+180);
+        setTargetPosition(120*(ballNum + add - 1) + 180);
         add += 1;
-        if (add == 3){add = 0;}
+        if (add == 3) {
+            add = 0;
+        }
     }
 
     public void outake(int ballNum) {
         setTargetPosition((120*(ballNum + add - 1)));
         add += 1;
-        if (add == 3){add = 0;}
+        if (add == 3) {
+            add = 0;
+        }
     }
 
     public void setTargetPosition(double targetPosition) {
@@ -62,7 +66,7 @@ public class SpindexerSubsystem extends SubsystemBase {
         return Math.abs(a - b) < thres;
     }
     public boolean isClose() {
-        return isClose(targetPosition, getDegrees(), 5);
+        return isClose(targetPosition, getDegrees(), ConstantsSpindexer.tolerance);
     }
 
 

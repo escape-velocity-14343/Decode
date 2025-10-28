@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Commands;
+package org.firstinspires.ftc.teamcode.command;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -6,11 +6,18 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsystem;
 
 public class TransferArmUpCommand extends CommandBase {
+    TransferArmSubsystem transferArm;
     ElapsedTime timer = new ElapsedTime();
     public TransferArmUpCommand(TransferArmSubsystem transferArm) {
-        timer.reset();
-        transferArm.up();
+        this.transferArm = transferArm;
+        addRequirements(transferArm);
     }
+    @Override
+    public void initialize() {
+        transferArm.up();
+        timer.reset();
+    }
+
 
     @Override
     public boolean isFinished() {

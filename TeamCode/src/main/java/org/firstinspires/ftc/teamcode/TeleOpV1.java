@@ -1,9 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.command.IntakeOffCommand;
+import org.firstinspires.ftc.teamcode.command.IntakeOnCommand;
+import org.firstinspires.ftc.teamcode.command.ShootCommandGroup;
+import org.firstinspires.ftc.teamcode.command.ShooterOffCommand;
+import org.firstinspires.ftc.teamcode.command.ShooterOnCommand;
+import org.firstinspires.ftc.teamcode.command.SpindexInCommand;
+import org.firstinspires.ftc.teamcode.command.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.hood.HoodSubsystem;
@@ -12,35 +22,25 @@ import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsyste
 import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubsystem;
 
 @TeleOp (name = "TeleOp V1", group = "LinearOpMode")
-public class TeleOpV1 extends LinearOpMode {
-    private MecanumDriveSubsystem drive;
-    private ShooterSubsystem shooter;
-    private HoodSubsystem hood;
-    private TransferArmSubsystem transferArm;
-    private TransferWheelSubsystem transferWheel;
-    private IntakeSubsystem intakeWheel;
-    private SpindexerSubsystem spindexer;
+public class TeleOpV1 extends Robot {
 
+    @Override
+    public void runOpMode() throws InterruptedException {
+        GamepadEx controller = new GamepadEx(gamepad1);
+        initialize();
+        drive.setDefaultCommand(new DefaultDriveCommand(drive,
+                controller::getLeftY,
+                controller::getLeftX,
+                controller::getRightX));
 
-
-    public void runOpMode(){
-        drive = new MecanumDriveSubsystem(hardwareMap, ()->0);
-        shooter = new ShooterSubsystem(hardwareMap);
-        hood = new HoodSubsystem(hardwareMap);
-        transferArm = new TransferArmSubsystem(hardwareMap);
-        transferWheel = new TransferWheelSubsystem(hardwareMap);
-        intakeWheel = new IntakeSubsystem(hardwareMap);
-        spindexer = new SpindexerSubsystem(hardwareMap, telemetry);
-
+        controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(new ShootCommandGroup(spindexer, transferArm, transferWheel, 1, telemetry));
+        controller.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new IntakeOnCommand(intake).alongWith(new SpindexInCommand(spindexer, 1)))
+                .whenReleased(new IntakeOffCommand(intake));
+        controller.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new ShooterOnCommand(shooter)).whenReleased(new ShooterOffCommand(shooter));;
         waitForStart();
-        intakeWheel.takein();
-        transferWheel.on();
-        shooter.on();
-        drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-        while(opModeIsActive()){
-
-
+        while (opModeIsActive()){
+            update();
         }
-    }
 
+    }
 }

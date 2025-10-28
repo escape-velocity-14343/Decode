@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Commands;
+package org.firstinspires.ftc.teamcode.command;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -12,15 +12,15 @@ import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubs
 public class ShootSequenceInstantCommand extends SequentialCommandGroup {
     public ShootSequenceInstantCommand(SpindexerSubsystem spindexer, TransferArmSubsystem transferArm, TransferWheelSubsystem transferWheel, int ballNum, Telemetry telemetry){
         addCommands(
-                new InstantCommand(()->transferArm.down()),
+                new InstantCommand(transferArm::down),
                 new WaitCommand(500),
                 new InstantCommand(()->spindexer.outake(ballNum)),
                 new WaitCommand(500),
-                new InstantCommand(()->transferWheel.on()),
-                new InstantCommand(()->transferArm.up()),
+                new InstantCommand(transferWheel::on),
+                new InstantCommand(transferArm::up),
                 new WaitCommand(500),
-                new InstantCommand(()-> transferArm.down()),
-                new InstantCommand(()->transferWheel.off())
+                new InstantCommand(transferArm::down),
+                new InstantCommand(transferWheel::off)
         );
     }
 }
