@@ -18,18 +18,16 @@ public class RevColorSensorDetector implements ArtifactSensor {
     }
     @Override
     public boolean greenDetected() {
+        float[] hsvValues = new float[3];
+        Color.colorToHSV(colorSensor.getNormalizedColors().toColor(), hsvValues);
+        float hue = hsvValues[0];
+        greenDetected = Math.abs(hue- ConstantsSpindexer.greenHue) > Math.abs(hue - ConstantsSpindexer.purpleHue);
         return greenDetected;
     }
 
     @Override
     public boolean proximityDetected() {
-        return proximityDetected;
-    }
-    public void update() {
-        float[] hsvValues = new float[3];
-        Color.colorToHSV(colorSensor.getNormalizedColors().toColor(), hsvValues);
-        float hue = hsvValues[0];
-        greenDetected = Math.abs(hue- ConstantsSpindexer.greenHue) > Math.abs(hue - ConstantsSpindexer.purpleHue);
         proximityDetected = colorSensor.getDistance(DistanceUnit.CM) < ConstantsSpindexer.proximityThreshold;
+        return proximityDetected;
     }
 }
