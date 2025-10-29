@@ -36,15 +36,19 @@ public class SpindexerSubsystem extends SubsystemBase {
 
 
     public void intake(int ballNum){
-        setTargetPosition(120*(ballNum + add - 1)+180);
+        setTargetPosition(120*(ballNum + add - 1) + 180);
         add += 1;
-        if (add == 3){add = 0;}
+        if (add == 3) {
+            add = 0;
+        }
     }
 
     public void outake(int ballNum) {
         setTargetPosition((120*(ballNum + add - 1)));
         add += 1;
-        if (add == 3){add = 0;}
+        if (add == 3) {
+            add = 0;
+        }
     }
 
 
@@ -91,6 +95,13 @@ public class SpindexerSubsystem extends SubsystemBase {
         //return Util.inRange(targetPosition, getDegrees(), 10);
         return Math.abs(a - b) < thres;
     }
+<<<<<<< HEAD
+=======
+    public boolean isClose() {
+        return isClose(targetPosition, getDegrees(), ConstantsSpindexer.tolerance);
+    }
+
+>>>>>>> refs/remotes/origin/master
 
 
     @Override

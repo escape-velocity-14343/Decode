@@ -53,10 +53,10 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         // This ensures all the powers maintain the same ratio,
         // but only if at least one is out of the range [-1, 1]
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(turn), 1);
-        double frontLeftPower = (rotY + rotX + turn) / denominator;
-        double backLeftPower = (rotY - rotX + turn) / denominator;
-        double frontRightPower = (rotY - rotX - turn) / denominator;
-        double backRightPower = (rotY + rotX - turn) / denominator;
+        double frontLeftPower = (rotY + rotX - turn) / denominator;
+        double backLeftPower = (rotY - rotX - turn) / denominator;
+        double frontRightPower = (rotY - rotX + turn) / denominator;
+        double backRightPower = (rotY + rotX + turn) / denominator;
 
         frontLeftMotor.setPower(frontLeftPower);
         backLeftMotor.setPower(backLeftPower);

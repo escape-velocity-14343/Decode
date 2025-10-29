@@ -16,11 +16,12 @@
         <LynxModule name="Control Hub" port="173">
             <goBILDA5202SeriesMotor name="driveFrontLeft" port="0" />
             <goBILDA5202SeriesMotor name="driveFrontRight" port="1" />
-            <goBILDA5202SeriesMotor name="driveBackRight" port="2" />
-            <goBILDA5202SeriesMotor name="driveBackLeft" port="3" />
+            <goBILDA5202SeriesMotor name="driveBackLeft" port="2" />
+            <goBILDA5202SeriesMotor name="driveBackRight" port="3" />
             <AnalogInput name="spindexerEncoder" port="0" />
             <AnalogInput name="turretEncoder" port="1" />
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
+            <RevColorSensorV3 name="colorSensor" port="0" bus="1" />
         </LynxModule>
     </LynxUsbDevice>
 </Robot>

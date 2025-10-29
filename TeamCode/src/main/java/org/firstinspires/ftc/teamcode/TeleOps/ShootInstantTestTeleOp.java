@@ -6,8 +6,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Commands.ShootCommandGroup;
-import org.firstinspires.ftc.teamcode.Commands.ShootSequenceInstantCommand;
+import org.firstinspires.ftc.teamcode.command.ShootSequenceInstantCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 @TeleOp(name = "Instant shoot", group = "test")

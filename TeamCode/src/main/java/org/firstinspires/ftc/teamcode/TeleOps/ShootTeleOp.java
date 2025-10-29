@@ -2,17 +2,14 @@ package org.firstinspires.ftc.teamcode.TeleOps;
 
 import android.util.Log;
 
-import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.LogCatCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Commands.ShootCommandGroup;
-import org.firstinspires.ftc.teamcode.Commands.TelemetryCommand;
+import org.firstinspires.ftc.teamcode.command.LogKittenCommand;
+import org.firstinspires.ftc.teamcode.command.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 @TeleOp (name = "ShootTeleOp", group = "Testing")
@@ -33,12 +30,11 @@ public class ShootTeleOp extends Robot {
 //                .whenPressed(new TelemetryCommand(telemetry, "A was pressed"))
 //                .whenPressed(new ShootCommandGroup(spindexer, transferArm, transferWheel, 1, telemetry));
 
-        controller.getGamepadButton(GamepadKeys.Button.A);
-        shoot
-                .whenPressed(new InstantCommand(()-> {
-                    Log.println(Log.INFO, "IT WAS PRESSED", "IT WAS PRESSED");
-                }))
-                .whenPressed(new ShootCommandGroup(spindexer, transferArm, transferWheel, 1, telemetry));
+        //controller.getGamepadButton(GamepadKeys.Button.A);
+        shoot.whenPressed(
+                new LogKittenCommand(Log.INFO, "ShootTeleOp", "IT WAS PRESSED")
+                        .alongWith(
+                        new ShootCommandGroup(spindexer, transferArm, transferWheel, 1, telemetry)));
 //    (new LogCatCommand("IT WAS PRESSED"));
 
 //        controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(
