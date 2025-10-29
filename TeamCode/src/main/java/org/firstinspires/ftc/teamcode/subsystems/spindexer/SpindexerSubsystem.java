@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.lib.RevColorSensorDetector;
 import org.firstinspires.ftc.teamcode.lib.SquIDController;
-import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.lib.sensOrangeEncoder;
 
 public class SpindexerSubsystem extends SubsystemBase {
@@ -22,6 +21,7 @@ public class SpindexerSubsystem extends SubsystemBase {
     byte[] ballsInSpindexer = new byte[]{0, 0, 0}; //0 means no ball, 1 means purple, 2 means CODE GREEN WILLIAM
     Telemetry telemtry;
     int add = 0;
+    String[] artifacts = {"empty", "empty", "empty"};
 
     public SpindexerSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         CommandScheduler.getInstance().registerSubsystem();
@@ -32,6 +32,9 @@ public class SpindexerSubsystem extends SubsystemBase {
 
         this.telemtry = telemetry;
     }
+
+
+
     public void intake(int ballNum){
         setTargetPosition(120*(ballNum + add - 1)+180);
         add += 1;
@@ -43,6 +46,33 @@ public class SpindexerSubsystem extends SubsystemBase {
         add += 1;
         if (add == 3){add = 0;}
     }
+
+
+
+
+    public int intakeAuto(String[] artifacts){
+        for (int i = 0; i < 3; i++){
+            if (artifacts[i] == "empty"){
+                intake(i);
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int outakeAuto(String[] artifacts, String color){
+        for (int i = 0; i < 3; i++){
+            if (artifacts[i].equals(color)){
+                outake(i);
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+
+
 
     public void setTargetPosition(double targetPosition) {
         this.targetPosition = targetPosition;
@@ -61,10 +91,6 @@ public class SpindexerSubsystem extends SubsystemBase {
         //return Util.inRange(targetPosition, getDegrees(), 10);
         return Math.abs(a - b) < thres;
     }
-    public boolean isClose() {
-        return isClose(targetPosition, getDegrees(), 5);
-    }
-
 
 
     @Override
