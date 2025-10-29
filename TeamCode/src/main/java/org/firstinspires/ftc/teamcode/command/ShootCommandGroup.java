@@ -16,26 +16,27 @@ public class ShootCommandGroup extends SequentialCommandGroup {
         telemetry.addData("hello", 1);
         addCommands(
                 new InstantCommand(()->{
-                    Log.println(Log.INFO, "Shoot Command Star", "Shoot Command Star");}),
+                    Log.println(Log.INFO, "SHOOT COMMAND GROUP", "spindexing to the right place");
+                }),
                 new TransferArmDownCommand(transferArm),
                 new InstantCommand(()->{
-                    Log.println(Log.INFO, "TRANSFER ARM DOWN", "TRANSFER ARM DOWN");}),
+                    Log.println(Log.INFO, "SHOOT COMMAND GROUP", "TRANSFER ARM DOWN");}),
                 new SpindexOutCommand(spindexer, ballNum),
                 new InstantCommand(()->{
-                    Log.println(Log.INFO, "Spindex Out Complete", "Spindex Out Complete");}),
+                    Log.println(Log.INFO, "SHOOT COMMAND GROUP", "Spindex Out Complete");}),
                 new TransferWheelOnCommand(transferWheel),
                 new InstantCommand(()->{
-                    Log.println(Log.INFO, "Transfer Wheels On", "Transfer Wheels ON");}),
+                    Log.println(Log.INFO, "SHOOT COMMAND GROUP", "Transfer Wheels ON");}),
                 new TransferArmUpCommand(transferArm),
                 new InstantCommand(()->{
-                    Log.println(Log.INFO, "Transfer Arm Up", "Transfer Arm Up");}),
+                    Log.println(Log.INFO, "SHOOT COMMAND GROUP", "Transfer Arm Up");}),
                 new TransferArmDownCommand(transferArm),
                 new InstantCommand(()->{
-                    Log.println(Log.INFO, "Transfer Arm Down Again", "Transfer Arm Down Again");}),
+                    Log.println(Log.INFO, "SHOOT COMMAND GROUP", "Transfer Arm Down Again");}),
                 new TransferWheelOffCommand(transferWheel),
                 new InstantCommand(()->{
-                    Log.println(Log.INFO, "Transfer Wheel Off", "Transfer Wheel Off");})
-        );
+                    Log.println(Log.INFO, "SHOOT COMMAND GROUP", "Transfer Wheel Off");})
+            );
         addRequirements(spindexer, transferArm, transferWheel);
     }
 }

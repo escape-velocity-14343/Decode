@@ -36,7 +36,7 @@ public class SpindexerSubsystem extends SubsystemBase {
 
 
     public void intake(int ballNum){
-        setTargetPosition(120*(ballNum + add - 1) + 180);
+        setTargetPosition(120*(ballNum + add) + 180);
         add += 1;
         if (add == 3) {
             add = 0;
@@ -44,7 +44,7 @@ public class SpindexerSubsystem extends SubsystemBase {
     }
 
     public void outake(int ballNum) {
-        setTargetPosition((120*(ballNum + add - 1)));
+        setTargetPosition((120*(ballNum + add)));
         add += 1;
         if (add == 3) {
             add = 0;
@@ -54,9 +54,9 @@ public class SpindexerSubsystem extends SubsystemBase {
 
 
 
-    public int intakeAuto(String[] artifacts){
+    public int intakeAuto(){
         for (int i = 0; i < 3; i++){
-            if (artifacts[i] == "empty"){
+            if (artifacts[i].equals("empty")){
                 intake(i);
                 return i;
             }
@@ -64,10 +64,11 @@ public class SpindexerSubsystem extends SubsystemBase {
         return -1;
     }
 
-    public int outakeAuto(String[] artifacts, String color){
+    public int outakeAuto(String color){
         for (int i = 0; i < 3; i++){
             if (artifacts[i].equals(color)){
                 outake(i);
+                artifacts[i] = "empty";
                 return i;
             }
         }
@@ -75,7 +76,13 @@ public class SpindexerSubsystem extends SubsystemBase {
     }
 
 
-
+    public void addColor(String color){
+        for (int i = 0; i < 3; i++){
+            if (artifacts[i].equals("empty")){
+                artifacts[i] = color;
+            }
+        }
+    }
 
 
     public void setTargetPosition(double targetPosition) {
@@ -95,13 +102,10 @@ public class SpindexerSubsystem extends SubsystemBase {
         //return Util.inRange(targetPosition, getDegrees(), 10);
         return Math.abs(a - b) < thres;
     }
-<<<<<<< HEAD
-=======
+
     public boolean isClose() {
         return isClose(targetPosition, getDegrees(), ConstantsSpindexer.tolerance);
     }
-
->>>>>>> refs/remotes/origin/master
 
 
     @Override

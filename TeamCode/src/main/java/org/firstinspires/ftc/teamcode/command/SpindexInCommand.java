@@ -7,15 +7,14 @@ import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 public class SpindexInCommand extends CommandBase {
     SpindexerSubsystem spindexer;
     int ballNum;
-    public SpindexInCommand(SpindexerSubsystem spindexer, int ballNum){
+    public SpindexInCommand(SpindexerSubsystem spindexer){
         this.spindexer = spindexer;
-        this.ballNum = ballNum;
         addRequirements(spindexer);
     }
 
     @Override
     public void initialize() {
-        spindexer.intake(ballNum);
+        spindexer.intakeAuto();
     }
     @Override
     public boolean isFinished() {
