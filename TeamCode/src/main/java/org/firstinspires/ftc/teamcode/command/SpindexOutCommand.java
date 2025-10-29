@@ -6,16 +6,16 @@ import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 
 public class SpindexOutCommand extends CommandBase {
     SpindexerSubsystem spindexer;
-    int ballNum;
-    public SpindexOutCommand(SpindexerSubsystem spindexer, int ballNum){
+    String ballColor;
+    public SpindexOutCommand(SpindexerSubsystem spindexer, String ballColor){
         this.spindexer = spindexer;
-        this.ballNum = ballNum;
+        this.ballColor = ballColor;
         addRequirements(spindexer);
     }
 
     @Override
     public void initialize() {
-        spindexer.outake(ballNum);
+        spindexer.outakeAuto(ballColor);
     }
     @Override
     public boolean isFinished() {

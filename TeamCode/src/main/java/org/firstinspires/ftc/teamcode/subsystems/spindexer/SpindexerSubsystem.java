@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.spindexer;
 
+import android.util.Log;
+
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.command.LogKittenCommand;
 import org.firstinspires.ftc.teamcode.lib.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.lib.RevColorSensorDetector;
 import org.firstinspires.ftc.teamcode.lib.SquIDController;
@@ -21,7 +24,7 @@ public class SpindexerSubsystem extends SubsystemBase {
     byte[] ballsInSpindexer = new byte[]{0, 0, 0}; //0 means no ball, 1 means purple, 2 means CODE GREEN WILLIAM
     Telemetry telemtry;
     int add = 0;
-    String[] artifacts = {"empty", "empty", "empty"};
+    String[] artifacts = {"purple", "purple", "green"};
 
     public SpindexerSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         CommandScheduler.getInstance().registerSubsystem();
@@ -36,19 +39,11 @@ public class SpindexerSubsystem extends SubsystemBase {
 
 
     public void intake(int ballNum){
-        setTargetPosition(120*(ballNum + add) + 180);
-        add += 1;
-        if (add == 3) {
-            add = 0;
-        }
+        setTargetPosition(120*(ballNum) + 180);
     }
 
     public void outake(int ballNum) {
-        setTargetPosition((120*(ballNum + add)));
-        add += 1;
-        if (add == 3) {
-            add = 0;
-        }
+        setTargetPosition((120*(ballNum)));
     }
 
 
@@ -57,7 +52,7 @@ public class SpindexerSubsystem extends SubsystemBase {
     public int intakeAuto(){
         for (int i = 0; i < 3; i++){
             if (artifacts[i].equals("empty")){
-                intake(i);
+                setTargetPosition(120*(i) + 180);
                 return i;
             }
         }
@@ -67,7 +62,9 @@ public class SpindexerSubsystem extends SubsystemBase {
     public int outakeAuto(String color){
         for (int i = 0; i < 3; i++){
             if (artifacts[i].equals(color)){
-                outake(i);
+                telemtry.addData("OUTAKE AUTO POS:", 120*(i));
+                telemtry.addData("OUTAKE AUTO CURRENT:", spindexerEncoder.getDegrees());
+                setTargetPosition((120*(i)));;
                 artifacts[i] = "empty";
                 return i;
             }
@@ -110,12 +107,16 @@ public class SpindexerSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        for (String s : artifacts){
+            telemtry.addData("SPINDEXER BALLS", s);
+        }
+//        telemtry.addData("SPINDEXER BALLS", artifacts.toString());
         squIDController.setPID(ConstantsSpindexer.spindexerP);
         telemtry.addData("spidnexer encoder pos", spindexerEncoder.getDegrees());
         telemtry.addData("targetposis", targetPosition);
         telemtry.addData("power", squIDController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
         telemtry.addData("the statement it is close is:", isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
-        if (!isClose(targetPosition, spindexerEncoder.getDegrees(), 5)) {
+        if (!isClose(targetPosition, spindexerEncoder.getDegrees(), 10)) {
             telemtry.addData("not clolse", !isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
             setPower(squIDController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
         }

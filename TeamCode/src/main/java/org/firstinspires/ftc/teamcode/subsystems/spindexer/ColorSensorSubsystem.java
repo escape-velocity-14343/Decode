@@ -6,18 +6,13 @@ import org.firstinspires.ftc.teamcode.lib.ArtifactSensor;
 
 public class ColorSensorSubsystem extends SubsystemBase {
     ArtifactSensor artifactSensor;
-    SpindexerSubsystem spindexer;
-    public ColorSensorSubsystem(ArtifactSensor artifactSensor, SpindexerSubsystem spindexer){
-        this.artifactSensor = artifactSensor;
-        this.spindexer = spindexer;
+    public ColorSensorSubsystem(){
     }
-    public void detectColor(){
-        if (artifactSensor.proximityDetected()) {
-            if (artifactSensor.greenDetected()){
-                spindexer.addColor("green");
-            } else {
-                spindexer.addColor("purple");
-            }
+    public String detectColor(){
+        if (artifactSensor.greenDetected()){
+            return "green";
+        } else {
+            return "purple";
         }
     }
 

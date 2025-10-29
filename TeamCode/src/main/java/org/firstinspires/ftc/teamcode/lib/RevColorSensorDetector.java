@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.lib;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -27,7 +28,9 @@ public class RevColorSensorDetector implements ArtifactSensor {
 
     @Override
     public boolean proximityDetected() {
-        proximityDetected = colorSensor.getDistance(DistanceUnit.CM) < ConstantsSpindexer.proximityThreshold;
+        double distance = colorSensor.getDistance(DistanceUnit.CM);
+        Log.println(Log.ASSERT, "Artifact Sensor,", "Distance: " + distance);
+        proximityDetected = distance < ConstantsSpindexer.proximityThreshold;
         return proximityDetected;
     }
 }

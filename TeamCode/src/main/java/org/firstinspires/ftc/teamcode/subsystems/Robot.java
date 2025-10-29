@@ -8,9 +8,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.command.ShooterOffCommand;
 import org.firstinspires.ftc.teamcode.command.ShooterOnCommand;
+import org.firstinspires.ftc.teamcode.lib.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.subsystems.hood.HoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.spindexer.ColorSensorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubsystem;
@@ -26,6 +28,7 @@ public abstract class Robot extends LinearOpMode {
     public TransferWheelSubsystem transferWheel;
     public TurretSubsystem turret;
     public MecanumDriveSubsystem drive;
+    public ColorSensorSubsystem artifactSensor;
 //    public List<LynxModule> hubs;
 
     public void initialize(){
@@ -34,6 +37,7 @@ public abstract class Robot extends LinearOpMode {
         CommandScheduler.getInstance().cancelAll();
         telemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
 
+        artifactSensor = new ColorSensorSubsystem();
         hood = new HoodSubsystem(hardwareMap);
         drive = new MecanumDriveSubsystem(hardwareMap, ()->0);
         turret = new TurretSubsystem(hardwareMap);
@@ -42,6 +46,7 @@ public abstract class Robot extends LinearOpMode {
         spindexer = new SpindexerSubsystem(hardwareMap, telemetry);
         transferArm = new TransferArmSubsystem(hardwareMap);
         transferWheel = new TransferWheelSubsystem(hardwareMap);
+
         //shooter.setDefaultCommand(new ShooterOffCommand(shooter));
         //intake.setDefaultCommand(new IntakeOnCommand(intake));
 //
