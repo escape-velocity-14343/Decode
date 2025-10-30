@@ -22,7 +22,7 @@ public class RevColorSensorDetector implements ArtifactSensor {
         float[] hsvValues = new float[3];
         Color.colorToHSV(colorSensor.getNormalizedColors().toColor(), hsvValues);
         float hue = hsvValues[0];
-        greenDetected = Math.abs(hue- ConstantsSpindexer.greenHue) > Math.abs(hue - ConstantsSpindexer.purpleHue);
+        greenDetected = Math.abs(hue- ConstantsSpindexer.greenHue) < Math.abs(hue - ConstantsSpindexer.purpleHue);
         return greenDetected;
     }
 

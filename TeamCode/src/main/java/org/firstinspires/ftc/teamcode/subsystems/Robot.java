@@ -43,7 +43,7 @@ public abstract class Robot extends LinearOpMode {
         CommandScheduler.getInstance().cancelAll();
         telemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
         publicTelemetry = telemetry;
-        artifactSensor = new ColorSensorSubsystem();
+        artifactSensor = new ColorSensorSubsystem(hardwareMap);
         pinpointSubsystem = new PinpointSubsystem(hardwareMap);
         hood = new HoodSubsystem(hardwareMap);
         drive = new MecanumDriveSubsystem(hardwareMap, () -> pinpointSubsystem.getHeading().getRadians());

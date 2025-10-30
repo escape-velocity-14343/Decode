@@ -14,4 +14,8 @@ public class IntakeOnCommand extends CommandBase {
     public void initialize() {
         intakeSubsystem.takein();
     }
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }

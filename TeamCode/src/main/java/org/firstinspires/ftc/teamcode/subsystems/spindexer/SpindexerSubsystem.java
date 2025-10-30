@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.spindexer;
 
+import static org.firstinspires.ftc.teamcode.subsystems.spindexer.ConstantsSpindexer.thres;
+
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.lib.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.lib.RevColorSensorDetector;
 import org.firstinspires.ftc.teamcode.lib.ThaiVPController;
@@ -22,7 +25,7 @@ public class SpindexerSubsystem extends SubsystemBase {
     byte[] ballsInSpindexer = new byte[]{0, 0, 0}; //0 means no ball, 1 means purple, 2 means CODE GREEN WILLIAM
     Telemetry telemtry;
     int add = 0;
-    String[] artifacts = {"purple", "purple", "green"};
+    String[] artifacts = {"empty", "empty", "empty"};
 
     public SpindexerSubsystem(HardwareMap hwMap) {
         CommandScheduler.getInstance().registerSubsystem();
@@ -76,6 +79,7 @@ public class SpindexerSubsystem extends SubsystemBase {
         for (int i = 0; i < 3; i++){
             if (artifacts[i].equals("empty")){
                 artifacts[i] = color;
+                break;
             }
         }
     }
@@ -96,11 +100,11 @@ public class SpindexerSubsystem extends SubsystemBase {
     }
     public boolean isClose(double a, double b, double thres) {
         //return Util.inRange(targetPosition, getDegrees(), 10);
-        return Math.abs(a - b) < thres;
+        return Math.abs(AngleUnit.normalizeDegrees(a - b)) < thres;
     }
 
     public boolean isClose() {
-        return isClose(targetPosition, getDegrees(), ConstantsSpindexer.tolerance);
+        return isClose(targetPosition, getDegrees(), thres);
     }
 
 
@@ -113,12 +117,10 @@ public class SpindexerSubsystem extends SubsystemBase {
         rotationController.setPID(ConstantsSpindexer.kP);
         telemtry.addData("spidnexer encoder pos", spindexerEncoder.getDegrees());
         telemtry.addData("targetposis", targetPosition);
-        telemtry.addData("power", rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
+        telemtry.addData("power", rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees())*100);
         telemtry.addData("the statement it is close is:", isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
-        if (!isClose(targetPosition, spindexerEncoder.getDegrees(), 10)) {
-            telemtry.addData("not clolse", !isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
-            setPower(rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
-        }
+        telemtry.addData("not clolse", !isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
+        setPower(rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
         //setPower(squIDController.calculate(0.0, spindexerEncoder.getDegrees()));
 //        if (Util.inRange(spindexerEncoder.getDegrees() % 120, 0, 10)) {
 //            if (artifactSensor.proximityDetected()) {

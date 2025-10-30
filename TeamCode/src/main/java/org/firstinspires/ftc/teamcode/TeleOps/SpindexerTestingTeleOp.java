@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 public class SpindexerTestingTeleOp extends LinearOpMode {
     private SpindexerSubsystem spindexer;
     public void runOpMode(){
-        spindexer = new SpindexerSubsystem(hardwareMap, telemetry);
+        spindexer = new SpindexerSubsystem(hardwareMap);
         waitForStart();
         while (opModeIsActive()){
             if (gamepad1.a){

@@ -11,11 +11,17 @@ public class DetectColor extends CommandBase {
     String color;
     public DetectColor(ColorSensorSubsystem artifactSensor, SpindexerSubsystem spindexer){
         addRequirements(artifactSensor);
+        this.spindexer = spindexer;
         this.artifactSensor = artifactSensor;
     }
     @Override
     public void initialize(){
-        color = artifactSensor.detectColor();
+        String color = artifactSensor.detectColor();
         spindexer.addColor(color);
+    }
+
+    @Override
+    public boolean isFinished(){
+        return true;
     }
 }

@@ -13,6 +13,7 @@ public class IntakeAutoCommandGroup extends SequentialCommandGroup {
     public IntakeAutoCommandGroup(SpindexerSubsystem spindexer, IntakeSubsystem intake, ColorSensorSubsystem artifactSensor){
         addCommands(
                 new IntakeOnCommand(intake),
+                new LogKittenCommand(Log.ASSERT, "INTAKE AUTO", "intake is on!"),
                 new SpindexInCommand(spindexer),
                 new LogKittenCommand(Log.ASSERT, "INTAKE AUTO", "spindexing done"),
                 new ArtifactSensorProximity(artifactSensor),

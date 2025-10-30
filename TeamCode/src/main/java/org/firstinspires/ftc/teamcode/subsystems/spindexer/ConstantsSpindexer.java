@@ -4,11 +4,11 @@ import com.bylazar.configurables.annotations.Configurable;
 
 @Configurable
 public class ConstantsSpindexer {
-    public static double offset = -75;
+    public static double offset = 42;
     public static double proximityThreshold = 3;
     public static double purpleHue = 270;
     public static double greenHue = 120;
-    public static double kP = -0.03;
-
+    public static double kP = -0.0075;
+    public static double thres = 15;
     public static double tolerance = 5;
 }

@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 public abstract class RobotSpindexOnly extends LinearOpMode {
     public SpindexerSubsystem spindexer;
     public void initialize(){
-        spindexer = new SpindexerSubsystem(hardwareMap, telemetry);
+        spindexer = new SpindexerSubsystem(hardwareMap);
     }
 
     public void update(){
