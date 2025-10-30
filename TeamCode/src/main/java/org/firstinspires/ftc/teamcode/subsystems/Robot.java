@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import android.util.Log;
+
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.command.ShooterOffCommand;
 import org.firstinspires.ftc.teamcode.command.ShooterOnCommand;
 import org.firstinspires.ftc.teamcode.lib.ArtifactSensor;
@@ -29,6 +32,9 @@ public abstract class Robot extends LinearOpMode {
     public TurretSubsystem turret;
     public MecanumDriveSubsystem drive;
     public ColorSensorSubsystem artifactSensor;
+    public PinpointSubsystem pinpointSubsystem;
+    public static Telemetry publicTelemetry;
+
 //    public List<LynxModule> hubs;
 
     public void initialize(){
@@ -36,14 +42,15 @@ public abstract class Robot extends LinearOpMode {
         CommandScheduler.getInstance().reset();
         CommandScheduler.getInstance().cancelAll();
         telemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
-
+        publicTelemetry = telemetry;
         artifactSensor = new ColorSensorSubsystem();
+        pinpointSubsystem = new PinpointSubsystem(hardwareMap);
         hood = new HoodSubsystem(hardwareMap);
-        drive = new MecanumDriveSubsystem(hardwareMap, ()->0);
+        drive = new MecanumDriveSubsystem(hardwareMap, () -> pinpointSubsystem.getHeading().getRadians());
         turret = new TurretSubsystem(hardwareMap);
         intake = new IntakeSubsystem(hardwareMap);
         shooter = new ShooterSubsystem(hardwareMap);
-        spindexer = new SpindexerSubsystem(hardwareMap, telemetry);
+        spindexer = new SpindexerSubsystem(hardwareMap);
         transferArm = new TransferArmSubsystem(hardwareMap);
         transferWheel = new TransferWheelSubsystem(hardwareMap);
 
@@ -62,5 +69,15 @@ public abstract class Robot extends LinearOpMode {
 //        }
         CommandScheduler.getInstance().run();
         telemetry.update();
+    }
+
+    public void end() {
+        CommandScheduler.getInstance().cancelAll();
+        CommandScheduler.getInstance().reset();
+        Log.d("RADIAN DEGREE MISMATCH", "Mecanum + " );
+    }
+
+    public static Telemetry getTelemetry() {
+        return publicTelemetry;
     }
 }

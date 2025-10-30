@@ -14,6 +14,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private DcMotor shooterMotorLeft;
     SquIDController velocityController = new SquIDController();
 
+    double targetVelocity = 0;
+
     public ShooterSubsystem (HardwareMap hwMap) {
         shooterMotorRight = (DcMotorEx) hwMap.get(DcMotor.class, "shooterMotorRight");
         shooterMotorLeft = hwMap.get(DcMotor.class, "shooterMotorLeft");
@@ -30,6 +32,12 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotorLeft.setPower(power);
     }
     public void setVelocity(double velocity) {
-        setPower(velocityController.calculate(velocity, shooterMotorRight.getVelocity()));
+        targetVelocity = velocity;
     }
+
+    @Override
+    public void periodic() {
+        setPower(velocityController.calculate(targetVelocity, shooterMotorRight.getVelocity()));
+    }
+
 }

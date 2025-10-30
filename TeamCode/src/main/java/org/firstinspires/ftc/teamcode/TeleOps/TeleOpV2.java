@@ -15,8 +15,8 @@ public class TeleOpV2 extends Robot {
         GamepadEx controller = new GamepadEx(gamepad1);
         initialize();
         drive.setDefaultCommand(new DefaultDriveCommand(drive,
-                controller::getLeftY,
-                controller::getLeftX,
+                () -> -controller.getLeftY(),
+                () -> -controller.getLeftX(),
                 controller::getRightX));
         controller.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, "purple", telemetry));
         controller.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, "green", telemetry));

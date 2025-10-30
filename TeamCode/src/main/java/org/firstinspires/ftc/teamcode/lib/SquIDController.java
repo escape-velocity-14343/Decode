@@ -16,7 +16,7 @@ public class SquIDController {
     }
 
     public double calculate(double setpoint, double current) {
-        return Math.sqrt(Math.abs((setpoint - current)))*p * Math.signum(setpoint - current);
+        return Math.sqrt(Math.abs((setpoint - current))) * p * Math.signum(setpoint - current);
     }
     public double calculateAngleWrapping(double setpoint, double current)  {
         return calculate(AngleUnit.normalizeDegrees(setpoint-current), 0);

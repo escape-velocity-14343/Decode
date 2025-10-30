@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems.spindexer;
 
-import android.util.Log;
-
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,31 +7,32 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.command.LogKittenCommand;
 import org.firstinspires.ftc.teamcode.lib.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.lib.RevColorSensorDetector;
-import org.firstinspires.ftc.teamcode.lib.SquIDController;
+import org.firstinspires.ftc.teamcode.lib.ThaiVPController;
 import org.firstinspires.ftc.teamcode.lib.sensOrangeEncoder;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 public class SpindexerSubsystem extends SubsystemBase {
     DcMotor spindexer;
     sensOrangeEncoder spindexerEncoder;
     ArtifactSensor artifactSensor;
-    SquIDController squIDController = new SquIDController();
+    ThaiVPController rotationController = new ThaiVPController();
     double targetPosition = 0;
     byte[] ballsInSpindexer = new byte[]{0, 0, 0}; //0 means no ball, 1 means purple, 2 means CODE GREEN WILLIAM
     Telemetry telemtry;
     int add = 0;
     String[] artifacts = {"purple", "purple", "green"};
 
-    public SpindexerSubsystem(HardwareMap hwMap, Telemetry telemetry) {
+    public SpindexerSubsystem(HardwareMap hwMap) {
         CommandScheduler.getInstance().registerSubsystem();
         spindexer = hwMap.get(DcMotor.class, "spindexerMotor");
         spindexerEncoder = new sensOrangeEncoder("spindexerEncoder", hwMap);
         spindexerEncoder.setPositionOffset(ConstantsSpindexer.offset);
         artifactSensor = new RevColorSensorDetector(hwMap); //@WILLIAM IS THIS PEAK RUNTIME POLYMORPHISM
+        rotationController.setExponent(1);
 
-        this.telemtry = telemetry;
+        this.telemtry = Robot.getTelemetry();
     }
 
 
@@ -111,14 +110,14 @@ public class SpindexerSubsystem extends SubsystemBase {
             telemtry.addData("SPINDEXER BALLS", s);
         }
 //        telemtry.addData("SPINDEXER BALLS", artifacts.toString());
-        squIDController.setPID(ConstantsSpindexer.spindexerP);
+        rotationController.setPID(ConstantsSpindexer.kP);
         telemtry.addData("spidnexer encoder pos", spindexerEncoder.getDegrees());
         telemtry.addData("targetposis", targetPosition);
-        telemtry.addData("power", squIDController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
+        telemtry.addData("power", rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
         telemtry.addData("the statement it is close is:", isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
         if (!isClose(targetPosition, spindexerEncoder.getDegrees(), 10)) {
             telemtry.addData("not clolse", !isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
-            setPower(squIDController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
+            setPower(rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
         }
         //setPower(squIDController.calculate(0.0, spindexerEncoder.getDegrees()));
 //        if (Util.inRange(spindexerEncoder.getDegrees() % 120, 0, 10)) {

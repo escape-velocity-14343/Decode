@@ -1,8 +1,13 @@
 package org.firstinspires.ftc.teamcode.lib;
 
+import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.INCH;
+
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 public class Util {
     public static boolean inRange(double a, double b, double thres) {
@@ -69,5 +74,13 @@ public class Util {
 
     public static double pose2dToDistance(Pose2d p1, Pose2d p2) {
         return Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
+    }
+
+    public static Pose2d Pose2dConverter(Pose2D pose) {
+        return new Pose2d(pose.getX(INCH), pose.getY(INCH), new Rotation2d(pose.getHeading(AngleUnit.RADIANS)));
+    }
+
+    public static Pose2D Pose2DConverter(Pose2d pose) {
+        return new Pose2D(INCH, pose.getX(), pose.getY(), AngleUnit.DEGREES,pose.getRotation().getDegrees());
     }
 }
