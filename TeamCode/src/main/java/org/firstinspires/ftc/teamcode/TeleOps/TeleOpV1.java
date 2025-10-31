@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOps;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -22,6 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsyste
 import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubsystem;
 
 @TeleOp (name = "TeleOp V1", group = "LinearOpMode")
+@Disabled
 public class TeleOpV1 extends Robot {
 
     @Override

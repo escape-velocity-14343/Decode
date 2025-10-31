@@ -139,6 +139,9 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
         pinpoint.resetPosAndIMU();
         lastGoodPose = new Pose2D(INCH, 0, 0, AngleUnit.DEGREES, 0);
     }
+    public void resetIMU() {
+        pinpoint.setHeading(0, AngleUnit.RADIANS);
+    }
 }
 
 
