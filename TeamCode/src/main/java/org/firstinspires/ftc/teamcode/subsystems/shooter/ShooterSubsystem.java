@@ -4,10 +4,10 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.lib.SquIDController;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 
 public class ShooterSubsystem extends SubsystemBase {
     private DcMotorEx shooterMotorRight;
@@ -21,8 +21,8 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotorLeft = hwMap.get(DcMotor.class, "shooterMotorLeft");
         //reverse right motor
         shooterMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
     }
+
     public void on(){
         shooterMotorRight.setPower(1);
         shooterMotorLeft.setPower(1);
@@ -31,13 +31,21 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotorRight.setPower(power);
         shooterMotorLeft.setPower(power);
     }
+
     public void setVelocity(double velocity) {
         targetVelocity = velocity;
     }
 
+//
+//    public void velocityControlTest(){
+//        setVelocity(constants.targetVelocity);
+//    }
+
     @Override
     public void periodic() {
-//        setPower(velocityController.calculate(targetVelocity, shooterMotorRight.getVelocity()));
+        Robot.getTelemetry().addData("shooter velocity", shooterMotorRight.getVelocity());
+        velocityController.setPID(ShooterConstants.kvp);
+        setPower(velocityController.calculate(ShooterConstants.targetVelocity, shooterMotorRight.getVelocity()) + ShooterConstants.kv * ShooterConstants.targetVelocity);
     }
 
 }
