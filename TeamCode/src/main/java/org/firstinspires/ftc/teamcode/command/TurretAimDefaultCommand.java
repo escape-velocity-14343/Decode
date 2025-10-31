@@ -18,7 +18,7 @@ public class TurretAimDefaultCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double[] rtn = aprilTag.periodic("blue");
+        double[] rtn = aprilTag.returnarray();
         if (Math.abs(rtn[0]) > 0.5){
             turret.auto(rtn[0]);
         }

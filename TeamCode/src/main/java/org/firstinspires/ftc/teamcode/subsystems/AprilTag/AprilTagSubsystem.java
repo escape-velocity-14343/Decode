@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems.AprilTag;
 
 import android.util.Size;
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AprilTagSubsystem {
+public class AprilTagSubsystem extends SubsystemBase {
     private WebcamName shooterCam;
     private VisionPortal visionPortal;
     private AprilTagProcessor tagProcessor;
@@ -21,7 +22,7 @@ public class AprilTagSubsystem {
     private double distance;
     private double height;
     private double rotation;
-    double[] rtn = new double[3];
+    double[] rtn = new double[4];
     Telemetry telemetry;
 
     public AprilTagSubsystem (HardwareMap hwMap, Telemetry telemetry) {
@@ -31,30 +32,23 @@ public class AprilTagSubsystem {
         visionPortal = new VisionPortal.Builder().addProcessor(tagProcessor).setCamera(shooterCam).setCameraResolution(new Size(640, 480)).setStreamFormat(VisionPortal.StreamFormat.MJPEG).build();
         goalTags.put("Blue", 20);
         goalTags.put("Red", 24);
-        distance = -0.1;
-        height = -0.1;
-        rotation = -0.1;
-        rtn[0] = distance;
-        rtn[1] = height;
-        rtn[2] = rotation;
         this.telemetry = telemetry;
     }
 
-    public double[] periodic(String color) {
+    public double[] returnarray(){
+        return rtn;
+    }
+
+    public double[] detect() {
         if (!tagProcessor.getDetections().isEmpty()) {
             AprilTagDetection tag = tagProcessor.getDetections().get(0);
-            if (tag.id == goalTags.get(color)) {
-                distance = tag.ftcPose.range;
-                height = tag.ftcPose.elevation;
-                rotation = tag.ftcPose.bearing;
-            }
+            rtn[0] = distance;
+            rtn[1] = height;
+            rtn[2] = rotation;
+            rtn[3] = tag.id;
+            telemetry.addData("rotation", rotation);
+            return rtn;
         }
-        rtn[0] = distance;
-        rtn[1] = height;
-        rtn[2] = rotation;
-        telemetry.addData("rotation", rotation);
-
-        return rtn;
     }
 }
 

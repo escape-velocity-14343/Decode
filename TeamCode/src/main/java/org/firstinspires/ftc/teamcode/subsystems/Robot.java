@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.command.ShooterOffCommand;
 import org.firstinspires.ftc.teamcode.command.ShooterOnCommand;
 import org.firstinspires.ftc.teamcode.lib.ArtifactSensor;
+import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.hood.HoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSubsystem;
@@ -33,12 +34,13 @@ public abstract class Robot extends LinearOpMode {
     public MecanumDriveSubsystem drive;
     public ColorSensorSubsystem artifactSensor;
     public PinpointSubsystem pinpointSubsystem;
+    public AprilTagSubsystem aprilTag;
     public static Telemetry publicTelemetry;
+    public static int greenBallPlace;
 
 //    public List<LynxModule> hubs;
 
     public void initialize(){
-//        apriltag = new AprilTagSubsystem(hardwareMap, telemetry);
         CommandScheduler.getInstance().reset();
         CommandScheduler.getInstance().cancelAll();
         telemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
@@ -53,6 +55,8 @@ public abstract class Robot extends LinearOpMode {
         spindexer = new SpindexerSubsystem(hardwareMap);
         transferArm = new TransferArmSubsystem(hardwareMap);
         transferWheel = new TransferWheelSubsystem(hardwareMap);
+        aprilTag = new AprilTagSubsystem(hardwareMap, telemetry);
+
 
         //shooter.setDefaultCommand(new ShooterOffCommand(shooter));
         //intake.setDefaultCommand(new IntakeOnCommand(intake));
