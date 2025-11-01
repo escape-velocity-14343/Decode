@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Auton;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -29,8 +30,9 @@ public class AutonV1 extends Robot {
 //                        new AprilTagMotifDetectionCommand(aprilTag),
 //                        new InstantCommand(()->turret.setposition(0)),
                         new MotifShootCommand(spindexer, shooter, transferWheel, transferArm),
-                        new GoToPointWithDefaultCommand(new Pose2d(60-15-12, 72-15+26, Rotation2d.fromDegrees(90)), toPoint),
-                        new GoToPointWithDefaultCommand(new Pose2d(60-15-12, 72-15+26+24, Rotation2d.fromDegrees(90)), toPoint)
+                        new GoToPointWithDefaultCommand(new Pose2d(60-15-36, 72-15+26, Rotation2d.fromDegrees(90)), toPoint),
+                        new WaitCommand(500),
+                        new GoToPointWithDefaultCommand(new Pose2d(60-15-36, 72-15+26+24, Rotation2d.fromDegrees(90)), toPoint)
                 )
         );
         waitForStart();
