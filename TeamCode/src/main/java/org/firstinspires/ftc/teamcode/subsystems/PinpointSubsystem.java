@@ -27,12 +27,10 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
     Pose2D pose = new Pose2D(INCH, 0, 0, AngleUnit.DEGREES, 0);
     GoBildaPinpointDriver.DeviceStatus deviceStatus = GoBildaPinpointDriver.DeviceStatus.NOT_READY;
 
-    @Deprecated
-    public static double yawScalar = 1;
-    public static boolean flipX = true;
-    public static boolean flipY = false;
-    public static double xEncOffset = 0;
-    public static double yEncOffset = 0;
+    public static boolean flipX = false;
+    public static boolean flipY = true;
+    public static double xEncOffset = -4;
+    public static double yEncOffset = 2;
 
     private Pose2D lastGoodPose = new Pose2D(INCH, 0, 0, AngleUnit.DEGREES, 0);
 
@@ -45,6 +43,7 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
         pinpoint.recalibrateIMU();
 
         pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        
         pinpoint.setEncoderDirections(
                 flipX
                         ? GoBildaPinpointDriver.EncoderDirection.REVERSED
@@ -59,6 +58,8 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
 
     @Override
     public void periodic() {
+        //TODO: for testing only
+        pinpoint.setOffsets(xEncOffset, yEncOffset, INCH);
         pinpoint.update();
         if (Double.isNaN(pinpoint.getPosX(INCH))
                 || Double.isNaN(pinpoint.getPosY(INCH))

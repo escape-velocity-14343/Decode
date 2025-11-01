@@ -45,7 +45,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void periodic() {
         Robot.getTelemetry().addData("shooter velocity", shooterMotorRight.getVelocity());
         velocityController.setPID(ShooterConstants.kvp);
-        setPower(velocityController.calculate(ShooterConstants.targetVelocity, shooterMotorRight.getVelocity()) + ShooterConstants.kv * ShooterConstants.targetVelocity);
+        setPower(velocityController.calculate(-targetVelocity, shooterMotorRight.getVelocity()) + ShooterConstants.kv * -targetVelocity);
     }
 
 }

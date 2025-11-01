@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import android.util.Log;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -37,10 +38,12 @@ public abstract class Robot extends LinearOpMode {
     public AprilTagSubsystem aprilTag;
     public static Telemetry publicTelemetry;
     public static int greenBallPlace;
+    public static Pose2d pose;
 
 //    public List<LynxModule> hubs;
 
     public void initialize(){
+//        apriltag = new AprilTagSubsystem(hardwareMap, telemetry);
         CommandScheduler.getInstance().reset();
         CommandScheduler.getInstance().cancelAll();
         telemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
@@ -71,6 +74,7 @@ public abstract class Robot extends LinearOpMode {
 //        for (LynxModule hub : hubs) {
 //            hub.clearBulkCache();
 //        }
+        pose = pinpointSubsystem.getPose();
         CommandScheduler.getInstance().run();
         telemetry.update();
     }
@@ -83,5 +87,8 @@ public abstract class Robot extends LinearOpMode {
 
     public static Telemetry getTelemetry() {
         return publicTelemetry;
+    }
+    public static Pose2d getPose() {
+        return pose;
     }
 }

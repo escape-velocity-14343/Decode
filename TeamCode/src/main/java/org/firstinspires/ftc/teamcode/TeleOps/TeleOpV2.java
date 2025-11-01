@@ -26,6 +26,9 @@ public class TeleOpV2 extends Robot {
         new Trigger(()-> gamepad1.options && gamepad1.share).whileActiveOnce(new InstantCommand(pinpointSubsystem::resetIMU));
         waitForStart();
         while (opModeIsActive()){
+            telemetry.addData("Pose x", pinpointSubsystem.getPose().getX());
+            telemetry.addData("Pose y", pinpointSubsystem.getPose().getY());
+            telemetry.addData("Pose heading", pinpointSubsystem.getHeading().getDegrees());
             update();
         }
     }
