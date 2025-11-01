@@ -15,7 +15,7 @@ public class AprilTagMotifDetectionCommand extends CommandBase {
 
     @Override
     public void initialize(){
-        Robot.greenBallPlace = (int)apriltag.detect()[3] - 20;
+        Robot.motif[(int)apriltag.detect()[3] - 20 - 1] = "green";
     }
 
     @Override

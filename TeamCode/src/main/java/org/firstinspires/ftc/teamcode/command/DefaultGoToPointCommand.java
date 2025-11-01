@@ -24,7 +24,7 @@ public class DefaultGoToPointCommand extends CommandBase {
 
     public DrivetrainSquIDController drivetrainSquIDController = new DrivetrainSquIDController();
 
-    public static double translationkP = 0.025;
+    public static double translationkP = -0.08;
     public static double translationkI = 0;
     public static double translationkD = 0;
     public static double headingkP = 0.002;

@@ -13,7 +13,7 @@ public class ShooterOffCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        shooterSubsystem.setPower(0);
+        shooterSubsystem.setVelocity(0);
     }
     @Override
     public boolean isFinished() {

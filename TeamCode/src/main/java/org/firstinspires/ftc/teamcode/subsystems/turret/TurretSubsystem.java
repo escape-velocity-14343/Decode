@@ -11,41 +11,58 @@ import org.firstinspires.ftc.teamcode.lib.sensOrangeEncoder;
 public class TurretSubsystem extends SubsystemBase {
     private DcMotor turretMotor;
     private sensOrangeEncoder turretEncoder;
-    private ConstantsTurret constants;
     private SquIDController powerManage;
+    private double targetpos = ConstantsTurret.targetposition;
 
     public TurretSubsystem(HardwareMap hwMap){
+        powerManage = new SquIDController();
         turretMotor = hwMap.get(DcMotor.class, "turretMotor");
         turretEncoder = new sensOrangeEncoder("turretEncoder", hwMap);
+        turretEncoder.setPositionOffset(ConstantsTurret.offset);
+        powerManage.setPID(ConstantsTurret.kp);
     }
 
     public void manual(Gamepad gamepad) {
         if (gamepad.right_trigger > 0){
-            if (turretEncoder.getDegrees() + gamepad.right_trigger < constants.max){
+            if (turretEncoder.getDegrees() + gamepad.right_trigger < ConstantsTurret.max){
                 turretMotor.setPower(powerManage.calculate(turretEncoder.getDegrees() + gamepad.right_trigger, turretEncoder.getDegrees()));
             } else {
-                turretMotor.setPower(powerManage.calculate(constants.max, turretEncoder.getDegrees()));
+                turretMotor.setPower(powerManage.calculate(ConstantsTurret.max, turretEncoder.getDegrees()));
             }
         }
 
         if (gamepad.left_trigger > 0){
-            if (turretEncoder.getDegrees() + gamepad.left_trigger > constants.min){
+            if (turretEncoder.getDegrees() + gamepad.left_trigger > ConstantsTurret.min){
                 turretMotor.setPower(powerManage.calculate(turretEncoder.getDegrees() - gamepad.left_trigger, turretEncoder.getDegrees()));
             } else {
-                turretMotor.setPower(powerManage.calculate(constants.min, turretEncoder.getDegrees()));
+                turretMotor.setPower(powerManage.calculate(ConstantsTurret.min, turretEncoder.getDegrees()));
             }
         }
     }
 
+
+    public void setposition(double position){
+        this.targetpos = position;
+    }
+
+    public double getTurretPosition(){
+        return turretEncoder.getDegrees();
+    }
     public void auto(double rotate){
         if (turretEncoder.getDegrees() + rotate > 0){
-            if (turretEncoder.getDegrees() + rotate < constants.max && turretEncoder.getDegrees() + rotate > constants.min){
+            if (turretEncoder.getDegrees() + rotate < ConstantsTurret.max && turretEncoder.getDegrees() + rotate > ConstantsTurret.min){
                 turretMotor.setPower(powerManage.calculate(turretEncoder.getDegrees() + rotate, turretEncoder.getDegrees()));
-            } else if (turretEncoder.getDegrees() + rotate > constants.min){
-                turretMotor.setPower(powerManage.calculate(constants.max, turretEncoder.getDegrees()));
+            } else if (turretEncoder.getDegrees() + rotate > ConstantsTurret.min) {
+                turretMotor.setPower(powerManage.calculate(ConstantsTurret.max, turretEncoder.getDegrees()));
             } else {
-                turretMotor.setPower(powerManage.calculate(constants.min, turretEncoder.getDegrees()));
+                turretMotor.setPower(powerManage.calculate(ConstantsTurret.min, turretEncoder.getDegrees()));
             }
         }
     }
+    @Override
+    public void periodic(){
+        turretMotor.setPower(powerManage.calculateAngleWrapping(targetpos, turretEncoder.getDegrees()));
+    }
+
+
 }

@@ -36,6 +36,10 @@ public class ShooterSubsystem extends SubsystemBase {
         targetVelocity = velocity;
     }
 
+    public double getvelocity(){
+        return shooterMotorRight.getVelocity();
+    }
+
 //
 //    public void velocityControlTest(){
 //        setVelocity(constants.targetVelocity);
@@ -45,7 +49,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void periodic() {
         Robot.getTelemetry().addData("shooter velocity", shooterMotorRight.getVelocity());
         velocityController.setPID(ShooterConstants.kvp);
-        setPower(velocityController.calculate(-targetVelocity, shooterMotorRight.getVelocity()) + ShooterConstants.kv * -targetVelocity);
+        setPower(velocityController.calculate(targetVelocity, shooterMotorRight.getVelocity()) + ShooterConstants.kv * targetVelocity);
     }
 
 }

@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.command;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
+import org.firstinspires.ftc.teamcode.lib.Util;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterConstants;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSubsystem;
 
 public class ShooterOnCommand extends CommandBase {
     ShooterSubsystem shooterSubsystem;
-    double targetVelocity = 750;
+    double targetVelocity = ShooterConstants.closeVelocity;
     public ShooterOnCommand(ShooterSubsystem shooter){
         this.shooterSubsystem = shooter;
         addRequirements(shooter);
@@ -23,6 +25,6 @@ public class ShooterOnCommand extends CommandBase {
     }
     @Override
     public boolean isFinished() {
-        return true;
+        return Util.inRange(shooterSubsystem.getvelocity(), targetVelocity, 67);
     }
 }

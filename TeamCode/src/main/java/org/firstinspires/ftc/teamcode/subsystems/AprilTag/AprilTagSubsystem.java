@@ -49,6 +49,7 @@ public class AprilTagSubsystem extends SubsystemBase {
             telemetry.addData("rotation", rotation);
             return rtn;
         }
+        return rtn;
     }
 }
 
