@@ -26,9 +26,9 @@ public class AutonV1 extends Robot {
         pinpointSubsystem.setPose(new Pose2d(60,72, Rotation2d.fromDegrees(-135)));
         toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(0, 0, new Rotation2d(0)));
         drive.setDefaultCommand(toPoint);
-        Robot.motif[0] = "purple";
-        Robot.motif[1] = "purple";
-        Robot.motif[2] = "purple";
+        Robot.motif[0] = 1;
+        Robot.motif[1] = 1;
+        Robot.motif[2] = 1;
         
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
@@ -70,8 +70,8 @@ public class AutonV1 extends Robot {
         );
         waitForStart();
         while (opModeIsActive()){
-            for (String s : Robot.motif){
-                Log.i("Motif", s);
+            for (int s : Robot.motif){
+                Log.i("Motif", "ball" + s);
             }
             //telemetry.addData("motif!", Robot.motif.toString());
             telemetry.addData("shooter", spindexer.getDegrees());

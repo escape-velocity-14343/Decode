@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubs
 
 public class ShootCommandGroup extends SequentialCommandGroup {
 
-    public ShootCommandGroup(ShooterSubsystem shooter, SpindexerSubsystem spindexer, TransferArmSubsystem transferArm, TransferWheelSubsystem transferWheel, String ballColor, Telemetry telemetry) {
+    public ShootCommandGroup(ShooterSubsystem shooter, SpindexerSubsystem spindexer, TransferArmSubsystem transferArm, TransferWheelSubsystem transferWheel, int ballColor, Telemetry telemetry) {
         telemetry.addData("hello", 1);
         addCommands(
                 new ShooterOnCommand(shooter),

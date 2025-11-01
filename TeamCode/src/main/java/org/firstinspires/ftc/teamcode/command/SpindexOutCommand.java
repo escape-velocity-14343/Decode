@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 
 public class SpindexOutCommand extends CommandBase {
     SpindexerSubsystem spindexer;
-    String ballColor;
-    public SpindexOutCommand(SpindexerSubsystem spindexer, String ballColor){
+    int ballColor;
+    public SpindexOutCommand(SpindexerSubsystem spindexer, int ballColor){
         this.spindexer = spindexer;
         this.ballColor = ballColor;
         addRequirements(spindexer);

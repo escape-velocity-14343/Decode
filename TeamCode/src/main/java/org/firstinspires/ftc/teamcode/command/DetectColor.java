@@ -16,7 +16,7 @@ public class DetectColor extends CommandBase {
     }
     @Override
     public void initialize(){
-        String color = artifactSensor.detectColor();
+        int color = artifactSensor.detectColor();
         spindexer.addColor(color);
     }
 

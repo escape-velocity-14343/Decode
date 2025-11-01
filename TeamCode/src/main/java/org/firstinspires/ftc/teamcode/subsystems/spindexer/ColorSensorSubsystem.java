@@ -11,11 +11,11 @@ public class ColorSensorSubsystem extends SubsystemBase {
     public ColorSensorSubsystem(HardwareMap hwMap){
         this.artifactSensor = new RevColorSensorDetector(hwMap);
     }
-    public String detectColor(){
+    public int detectColor(){
         if (artifactSensor.greenDetected()){
-            return "green";
+            return 2;
         } else {
-            return "purple";
+            return 1;
         }
     }
 

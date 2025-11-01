@@ -38,7 +38,7 @@ public abstract class Robot extends LinearOpMode {
     public PinpointSubsystem pinpointSubsystem;
     public AprilTagSubsystem aprilTag;
     public static Telemetry publicTelemetry;
-    public static String[] motif = new String[3];
+    public static int[] motif = new int[3];
     public static Pose2d pose;
 
 //    public List<LynxModule> hubs;

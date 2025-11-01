@@ -21,8 +21,8 @@ public class TeleOpV2 extends Robot {
                 () -> -controller.getLeftY(),
                 () -> -controller.getLeftX(),
                 controller::getRightX));
-        controller.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, "purple", telemetry));
-        controller.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, "green", telemetry));
+        controller.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, 1, telemetry));
+        controller.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, 2, telemetry));
         controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(new MotifShootCommand(spindexer, shooter, transferWheel, transferArm));
         controller.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor));
         controller.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new InstantCommand(()->intake.setPower(-0.5)));

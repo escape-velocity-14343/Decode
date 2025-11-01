@@ -25,7 +25,7 @@ public class SpindexerSubsystem extends SubsystemBase {
     byte[] ballsInSpindexer = new byte[]{0, 0, 0}; //0 means no ball, 1 means purple, 2 means CODE GREEN WILLIAM
     Telemetry telemtry;
     int add = 0;
-    String[] artifacts = {"green", "purple", "purple"};
+    public static int[] artifacts = {2, 1, 1};
 
     public SpindexerSubsystem(HardwareMap hwMap) {
         CommandScheduler.getInstance().registerSubsystem();
@@ -53,7 +53,7 @@ public class SpindexerSubsystem extends SubsystemBase {
 
     public int intakeAuto(){
         for (int i = 0; i < 3; i++){
-            if (artifacts[i].equals("empty")){
+            if (artifacts[i] == 0){
                 setTargetPosition(120*(i) + 180);
                 return i;
             }
@@ -61,13 +61,13 @@ public class SpindexerSubsystem extends SubsystemBase {
         return -1;
     }
 
-    public int outakeAuto(String color){
+    public int outakeAuto(int color){
         for (int i = 0; i < 3; i++){
-            if (artifacts[i].equals(color)){
+            if (artifacts[i] == color){
 //                telemtry.addData("OUTAKE AUTO POS:", 120*i);
 //                telemtry.addData("OUTAKE AUTO CURRENT:", spindexerEncoder.getDegrees());
                 setTargetPosition(120*i);
-                artifacts[i] = "empty";
+                artifacts[i] = 0;
                 return i;
             }
         }
@@ -75,9 +75,9 @@ public class SpindexerSubsystem extends SubsystemBase {
     }
 
 
-    public void addColor(String color){
+    public void addColor(int color){
         for (int i = 0; i < 3; i++){
-            if (artifacts[i].equals("empty")){
+            if (artifacts[i] == 0){
                 artifacts[i] = color;
                 break;
             }
@@ -110,8 +110,8 @@ public class SpindexerSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        for (String s : artifacts){
-            telemtry.addData("SPINDEXER BALLS", s);
+        for (int s : artifacts){
+            telemtry.addData("SPINDEXER BALLS", "balls" + s);
         }
 //        telemtry.addData("SPINDEXER BALLS", artifacts.toString());
         rotationController.setPID(ConstantsSpindexer.kP);
