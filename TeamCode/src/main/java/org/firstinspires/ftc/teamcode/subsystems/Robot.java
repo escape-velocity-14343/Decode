@@ -10,9 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.command.ShooterOffCommand;
-import org.firstinspires.ftc.teamcode.command.ShooterOnCommand;
-import org.firstinspires.ftc.teamcode.lib.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.hood.HoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeSubsystem;
@@ -22,7 +19,6 @@ import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.turret.TurretSubsystem;
-import org.firstinspires.ftc.vision.VisionPortal;
 
 public abstract class Robot extends LinearOpMode {
 //    public AprilTagSubsystem apriltag;
@@ -40,6 +36,8 @@ public abstract class Robot extends LinearOpMode {
     public static Telemetry publicTelemetry;
     public static int[] motif = new int[3];
     public static Pose2d pose;
+    public static int atagBearing = 0;
+    public static boolean blueAlliance;
 
 //    public List<LynxModule> hubs;
 

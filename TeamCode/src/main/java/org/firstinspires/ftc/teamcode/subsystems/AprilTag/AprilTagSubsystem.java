@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -42,6 +43,9 @@ public class AprilTagSubsystem extends SubsystemBase {
     public double detect() {
         if (!tagProcessor.getDetections().isEmpty()) {
             AprilTagDetection tag = tagProcessor.getDetections().get(0);
+            if (tag.id==20 || tag.id==24) {
+                Robot.atagBearing = (int) (tag.ftcPose.bearing);
+            }
             //rtn[0] = distance;
             //rtn[1] = height;
             //rtn[2] = rotation;
