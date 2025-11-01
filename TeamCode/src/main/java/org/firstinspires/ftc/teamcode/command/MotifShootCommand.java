@@ -17,19 +17,21 @@ public class MotifShootCommand extends SequentialCommandGroup {
         addRequirements(spindexer, shooter);
         addCommands(
                 new ShooterOnCommand(shooter),
-                new SpindexOutCommand(spindexer, Robot.motif[0]),
+
+                new SpindexOutCommand(spindexer, Robot.motif1),
+                //new LogKittenCommand()
                 new TransferWheelOnCommand(transferWheel),
                 new TransferArmUpCommand(transferArm),
                 new WaitCommand(500),
                 new TransferArmDownCommand(transferArm),
 
-                new SpindexOutCommand(spindexer, Robot.motif[1]),
+                new SpindexOutCommand(spindexer, Robot.motif2),
                 new TransferWheelOnCommand(transferWheel),
                 new TransferArmUpCommand(transferArm),
                 new WaitCommand(500),
                 new TransferArmDownCommand(transferArm),
 
-                new SpindexOutCommand(spindexer, Robot.motif[2]),
+                new SpindexOutCommand(spindexer, Robot.motif3),
                 new TransferWheelOnCommand(transferWheel),
                 new TransferArmUpCommand(transferArm),
                 new WaitCommand(500),

@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import android.util.Log;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.bylazar.gamepad.PanelsGamepad;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -40,6 +42,10 @@ public abstract class Robot extends LinearOpMode {
     public static Telemetry publicTelemetry;
     public static int[] motif = new int[3];
     public static Pose2d pose;
+    public static double aprilTagX;
+    public GamepadEx controller;
+
+    public static boolean blueAlliance = true;
 
 //    public List<LynxModule> hubs;
 
@@ -47,6 +53,7 @@ public abstract class Robot extends LinearOpMode {
 //        apriltag = new AprilTagSubsystem(hardwareMap, telemetry);
         CommandScheduler.getInstance().reset();
         CommandScheduler.getInstance().cancelAll();
+        controller = new GamepadEx(PanelsGamepad.INSTANCE.getFirstManager().asCombinedFTCGamepad(gamepad1));
         telemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
         publicTelemetry = telemetry;
         artifactSensor = new ColorSensorSubsystem(hardwareMap);

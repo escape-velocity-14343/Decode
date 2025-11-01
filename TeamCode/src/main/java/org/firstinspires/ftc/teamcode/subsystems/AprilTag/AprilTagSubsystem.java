@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.subsystems.Robot;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -47,7 +48,10 @@ public class AprilTagSubsystem extends SubsystemBase {
             //rtn[2] = rotation;
             //rtn[3] = tag.id;
             telemetry.addData("rotation", rotation);
-            return tag.id - 21;
+            if (tag.id == 20 || tag.id == 24) {
+                Robot.aprilTagX = tag.center.x-320;
+            }
+            return tag.id;
         }
         return 0;
     }
