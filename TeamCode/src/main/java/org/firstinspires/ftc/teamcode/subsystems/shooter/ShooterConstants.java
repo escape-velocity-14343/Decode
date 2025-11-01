@@ -5,5 +5,5 @@ import com.bylazar.configurables.annotations.Configurable;
 public class ShooterConstants {
     public static double kvp = -0.0175;
     public static double kv = -0.00075;
-    public static double closeVelocity = -1500;
+    public static double closeVelocity = -1400;
 }

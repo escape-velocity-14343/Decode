@@ -25,7 +25,7 @@ public class SpindexerSubsystem extends SubsystemBase {
     byte[] ballsInSpindexer = new byte[]{0, 0, 0}; //0 means no ball, 1 means purple, 2 means CODE GREEN WILLIAM
     Telemetry telemtry;
     int add = 0;
-    String[] artifacts = {"empty", "empty", "empty"};
+    String[] artifacts = {"green", "purple", "purple"};
 
     public SpindexerSubsystem(HardwareMap hwMap) {
         CommandScheduler.getInstance().registerSubsystem();
@@ -91,7 +91,7 @@ public class SpindexerSubsystem extends SubsystemBase {
 
 
     public void setPower(double power){
-        spindexer.setPower(Range.clip(power, -0.4, 0.4));
+        spindexer.setPower(Range.clip(power, -0.5, 0.5));
     }
 
     public double getDegrees() {

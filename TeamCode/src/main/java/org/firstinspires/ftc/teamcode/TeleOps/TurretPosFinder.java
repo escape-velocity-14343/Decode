@@ -11,6 +11,7 @@ public class TurretPosFinder extends Robot {
         waitForStart();
         while (opModeIsActive()) {
             turret.periodic();
+            telemetry.update();
         }
         end();
     }

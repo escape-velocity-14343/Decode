@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.turret.TurretSubsystem;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 public abstract class Robot extends LinearOpMode {
 //    public AprilTagSubsystem apriltag;
@@ -52,7 +53,7 @@ public abstract class Robot extends LinearOpMode {
         pinpointSubsystem = new PinpointSubsystem(hardwareMap);
         hood = new HoodSubsystem(hardwareMap);
         drive = new MecanumDriveSubsystem(hardwareMap, () -> pinpointSubsystem.getHeading().getRadians());
-        turret = new TurretSubsystem(hardwareMap);
+        turret = new TurretSubsystem(hardwareMap, telemetry);
         intake = new IntakeSubsystem(hardwareMap);
         shooter = new ShooterSubsystem(hardwareMap);
         spindexer = new SpindexerSubsystem(hardwareMap);
@@ -82,7 +83,9 @@ public abstract class Robot extends LinearOpMode {
     public void end() {
         CommandScheduler.getInstance().cancelAll();
         CommandScheduler.getInstance().reset();
+        aprilTag.end();
         Log.d("RADIAN DEGREE MISMATCH", "Mecanum + " );
+
     }
 
     public static Telemetry getTelemetry() {

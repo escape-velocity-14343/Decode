@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.subsystems.turret;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.SquIDController;
 import org.firstinspires.ftc.teamcode.lib.sensOrangeEncoder;
 
@@ -13,12 +16,14 @@ public class TurretSubsystem extends SubsystemBase {
     private sensOrangeEncoder turretEncoder;
     private SquIDController powerManage;
     private double targetpos = ConstantsTurret.targetposition;
+    private Telemetry telemetry;
 
-    public TurretSubsystem(HardwareMap hwMap){
+    public TurretSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         powerManage = new SquIDController();
         turretMotor = hwMap.get(DcMotor.class, "turretMotor");
         turretEncoder = new sensOrangeEncoder("turretEncoder", hwMap);
         turretEncoder.setPositionOffset(ConstantsTurret.offset);
+        this.telemetry = telemetry;
 
     }
 
@@ -59,11 +64,16 @@ public class TurretSubsystem extends SubsystemBase {
             }
         }
     }
+    public void setPower(double power){
+        turretMotor.setPower(power);
+    }
+
     @Override
     public void periodic(){
         powerManage.setPID(ConstantsTurret.kp);
+        telemetry.addData("Kp is", ConstantsTurret.kp);
+        telemetry.addData("setting power to", powerManage.calculateAngleWrapping(targetpos, turretEncoder.getDegrees()));
+        telemetry.addData("turret position", turretEncoder.getDegrees());
         turretMotor.setPower(powerManage.calculateAngleWrapping(targetpos, turretEncoder.getDegrees()));
     }
-
-
 }

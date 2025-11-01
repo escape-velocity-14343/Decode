@@ -13,7 +13,7 @@ public class TurretAimDefaultCommand extends CommandBase {
 
     public TurretAimDefaultCommand(HardwareMap hwMap, Telemetry telemetry){
         aprilTag = new AprilTagSubsystem(hwMap, telemetry);
-        turret = new TurretSubsystem(hwMap);
+        turret = new TurretSubsystem(hwMap, telemetry);
     }
 
     @Override

@@ -39,17 +39,20 @@ public class AprilTagSubsystem extends SubsystemBase {
         return rtn;
     }
 
-    public double[] detect() {
+    public double detect() {
         if (!tagProcessor.getDetections().isEmpty()) {
             AprilTagDetection tag = tagProcessor.getDetections().get(0);
-            rtn[0] = distance;
-            rtn[1] = height;
-            rtn[2] = rotation;
-            rtn[3] = tag.id;
+            //rtn[0] = distance;
+            //rtn[1] = height;
+            //rtn[2] = rotation;
+            //rtn[3] = tag.id;
             telemetry.addData("rotation", rotation);
-            return rtn;
+            return tag.id;
         }
-        return rtn;
+        return 0;
+    }
+    public void end(){
+        visionPortal.close();
     }
 }
 
