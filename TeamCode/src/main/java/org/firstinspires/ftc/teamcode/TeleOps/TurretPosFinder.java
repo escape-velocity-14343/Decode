@@ -12,5 +12,6 @@ public class TurretPosFinder extends Robot {
         while (opModeIsActive()) {
             turret.periodic();
         }
+        end();
     }
 }

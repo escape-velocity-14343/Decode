@@ -28,7 +28,8 @@ public class AutonV1 extends Robot {
                         new InstantCommand(()->turret.setposition(45)),
                         new AprilTagMotifDetectionCommand(aprilTag),
                         new InstantCommand(()->turret.setposition(0)),
-                        new MotifShootCommand(spindexer, shooter, transferWheel, transferArm)
+                        new MotifShootCommand(spindexer, shooter, transferWheel, transferArm),
+                        new GoToPointWithDefaultCommand(new Pose2d(60-15, 72-15, Rotation2d.fromDegrees(-135)), toPoint)
                 )
         );
         waitForStart();

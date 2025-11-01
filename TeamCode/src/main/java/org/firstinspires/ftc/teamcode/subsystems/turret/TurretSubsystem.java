@@ -19,7 +19,7 @@ public class TurretSubsystem extends SubsystemBase {
         turretMotor = hwMap.get(DcMotor.class, "turretMotor");
         turretEncoder = new sensOrangeEncoder("turretEncoder", hwMap);
         turretEncoder.setPositionOffset(ConstantsTurret.offset);
-        powerManage.setPID(ConstantsTurret.kp);
+
     }
 
     public void manual(Gamepad gamepad) {
@@ -61,6 +61,7 @@ public class TurretSubsystem extends SubsystemBase {
     }
     @Override
     public void periodic(){
+        powerManage.setPID(ConstantsTurret.kp);
         turretMotor.setPower(powerManage.calculateAngleWrapping(targetpos, turretEncoder.getDegrees()));
     }
 
