@@ -25,11 +25,12 @@ public class AutonV1 extends Robot {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new GoToPointWithDefaultCommand(new Pose2d(60-15, 72-15, Rotation2d.fromDegrees(-135)), toPoint),
-                        new InstantCommand(()->turret.setposition(45)),
-                        new AprilTagMotifDetectionCommand(aprilTag),
-                        new InstantCommand(()->turret.setposition(0)),
+//                        new InstantCommand(()->turret.setposition(45)),
+//                        new AprilTagMotifDetectionCommand(aprilTag),
+//                        new InstantCommand(()->turret.setposition(0)),
                         new MotifShootCommand(spindexer, shooter, transferWheel, transferArm),
-                        new GoToPointWithDefaultCommand(new Pose2d(60-15, 72-15, Rotation2d.fromDegrees(-135)), toPoint)
+                        new GoToPointWithDefaultCommand(new Pose2d(60-15-12, 72-15+26, Rotation2d.fromDegrees(90)), toPoint),
+                        new GoToPointWithDefaultCommand(new Pose2d(60-15-12, 72-15+26+24, Rotation2d.fromDegrees(90)), toPoint)
                 )
         );
         waitForStart();
