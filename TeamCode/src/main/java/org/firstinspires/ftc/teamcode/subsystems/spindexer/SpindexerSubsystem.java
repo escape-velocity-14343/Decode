@@ -64,9 +64,9 @@ public class SpindexerSubsystem extends SubsystemBase {
     public int outakeAuto(String color){
         for (int i = 0; i < 3; i++){
             if (artifacts[i].equals(color)){
-                telemtry.addData("OUTAKE AUTO POS:", 120*(i));
-                telemtry.addData("OUTAKE AUTO CURRENT:", spindexerEncoder.getDegrees());
-                setTargetPosition((120*(i)));;
+//                telemtry.addData("OUTAKE AUTO POS:", 120*i);
+//                telemtry.addData("OUTAKE AUTO CURRENT:", spindexerEncoder.getDegrees());
+                setTargetPosition(120*i);
                 artifacts[i] = "empty";
                 return i;
             }
@@ -118,8 +118,8 @@ public class SpindexerSubsystem extends SubsystemBase {
         telemtry.addData("spidnexer encoder pos", spindexerEncoder.getDegrees());
         telemtry.addData("targetposis", targetPosition);
         telemtry.addData("power", rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees())*100);
-        telemtry.addData("the statement it is close is:", isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
-        telemtry.addData("not clolse", !isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
+//        telemtry.addData("the statement it is close is:", isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
+//        telemtry.addData("not clolse", !isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
         setPower(rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
         //setPower(squIDController.calculate(0.0, spindexerEncoder.getDegrees()));
 //        if (Util.inRange(spindexerEncoder.getDegrees() % 120, 0, 10)) {

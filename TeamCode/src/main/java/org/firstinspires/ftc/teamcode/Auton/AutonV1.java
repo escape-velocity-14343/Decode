@@ -47,9 +47,9 @@ public class AutonV1 extends Robot {
                         new MotifShootCommand(spindexer, shooter, transferWheel, transferArm),
 
                         //new GoToPointWithDefaultCommand(new Pose2d(-5-24, 38+22, Rotation2d.fromDegrees(90)), toPoint),
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-24-2, 35+18, Rotation2d.fromDegrees(90)), toPoint)),
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-24 - 2, 40+18, Rotation2d.fromDegrees(90)), toPoint)),
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-24 - 2, 45+18, Rotation2d.fromDegrees(90)), toPoint)),
+                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-24-2, 35+17, Rotation2d.fromDegrees(90)), toPoint)),
+                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-24 - 2, 40+17, Rotation2d.fromDegrees(90)), toPoint)),
+                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-24 - 2, 45+17, Rotation2d.fromDegrees(90)), toPoint)),
                         new GoToPointWithDefaultCommand(new Pose2d(60-30, 72-25, Rotation2d.fromDegrees(-125)), toPoint),
                         new MotifShootCommand(spindexer, shooter, transferWheel, transferArm),
 
