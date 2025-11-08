@@ -24,6 +24,7 @@ public class TeleOpV2 extends Robot {
     public void runOpMode() throws InterruptedException{
         GamepadEx controller = new GamepadEx(gamepad1);
         initialize();
+        pinpointSubsystem.update();
         pinpointSubsystem.setPose(new Pose2d(pinpointSubsystem.getTranslation(), pinpointSubsystem.getPose().getRotation().plus(Rotation2d.fromDegrees(blueAlliance ? 90 : -90))));
         drive.setDefaultCommand(new DefaultDriveCommand(drive,
                 () -> -controller.getLeftY(),
@@ -43,7 +44,7 @@ public class TeleOpV2 extends Robot {
                 new TransferWheelOffCommand(transferWheel),
                 new InstantCommand(()->spindexer.setTargetPosition(spindexer.getDegrees()))
         ));
-        new Trigger(()-> controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5).whileActiveContinuous(new InstantCommand(()->aprilTag.detect()));
+        //new Trigger(()-> controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5).whileActiveContinuous(new InstantCommand(()->aprilTag.detect()));
         waitForStart();
         while (opModeIsActive()){
             telemetry.addData("Pose x", pinpointSubsystem.getPose().getX());

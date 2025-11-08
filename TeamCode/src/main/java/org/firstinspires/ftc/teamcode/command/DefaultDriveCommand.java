@@ -28,9 +28,9 @@ public class DefaultDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drive.drive(-x.getAsDouble() + getXModPower(), y.getAsDouble() + getYModPower(),
-                useAtagAlign.getAsBoolean() ?
-                rx.getAsDouble() + getRModPower() : Robot.atagBearing*kP);
+        drive.drive(-x.getAsDouble() + getXModPower(), y.getAsDouble() + getYModPower(), rx.getAsDouble() + getRModPower());
+                /*useAtagAlign.getAsBoolean() ?
+                        Robot.atagBearing*kP : rx.getAsDouble() + getRModPower());*/
     }
 
     public double getXModPower() {

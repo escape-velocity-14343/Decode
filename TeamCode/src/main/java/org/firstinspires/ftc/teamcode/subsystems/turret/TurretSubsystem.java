@@ -46,16 +46,16 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
 
-    public void setposition(double position){
+    public void setposition(double position) {
         this.targetpos = position;
     }
 
-    public double getTurretPosition(){
+    public double getTurretPosition() {
         return turretEncoder.getDegrees();
     }
-    public void auto(double rotate){
+    public void auto(double rotate) {
         if (turretEncoder.getDegrees() + rotate > 0){
-            if (turretEncoder.getDegrees() + rotate < ConstantsTurret.max && turretEncoder.getDegrees() + rotate > ConstantsTurret.min){
+            if (turretEncoder.getDegrees() + rotate < ConstantsTurret.max && turretEncoder.getDegrees() + rotate > ConstantsTurret.min) {
                 turretMotor.setPower(powerManage.calculate(turretEncoder.getDegrees() + rotate, turretEncoder.getDegrees()));
             } else if (turretEncoder.getDegrees() + rotate > ConstantsTurret.min) {
                 turretMotor.setPower(powerManage.calculate(ConstantsTurret.max, turretEncoder.getDegrees()));
@@ -64,16 +64,19 @@ public class TurretSubsystem extends SubsystemBase {
             }
         }
     }
-    public void setPower(double power){
-        turretMotor.setPower(power);
+    public void setPower(double power) {
+        if (!(turretEncoder.getDegrees() > ConstantsTurret.max && power > 0) && !(turretEncoder.getDegrees() < ConstantsTurret.min && power < 0))
+            turretMotor.setPower(power);
+        else
+            turretMotor.setPower(0);
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
         powerManage.setPID(ConstantsTurret.kp);
         telemetry.addData("Kp is", ConstantsTurret.kp);
         telemetry.addData("setting power to", powerManage.calculateAngleWrapping(targetpos, turretEncoder.getDegrees()));
         telemetry.addData("turret position", turretEncoder.getDegrees());
-        turretMotor.setPower(powerManage.calculateAngleWrapping(targetpos, turretEncoder.getDegrees()));
+        setPower(powerManage.calculate(targetpos, turretEncoder.getDegrees())); //NO ANGLE WRAP BECAUSE THE WIRING CANT WRAP
     }
 }

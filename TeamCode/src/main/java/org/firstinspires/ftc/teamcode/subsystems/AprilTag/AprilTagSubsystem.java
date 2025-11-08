@@ -55,6 +55,10 @@ public class AprilTagSubsystem extends SubsystemBase {
         }
         return 0;
     }
+    @Override
+    public void periodic() {
+        detect();
+    }
     public void end(){
         visionPortal.close();
     }
