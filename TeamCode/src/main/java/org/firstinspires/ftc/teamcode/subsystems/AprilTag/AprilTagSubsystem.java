@@ -23,6 +23,7 @@ public class AprilTagSubsystem extends SubsystemBase {
     private double height;
     private double rotation;
     double[] rtn = new double[4];
+    public static double ID;
     Telemetry telemetry;
 
     public AprilTagSubsystem (HardwareMap hwMap, Telemetry telemetry) {
@@ -47,6 +48,7 @@ public class AprilTagSubsystem extends SubsystemBase {
             //rtn[2] = rotation;
             //rtn[3] = tag.id;
             telemetry.addData("rotation", rotation);
+            ID = tag.id-21;
             return tag.id - 21;
         }
         return 0;

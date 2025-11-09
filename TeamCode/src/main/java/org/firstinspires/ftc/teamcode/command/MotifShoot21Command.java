@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.command;
 
-import com.arcrobotics.ftclib.command.Command;
-import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -12,24 +9,24 @@ import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubsystem;
 
-public class MotifShootCommand extends SequentialCommandGroup {
-    public MotifShootCommand(SpindexerSubsystem spindexer, ShooterSubsystem shooter, TransferWheelSubsystem transferWheel, TransferArmSubsystem transferArm) {
+public class MotifShoot21Command extends SequentialCommandGroup {
+    public MotifShoot21Command(SpindexerSubsystem spindexer, ShooterSubsystem shooter, TransferWheelSubsystem transferWheel, TransferArmSubsystem transferArm) {
         addRequirements(spindexer, shooter);
         addCommands(
                 new ShooterOnCommand(shooter),
-                new SpindexOutCommand(spindexer, Robot.motif[0]),
+                new SpindexGoToCommand(spindexer, 0),
                 new TransferWheelOnCommand(transferWheel),
                 new TransferArmUpCommand(transferArm),
                 new WaitCommand(500),
                 new TransferArmDownCommand(transferArm),
 
-                new SpindexOutCommand(spindexer, Robot.motif[1]),
+                new SpindexGoToCommand(spindexer, 120),
                 new TransferWheelOnCommand(transferWheel),
                 new TransferArmUpCommand(transferArm),
                 new WaitCommand(500),
                 new TransferArmDownCommand(transferArm),
 
-                new SpindexOutCommand(spindexer, Robot.motif[2]),
+                new SpindexGoToCommand(spindexer, 240),
                 new TransferWheelOnCommand(transferWheel),
                 new TransferArmUpCommand(transferArm),
                 new WaitCommand(500),

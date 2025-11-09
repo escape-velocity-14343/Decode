@@ -4,9 +4,10 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.StaticValues;
 
 public class AprilTagMotifDetectionCommand extends CommandBase {
-    double ID;
+    public static double ID;
 
     AprilTagSubsystem apriltag;
     public AprilTagMotifDetectionCommand(AprilTagSubsystem apriltag){
@@ -15,7 +16,7 @@ public class AprilTagMotifDetectionCommand extends CommandBase {
 
     @Override
     public void initialize(){
-        Robot.motif[(int)apriltag.detect()] = 2;
+        StaticValues.setMotif((int)apriltag.detect(), 2);
     }
 
     @Override

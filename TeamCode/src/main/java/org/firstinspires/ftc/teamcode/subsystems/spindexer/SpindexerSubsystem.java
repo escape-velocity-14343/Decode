@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.lib.RevColorSensorDetector;
 import org.firstinspires.ftc.teamcode.lib.ThaiVPController;
 import org.firstinspires.ftc.teamcode.lib.sensOrangeEncoder;
 import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.StaticValues;
 
 public class SpindexerSubsystem extends SubsystemBase {
     DcMotor spindexer;
@@ -25,7 +26,6 @@ public class SpindexerSubsystem extends SubsystemBase {
     byte[] ballsInSpindexer = new byte[]{0, 0, 0}; //0 means no ball, 1 means purple, 2 means CODE GREEN WILLIAM
     Telemetry telemtry;
     int add = 0;
-    public static int[] artifacts = {2, 1, 1};
 
     public SpindexerSubsystem(HardwareMap hwMap) {
         CommandScheduler.getInstance().registerSubsystem();
@@ -37,7 +37,6 @@ public class SpindexerSubsystem extends SubsystemBase {
 
         this.telemtry = Robot.getTelemetry();
     }
-
 
 
     public void intake(int ballNum){
@@ -53,7 +52,7 @@ public class SpindexerSubsystem extends SubsystemBase {
 
     public int intakeAuto(){
         for (int i = 0; i < 3; i++){
-            if (artifacts[i] == 0){
+            if (StaticValues.getArtifacts(i) == 0){
                 setTargetPosition(120*(i) + 180);
                 return i;
             }
@@ -63,11 +62,11 @@ public class SpindexerSubsystem extends SubsystemBase {
 
     public int outakeAuto(int color){
         for (int i = 0; i < 3; i++){
-            if (artifacts[i] == color){
+            if (StaticValues.getArtifacts(i) == color){
 //                telemtry.addData("OUTAKE AUTO POS:", 120*i);
 //                telemtry.addData("OUTAKE AUTO CURRENT:", spindexerEncoder.getDegrees());
                 setTargetPosition(120*i);
-                artifacts[i] = 0;
+                StaticValues.setArtifacts(i, 0);
                 return i;
             }
         }
@@ -77,8 +76,8 @@ public class SpindexerSubsystem extends SubsystemBase {
 
     public void addColor(int color){
         for (int i = 0; i < 3; i++){
-            if (artifacts[i] == 0){
-                artifacts[i] = color;
+            if (StaticValues.getArtifacts(i) == 0){
+                StaticValues.setArtifacts(i, color);;
                 break;
             }
         }
@@ -110,8 +109,8 @@ public class SpindexerSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        for (int s : artifacts){
-            telemtry.addData("SPINDEXER BALLS", "balls" + s);
+        for (int i = 0; i < 3; i++){
+            telemtry.addData("SPINDEXER BALLS", "balls" + StaticValues.getArtifacts(i));
         }
 //        telemtry.addData("SPINDEXER BALLS", artifacts.toString());
         rotationController.setPID(ConstantsSpindexer.kP);

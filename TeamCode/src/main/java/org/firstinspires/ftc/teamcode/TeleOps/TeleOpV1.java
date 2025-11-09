@@ -35,7 +35,7 @@ public class TeleOpV1 extends Robot {
                 controller::getLeftX,
                 controller::getRightX));
 
-        controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, "blue", telemetry));
+        controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, 0, telemetry));
         controller.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new IntakeOnCommand(intake).alongWith(new SpindexInCommand(spindexer)))
                 .whenReleased(new IntakeOffCommand(intake));
         controller.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(new ShooterOnCommand(shooter)).whenReleased(new ShooterOffCommand(shooter));;
