@@ -30,6 +30,7 @@ public class ShooterSubsystem extends SubsystemBase {
         velocityLUT.add(40,-1500);
         velocityLUT.add(60,-1600);
         velocityLUT.add(70,-1800);
+        velocityLUT.add(100, -2000);
         velocityLUT.createLUT();
 
     }
@@ -42,8 +43,10 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotorRight.setPower(power);
         shooterMotorLeft.setPower(power);
     }
-    public void shootFromDistance(double distance){
-        double velocity = velocityLUT.get(distance);
+    public void shootFromDistance(double distance) {
+        double velocity = ShooterConstants.closeVelocity;
+        if (distance > 0 && distance < 100)
+            velocity = velocityLUT.get(distance);
         Log.i("Shooter", "Shooting from distance: " + distance + " with velocity: " + velocity);
         setVelocity(velocity);
     }

@@ -50,8 +50,8 @@ public class AprilTagSubsystem extends SubsystemBase {
                 .setLensIntrinsics(
                         341.44068944204895,
                         310.9014398907107,
-                        342.01300901026104,
-                        228.30715483016178)
+                        360, //342.01300901026104
+                        240) //228.30715483016178
                 .build();
         tagProcessor.setDecimation(1.5f);
         visionPortal = new VisionPortal.Builder().addProcessor(tagProcessor)
