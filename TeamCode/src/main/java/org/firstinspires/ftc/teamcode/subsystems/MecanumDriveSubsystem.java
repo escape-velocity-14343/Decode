@@ -70,4 +70,7 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         frontRightMotor.setPower(frontRightPower);
         backRightMotor.setPower(backRightPower);
     }
+    public void setHeadingSupplier(DoubleSupplier headingSupplier){
+        heading = headingSupplier;
+    }
 }

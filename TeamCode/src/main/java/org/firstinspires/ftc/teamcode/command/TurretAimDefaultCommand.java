@@ -5,22 +5,21 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.turret.ConstantsTurret;
 import org.firstinspires.ftc.teamcode.subsystems.turret.TurretSubsystem;
 
 public class TurretAimDefaultCommand extends CommandBase {
     private AprilTagSubsystem aprilTag;
     private TurretSubsystem turret;
 
-    public TurretAimDefaultCommand(HardwareMap hwMap, Telemetry telemetry){
-        aprilTag = new AprilTagSubsystem(hwMap, telemetry);
-        turret = new TurretSubsystem(hwMap, telemetry);
+    public TurretAimDefaultCommand(AprilTagSubsystem aprilTag, TurretSubsystem turret) {
+        this.aprilTag = aprilTag;
+        this.turret = turret;
+        addRequirements(turret);
     }
 
     @Override
     public void execute() {
-        double[] rtn = aprilTag.returnarray();
-        if (Math.abs(rtn[0]) > 0.5){
-            turret.auto(rtn[0]);
-        }
+        turret.setPowerManual(ConstantsTurret.apriltagkP*aprilTag.getBearing());
     }
 }

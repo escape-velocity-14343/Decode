@@ -17,6 +17,7 @@ public class TurretSubsystem extends SubsystemBase {
     private SquIDController powerManage;
     private double targetpos = ConstantsTurret.targetposition;
     private Telemetry telemetry;
+    boolean manualControl = false;
 
     public TurretSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         powerManage = new SquIDController();
@@ -27,48 +28,23 @@ public class TurretSubsystem extends SubsystemBase {
 
     }
 
-    public void manual(Gamepad gamepad) {
-        if (gamepad.right_trigger > 0){
-            if (turretEncoder.getDegrees() + gamepad.right_trigger < ConstantsTurret.max){
-                turretMotor.setPower(powerManage.calculate(turretEncoder.getDegrees() + gamepad.right_trigger, turretEncoder.getDegrees()));
-            } else {
-                turretMotor.setPower(powerManage.calculate(ConstantsTurret.max, turretEncoder.getDegrees()));
-            }
-        }
-
-        if (gamepad.left_trigger > 0){
-            if (turretEncoder.getDegrees() + gamepad.left_trigger > ConstantsTurret.min){
-                turretMotor.setPower(powerManage.calculate(turretEncoder.getDegrees() - gamepad.left_trigger, turretEncoder.getDegrees()));
-            } else {
-                turretMotor.setPower(powerManage.calculate(ConstantsTurret.min, turretEncoder.getDegrees()));
-            }
-        }
-    }
-
-
-    public void setposition(double position) {
+    public void setTargetPosition(double position) {
+        manualControl = false;
         this.targetpos = position;
     }
 
     public double getTurretPosition() {
         return turretEncoder.getDegrees();
     }
-    public void auto(double rotate) {
-        if (turretEncoder.getDegrees() + rotate > 0){
-            if (turretEncoder.getDegrees() + rotate < ConstantsTurret.max && turretEncoder.getDegrees() + rotate > ConstantsTurret.min) {
-                turretMotor.setPower(powerManage.calculate(turretEncoder.getDegrees() + rotate, turretEncoder.getDegrees()));
-            } else if (turretEncoder.getDegrees() + rotate > ConstantsTurret.min) {
-                turretMotor.setPower(powerManage.calculate(ConstantsTurret.max, turretEncoder.getDegrees()));
-            } else {
-                turretMotor.setPower(powerManage.calculate(ConstantsTurret.min, turretEncoder.getDegrees()));
-            }
-        }
-    }
-    public void setPower(double power) {
+    private void setPower(double power) {
         if (!(turretEncoder.getDegrees() > ConstantsTurret.max && power > 0) && !(turretEncoder.getDegrees() < ConstantsTurret.min && power < 0))
             turretMotor.setPower(power);
         else
             turretMotor.setPower(0);
+    }
+    public void setPowerManual(double power) {
+        manualControl = true;
+        setPower(power);
     }
 
     @Override
@@ -77,6 +53,7 @@ public class TurretSubsystem extends SubsystemBase {
         telemetry.addData("Kp is", ConstantsTurret.kp);
         telemetry.addData("setting power to", powerManage.calculateAngleWrapping(targetpos, turretEncoder.getDegrees()));
         telemetry.addData("turret position", turretEncoder.getDegrees());
-        setPower(powerManage.calculate(targetpos, turretEncoder.getDegrees())); //NO ANGLE WRAP BECAUSE THE WIRING CANT WRAP
+        if (!manualControl)
+            setPower(powerManage.calculate(targetpos, turretEncoder.getDegrees())); //NO ANGLE WRAP BECAUSE THE WIRING CANT WRAP
     }
 }

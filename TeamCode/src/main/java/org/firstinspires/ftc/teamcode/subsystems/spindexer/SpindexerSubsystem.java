@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.lib.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.lib.RevColorSensorDetector;
 import org.firstinspires.ftc.teamcode.lib.ThaiVPController;
 import org.firstinspires.ftc.teamcode.lib.sensOrangeEncoder;
-import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 public class SpindexerSubsystem extends SubsystemBase {
     DcMotor spindexer;
@@ -22,7 +22,6 @@ public class SpindexerSubsystem extends SubsystemBase {
     ArtifactSensor artifactSensor;
     ThaiVPController rotationController = new ThaiVPController();
     double targetPosition = 0;
-    byte[] ballsInSpindexer = new byte[]{0, 0, 0}; //0 means no ball, 1 means purple, 2 means CODE GREEN WILLIAM
     Telemetry telemtry;
     int add = 0;
     public static int[] artifacts = {2, 1, 1};
@@ -33,7 +32,7 @@ public class SpindexerSubsystem extends SubsystemBase {
         spindexerEncoder = new sensOrangeEncoder("spindexerEncoder", hwMap);
         spindexerEncoder.setPositionOffset(ConstantsSpindexer.offset);
         artifactSensor = new RevColorSensorDetector(hwMap); //@WILLIAM IS THIS PEAK RUNTIME POLYMORPHISM
-        rotationController.setExponent(1);
+        rotationController.setExponent(ConstantsSpindexer.exponent);
 
         this.telemtry = Robot.getTelemetry();
     }
@@ -83,6 +82,14 @@ public class SpindexerSubsystem extends SubsystemBase {
             }
         }
     }
+    public boolean hasSpace() {
+        for (int i : artifacts) {
+            if (i==0) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     public void setTargetPosition(double targetPosition) {
@@ -91,7 +98,7 @@ public class SpindexerSubsystem extends SubsystemBase {
 
 
     public void setPower(double power){
-        spindexer.setPower(Range.clip(power, -0.5, 0.5));
+        spindexer.setPower(Range.clip(power, -0.75, 0.75));
     }
 
     public double getDegrees() {
