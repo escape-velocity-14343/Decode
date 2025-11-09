@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOps;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 @TeleOp(name = "TurretPosFinder", group = "Test")
 public class TurretPosFinder extends Robot {
     @Override

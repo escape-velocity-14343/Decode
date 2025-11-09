@@ -3,28 +3,34 @@ package org.firstinspires.ftc.teamcode.command;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.lib.Util;
+import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterConstants;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSubsystem;
 
-public class ShooterOnCommand extends CommandBase {
+public class ShootWithDistCommand extends CommandBase {
     ShooterSubsystem shooterSubsystem;
-    double targetVelocity = ShooterConstants.closeVelocity;
-    public ShooterOnCommand(ShooterSubsystem shooter){
+    AprilTagSubsystem atag;
+    double distance = 0;
+    public ShootWithDistCommand(ShooterSubsystem shooter, AprilTagSubsystem atag){
         this.shooterSubsystem = shooter;
+        this.atag = atag;
         addRequirements(shooter);
     }
-    public ShooterOnCommand(ShooterSubsystem shooter, double velocity){
+    public ShootWithDistCommand(ShooterSubsystem shooter, double distance){
         this.shooterSubsystem = shooter;
-        this.targetVelocity = velocity;
+        this.distance = distance;
         addRequirements(shooter);
     }
 
     @Override
     public void initialize() {
-        shooterSubsystem.setVelocity(targetVelocity);
+        if (atag != null) {
+            distance = atag.getDistance();
+        }
+        shooterSubsystem.shootFromDistance(distance);
     }
     @Override
     public boolean isFinished() {
-        return Util.inRange(shooterSubsystem.getVelocity(), targetVelocity, 67);
+        return shooterSubsystem.atVelocity();
     }
 }

@@ -63,7 +63,7 @@ public class UtilityCameraFrameCapture extends LinearOpMode
     /*
      * EDIT THESE PARAMETERS AS NEEDED
      */
-    final boolean USING_WEBCAM = false;
+    final boolean USING_WEBCAM = true;
     final BuiltinCameraDirection INTERNAL_CAM_DIR = BuiltinCameraDirection.BACK;
     final int RESOLUTION_WIDTH = 640;
     final int RESOLUTION_HEIGHT = 480;
@@ -83,6 +83,8 @@ public class UtilityCameraFrameCapture extends LinearOpMode
             portal = new VisionPortal.Builder()
                     .setCamera(hardwareMap.get(WebcamName.class, "shooterCam"))
                     .setCameraResolution(new Size(RESOLUTION_WIDTH, RESOLUTION_HEIGHT))
+                    .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                    .setShowStatsOverlay(false)
                     .build();
         }
         else
@@ -97,13 +99,13 @@ public class UtilityCameraFrameCapture extends LinearOpMode
         {
             boolean x = gamepad1.x;
 
-            if (x && !lastX)
+            if (x)
             {
-                portal.saveNextFrameRaw(String.format(Locale.US, "CameraFrameCapture-%06d", frameCount++));
+                portal.saveNextFrameRaw(String.format(Locale.US, "img-%06d", frameCount++));
                 capReqTime = System.currentTimeMillis();
             }
 
-            lastX = x;
+
 
             telemetry.addLine("######## Camera Capture Utility ########");
             telemetry.addLine(String.format(Locale.US, " > Resolution: %dx%d", RESOLUTION_WIDTH, RESOLUTION_HEIGHT));
@@ -119,7 +121,7 @@ public class UtilityCameraFrameCapture extends LinearOpMode
             {
                 capReqTime = 0;
             }
-
+            sleep(100);
             telemetry.update();
         }
     }

@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.command.LogKittenCommand;
 import org.firstinspires.ftc.teamcode.command.ShootCommandGroup;
-import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 @TeleOp (name = "ShootTeleOp", group = "Testing")
 public class ShootTeleOp extends Robot {
@@ -34,7 +34,7 @@ public class ShootTeleOp extends Robot {
         shoot.whenPressed(
                 new LogKittenCommand(Log.INFO, "ShootTeleOp", "IT WAS PRESSED")
                         .alongWith(
-                        new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, 0, telemetry)));
+                        new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, 0, telemetry, aprilTag)));
 //    (new LogCatCommand("IT WAS PRESSED"));
 
 //        controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(
