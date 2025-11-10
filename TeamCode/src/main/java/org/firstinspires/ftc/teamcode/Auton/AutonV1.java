@@ -25,6 +25,9 @@ public abstract class AutonV1 extends Robot {
 
     public void run(int m) throws InterruptedException {
         initialize();
+        timer.reset();
+        while(!aprilTag.isStreaming()||timer.milliseconds()>1000);
+        aprilTag.waitForSetExposure(1000,1000);
         pinpointSubsystem.setPose(new Pose2d(60,(72)*m, Rotation2d.fromDegrees(-135)));
         Log.i("AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading());
         toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(60,(72)*m, Rotation2d.fromDegrees(-135)));
