@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
+import org.firstinspires.ftc.teamcode.lib.FieldDrawing;
 import org.firstinspires.ftc.teamcode.lib.Localizer;
 
 
@@ -33,6 +34,7 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
     public static double yEncOffset = -4;
 
     private Pose2D lastGoodPose = new Pose2D(INCH, 0, 0, AngleUnit.DEGREES, 0);
+    FieldDrawing fieldDrawing = new FieldDrawing();
 
     public PinpointSubsystem(HardwareMap hMap) {
         pinpoint = hMap.get(GoBildaPinpointDriver.class, "pinpoint");
@@ -54,6 +56,7 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
         pinpoint.setOffsets(xEncOffset, yEncOffset, INCH);
         // reset();
         deviceStatus = pinpoint.getDeviceStatus();
+        fieldDrawing = new FieldDrawing();
     }
 
     @Override
@@ -78,6 +81,7 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
             Log.i("%Pinpoint Status Change", pinpoint.getDeviceStatus().toString());
             deviceStatus = pinpoint.getDeviceStatus();
         }
+        fieldDrawing.draw(getPose());
     }
 
     private Pose2D getSDKPose() {
