@@ -8,7 +8,7 @@ public class PinpointTuner extends Robot {
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
-        pinpointSubsystem.reset();
+//        pinpointSubsystem.reset();
         waitForStart();
         while(opModeIsActive()) {
             update();

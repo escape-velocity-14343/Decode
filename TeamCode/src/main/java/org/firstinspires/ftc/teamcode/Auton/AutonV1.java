@@ -12,9 +12,11 @@ import org.firstinspires.ftc.teamcode.command.AprilTagMotifDetectionCommand;
 import org.firstinspires.ftc.teamcode.command.DefaultGoToPointCommand;
 import org.firstinspires.ftc.teamcode.command.GoToPointWithDefaultCommand;
 import org.firstinspires.ftc.teamcode.command.IntakeAutoCommandGroup;
+import org.firstinspires.ftc.teamcode.command.LogKittenCommand;
 import org.firstinspires.ftc.teamcode.command.MotifShoot21Command;
 import org.firstinspires.ftc.teamcode.command.MotifShootCommandGroup;
 import org.firstinspires.ftc.teamcode.command.ShootCommandGroup;
+import org.firstinspires.ftc.teamcode.subsystems.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 @Autonomous(name = "AutonV1", group = "Auton")
@@ -24,39 +26,45 @@ public abstract class AutonV1 extends Robot {
     public void run(int m) throws InterruptedException {
         initialize();
         pinpointSubsystem.setPose(new Pose2d(60,(72)*m, Rotation2d.fromDegrees(-135)));
-        toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(0, 0, new Rotation2d(0)));
+        Log.i("AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading());
+        toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(60,(72)*m, Rotation2d.fromDegrees(-135)));
+        Log.i("AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading());
         drive.setDefaultCommand(toPoint);
-        Robot.motif[0] = 1;
-        Robot.motif[1] = 1;
-        Robot.motif[2] = 1;
+        Log.i("AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading());
         
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new GoToPointWithDefaultCommand(new Pose2d(60-15, (72-15)*m, Rotation2d.fromDegrees((-135)*m)), toPoint),
-                        new GoToPointWithDefaultCommand(new Pose2d(60-25, (72-25)*m, Rotation2d.fromDegrees((-200)*m)), toPoint),
+                        new LogKittenCommand(Log.ASSERT, "AUTO PINPOINT", "starting"),
+                        new GoToPointWithDefaultCommand(new Pose2d(40, (60)*m, new Rotation2d((2)*m)), toPoint),
+                        new LogKittenCommand(Log.ASSERT, "AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading()),
                         //new WaitCommand(5000),
                         new AprilTagMotifDetectionCommand(aprilTag),
-                        new GoToPointWithDefaultCommand(new Pose2d(60-25, (72-25)*m, Rotation2d.fromDegrees((-125)*m)), toPoint),
+                        new GoToPointWithDefaultCommand(new Pose2d(19, (55.5)*m, new Rotation2d((-2.3)*m)), toPoint),
+                        new LogKittenCommand(Log.ASSERT, "AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading()),
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag),
 
                         //new GoToPointWithDefaultCommand(new Pose2d(12, 28, Rotation2d.fromDegrees(90)), toPoint),
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(0, (35+18)*m, Rotation2d.fromDegrees((90)*m)), toPoint)),
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(0, (40+18)*m, Rotation2d.fromDegrees((90)*m)), toPoint)),
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(0, (45+18)*m, Rotation2d.fromDegrees((90)*m)), toPoint)),
-                        new GoToPointWithDefaultCommand(new Pose2d(60-30, (72-25)*m, Rotation2d.fromDegrees((-125)*m)), toPoint),
+                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(21, (65)*m, new Rotation2d((1.5)*m)), toPoint)),
+                        new LogKittenCommand(Log.ASSERT, "AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading()),
+                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(21, (71)*m, new Rotation2d((1.5)*m)), toPoint)),
+                        new LogKittenCommand(Log.ASSERT, "AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading()),
+                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(21, (80)*m, new Rotation2d((1.5)*m)), toPoint)),
+                        new LogKittenCommand(Log.ASSERT, "AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading()),
+                        new GoToPointWithDefaultCommand(new Pose2d(19, (55.5)*m, new Rotation2d((-2.3)*m)), toPoint),
+                        new LogKittenCommand(Log.ASSERT, "AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading()),
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag),
 
                         //new GoToPointWithDefaultCommand(new Pose2d(-5-24, 38+22, Rotation2d.fromDegrees(90)), toPoint),
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-24-2, (35+17)*m, Rotation2d.fromDegrees((90)*m)), toPoint)),
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-24 - 2, (40+17)*m, Rotation2d.fromDegrees((90)*m)), toPoint)),
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-24 - 2, (45+17)*m, Rotation2d.fromDegrees((90)*m)), toPoint)),
-                        new GoToPointWithDefaultCommand(new Pose2d(60-30, (72-25)*m, Rotation2d.fromDegrees((-125)*m)), toPoint),
+                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(4, (65)*m, new Rotation2d((1.5)*m)), toPoint)),
+                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(4, (71)*m, new Rotation2d((1.5)*m)), toPoint)),
+                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(4, (80)*m, new Rotation2d((1.5)*m)), toPoint)),
+                        new GoToPointWithDefaultCommand(new Pose2d(19, (55.5)*m, new Rotation2d((-2.3)*m)), toPoint),
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag),
 
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-24-24 - 2, (35+18)*m, Rotation2d.fromDegrees((90)*m)), toPoint)),
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-24-24 - 2, (40+18)*m, Rotation2d.fromDegrees((90)*m)), toPoint)),
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-24-24 - 2, (45+18)*m, Rotation2d.fromDegrees((90)*m)), toPoint)),
-                        new GoToPointWithDefaultCommand(new Pose2d(60-30, (72-25)*m, Rotation2d.fromDegrees((-125)*m)), toPoint),
+                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-8, (65)*m, new Rotation2d((1.5)*m)), toPoint)),
+                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-8, (71)*m, new Rotation2d((1.5)*m)), toPoint)),
+                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-8, (80)*m, new Rotation2d((1.5)*m)), toPoint)),
+                        new GoToPointWithDefaultCommand(new Pose2d(19, (55.5)*m, new Rotation2d((-2.3)*m)), toPoint),
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag)
                         //
                         //new GoToPointWithDefaultCommand(new Pose2d(-5-24, 58+22, Rotation2d.fromDegrees(90)), toPoint),
@@ -70,8 +78,8 @@ public abstract class AutonV1 extends Robot {
         );
         waitForStart();
         while (opModeIsActive()){
-            for (int s : Robot.motif){
-                Log.i("Motif", "ball" + s);
+            for (int i = 0; i < 3; i++){
+                Log.i("Motif", "ball" + StaticValues.getMotif(i));
             }
             //telemetry.addData("motif!", Robot.motif.toString());
             telemetry.addData("shooter", spindexer.getDegrees());
