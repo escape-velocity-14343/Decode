@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubsystem;
 
-public class MotifShootCommand extends SequentialCommandGroup {
-    public MotifShootCommand(SpindexerSubsystem spindexer, ShooterSubsystem shooter, TransferWheelSubsystem transferWheel, TransferArmSubsystem transferArm, AprilTagSubsystem aprilTagSubsystem) {
+public class MotifShoot21Command extends SequentialCommandGroup {
+    public MotifShoot21Command(SpindexerSubsystem spindexer, ShooterSubsystem shooter, TransferWheelSubsystem transferWheel, TransferArmSubsystem transferArm, AprilTagSubsystem aprilTagSubsystem) {
         addRequirements(spindexer, shooter);
         addCommands(
                 new ShootWithDistCommand(shooter, aprilTagSubsystem),

@@ -34,7 +34,7 @@ public class ShootTeleOp extends Robot {
         shoot.whenPressed(
                 new LogKittenCommand(Log.INFO, "ShootTeleOp", "IT WAS PRESSED")
                         .alongWith(
-                        new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, 0, telemetry, aprilTag)));
+                        new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, 0, aprilTag)));
 //    (new LogCatCommand("IT WAS PRESSED"));
 
 //        controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(
