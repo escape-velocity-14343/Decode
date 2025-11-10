@@ -40,7 +40,6 @@ public abstract class Robot extends LinearOpMode {
     public PinpointSubsystem pinpointSubsystem;
     public AprilTagSubsystem aprilTag;
     public static Telemetry publicTelemetry;
-    public static int[] motif = {1, 2, 1};
     public static Pose2d pose;
     public static int atagBearing = 0;
     public static boolean blueAlliance;
