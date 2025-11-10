@@ -5,6 +5,7 @@ import android.util.Log;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -55,6 +56,7 @@ public class DefaultGoToPointCommand extends CommandBase {
     private DoubleSupplier ySpeedSupplier;
     private DoubleSupplier rotSpeedSupplier;
 
+    Pose2d offset = new Pose2d(0,0,new Rotation2d(0));
 
 
     private boolean shouldLog = true;
@@ -213,5 +215,8 @@ public class DefaultGoToPointCommand extends CommandBase {
     public void setTolerances(double tol, double Htol) {
         this.tol = tol;
         this.hTol = Htol;
+    }
+    public void setOffset(Pose2d offset) {
+        this.offset = offset;
     }
 }
