@@ -1,5 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems.spindexer;
-
+import static org.firstinspires.ftc.teamcode.subsystems.StaticValues.getArtifacts;
 import static org.firstinspires.ftc.teamcode.subsystems.spindexer.ConstantsSpindexer.thres;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.lib.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.lib.RevColorSensorDetector;
 import org.firstinspires.ftc.teamcode.lib.ThaiVPController;
 import org.firstinspires.ftc.teamcode.lib.sensOrangeEncoder;
-import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.StaticValues;
 
 public class SpindexerSubsystem extends SubsystemBase {
@@ -33,7 +33,7 @@ public class SpindexerSubsystem extends SubsystemBase {
         spindexerEncoder = new sensOrangeEncoder("spindexerEncoder", hwMap);
         spindexerEncoder.setPositionOffset(ConstantsSpindexer.offset);
         artifactSensor = new RevColorSensorDetector(hwMap); //@WILLIAM IS THIS PEAK RUNTIME POLYMORPHISM
-        rotationController.setExponent(1);
+        rotationController.setExponent(ConstantsSpindexer.exponent);
 
         this.telemtry = Robot.getTelemetry();
     }
@@ -83,6 +83,14 @@ public class SpindexerSubsystem extends SubsystemBase {
         }
     }
 
+    public boolean hasSpace() {
+        for (int i = 0; i < 3; i++) {
+            if (StaticValues.getArtifacts(i) == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void setTargetPosition(double targetPosition) {
         this.targetPosition = targetPosition;

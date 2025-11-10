@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 public class StaticValues {
-    private static int[] motif = {1, 1, 1};
+    private static int[] motif = {1, 1, 2};
     public static void setMotif(int place, int value){
         motif[place] = value;
     }
