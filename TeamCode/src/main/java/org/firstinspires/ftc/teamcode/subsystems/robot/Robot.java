@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.command.DefaultGoToPointCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.PinpointSubsystem;
@@ -46,6 +47,7 @@ public abstract class Robot extends LinearOpMode {
     public ElapsedTime timer = new ElapsedTime();
     int loopTimerCounter = 0;
     double loopTime = 0;
+    public DefaultGoToPointCommand toPoint;
 
     public static boolean useTestTelemetry = true;
 

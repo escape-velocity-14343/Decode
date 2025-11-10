@@ -16,4 +16,12 @@ public class StaticValues {
     public static int getArtifacts(int place){
         return artifacts[place];
     }
+
+    private static int m = 1;
+    public static void setM(int value){
+        m = value;
+    }
+    public static int getM(){
+        return m;
+    }
 }
