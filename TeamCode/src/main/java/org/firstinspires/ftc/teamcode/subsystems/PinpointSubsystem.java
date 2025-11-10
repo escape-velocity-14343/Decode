@@ -29,8 +29,8 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
 
     public static boolean flipX = false;
     public static boolean flipY = true;
-    public static double xEncOffset = -4;
-    public static double yEncOffset = 2;
+    public static double xEncOffset = 1.5;
+    public static double yEncOffset = -4;
 
     private Pose2D lastGoodPose = new Pose2D(INCH, 0, 0, AngleUnit.DEGREES, 0);
 

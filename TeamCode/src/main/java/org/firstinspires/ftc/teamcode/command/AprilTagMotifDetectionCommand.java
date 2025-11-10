@@ -4,7 +4,7 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.onbotjava.handlers.admin.ResetOnBotJava;
 import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 public class AprilTagMotifDetectionCommand extends CommandBase {
     double ID;
