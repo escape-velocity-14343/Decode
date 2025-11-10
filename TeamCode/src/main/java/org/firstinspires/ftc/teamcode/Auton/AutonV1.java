@@ -33,7 +33,7 @@ public abstract class AutonV1 extends Robot {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new GoToPointWithDefaultCommand(new Pose2d(60-15, (72-15)*m, Rotation2d.fromDegrees((-135)*m)), toPoint),
-                        new GoToPointWithDefaultCommand(new Pose2d(60-25, (72-25)*m, Rotation2d.fromDegrees((-225)*m)), toPoint),
+                        new GoToPointWithDefaultCommand(new Pose2d(60-25, (72-25)*m, Rotation2d.fromDegrees((-200)*m)), toPoint),
                         //new WaitCommand(5000),
                         new AprilTagMotifDetectionCommand(aprilTag),
                         new GoToPointWithDefaultCommand(new Pose2d(60-25, (72-25)*m, Rotation2d.fromDegrees((-125)*m)), toPoint),
