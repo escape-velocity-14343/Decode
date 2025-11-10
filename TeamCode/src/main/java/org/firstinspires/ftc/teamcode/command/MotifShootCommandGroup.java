@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubs
 public class MotifShootCommandGroup extends SequentialCommandGroup {
     public MotifShootCommandGroup(SpindexerSubsystem spindexer, ShooterSubsystem shooter, TransferWheelSubsystem transferWheel, TransferArmSubsystem transferArm, AprilTagSubsystem aprilTag){
         addRequirements(spindexer, shooter, transferWheel, transferArm);
+        Log.i("motif", "motif is: " + StaticValues.getMotif(0) +  StaticValues.getMotif(1) + StaticValues.getMotif(2));
         addCommands(
                 new ShootWithDistCommand(shooter, aprilTag),
                 new LogKittenCommand(Log.ASSERT,"auto", "shooter on"),
