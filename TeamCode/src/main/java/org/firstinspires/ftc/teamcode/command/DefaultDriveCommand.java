@@ -5,7 +5,7 @@ import com.bylazar.configurables.annotations.Configurable;
 
 import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;

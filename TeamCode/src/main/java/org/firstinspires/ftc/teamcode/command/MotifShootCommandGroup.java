@@ -19,6 +19,7 @@ public class MotifShootCommandGroup extends SequentialCommandGroup {
     public MotifShootCommandGroup(SpindexerSubsystem spindexer, ShooterSubsystem shooter, TransferWheelSubsystem transferWheel, TransferArmSubsystem transferArm, AprilTagSubsystem aprilTag){
         addRequirements(spindexer, shooter, transferWheel, transferArm);
         addCommands(
+//                new LogKittenCommand()
                 new ShootWithDistCommand(shooter, aprilTag),
                 new LogKittenCommand(Log.ASSERT,"auto", "shooter on"),
                 new LogKittenCommand(Log.ASSERT, "auto", "motif is: " + StaticValues.getMotif(0) +  StaticValues.getMotif(1) + StaticValues.getMotif(2)),
