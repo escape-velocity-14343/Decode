@@ -18,10 +18,10 @@ import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubs
 
 public class ShootCommandGroup extends SequentialCommandGroup {
 
-    public ShootCommandGroup(ShooterSubsystem shooter, SpindexerSubsystem spindexer, TransferArmSubsystem transferArm, TransferWheelSubsystem transferWheel, int ballColor, AprilTagSubsystem atag, DefaultGoToPointCommand toPoint) {
+    public ShootCommandGroup(ShooterSubsystem shooter, SpindexerSubsystem spindexer, TransferArmSubsystem transferArm, TransferWheelSubsystem transferWheel, int ballColor, AprilTagSubsystem atag) {
 //        telemetry.addData("hello", 1);
         addCommands(
-                new GoToPointWithDefaultCommand(new Pose2d(23, (36)* StaticValues.getM(), new Rotation2d((-2.3)*StaticValues.getM())), toPoint), // shooting
+                //new GoToPointWithDefaultCommand(new Pose2d(23, (36)* StaticValues.getM(), Rotation2d.fromDegrees((-215)*StaticValues.getM())), toPoint), // shooting
                 new ShootWithDistCommand(shooter, atag),
                 new SpindexOutCommand(spindexer, ballColor),
                 new LogKittenCommand(Log.ASSERT, "SHOOT COMMAND", "spindexing done"),

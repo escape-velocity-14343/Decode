@@ -98,7 +98,8 @@ public class SpindexerSubsystem extends SubsystemBase {
 
 
     public void setPower(double power){
-        spindexer.setPower(Range.clip(power, -0.5, 0.5));
+        //spindexer.setPower(Range.clip(power, -0.5, 0.5));
+        spindexer.setPower(power);
     }
 
     public double getDegrees() {

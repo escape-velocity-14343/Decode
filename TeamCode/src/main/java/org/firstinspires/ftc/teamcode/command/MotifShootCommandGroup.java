@@ -21,12 +21,12 @@ public class MotifShootCommandGroup extends SequentialCommandGroup {
         Log.i("motif", "motif is: " + StaticValues.getMotif(0) +  StaticValues.getMotif(1) + StaticValues.getMotif(2));
         addCommands(
 //                new LogKittenCommand()
-                new ShootWithDistCommand(shooter, aprilTag),
+                //new ShootWithDistCommand(shooter, aprilTag),
                 new LogKittenCommand(Log.ASSERT,"auto", "shooter on"),
                 new LogKittenCommand(Log.ASSERT, "auto", "motif is: " + StaticValues.getMotif(0) +  StaticValues.getMotif(1) + StaticValues.getMotif(2)),
                 new LogKittenCommand(Log.ASSERT,"auto1", "shooting ball one"),
                 new LogKittenCommand(Log.ASSERT,"auto1", "shooting"),
-                new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, StaticValues.getMotif(0), aprilTag, toPoint),
+                new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, StaticValues.getMotif(0), aprilTag),
 //                new SpindexOutCommand(spindexer, StaticValues.getMotif(0)),
 //                new LogKittenCommand(Log.ASSERT,"auto1", "transferwheel on"),
 //                new TransferWheelOnCommand(transferWheel),
@@ -39,7 +39,7 @@ public class MotifShootCommandGroup extends SequentialCommandGroup {
                 new ShootWithDistCommand(shooter, aprilTag),
                 new LogKittenCommand(Log.ASSERT,"auto2", "shooting ball two"),
                 new LogKittenCommand(Log.ASSERT,"auto1", "shooting"),
-                new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, StaticValues.getMotif(1), aprilTag, toPoint),
+                new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, StaticValues.getMotif(1), aprilTag),
 //                new LogKittenCommand(Log.ASSERT,"auto2", "spindex"),
 //                new SpindexOutCommand(spindexer, StaticValues.getMotif(1)),
 //                new LogKittenCommand(Log.ASSERT,"auto2", "transfer arm up"),
@@ -50,8 +50,8 @@ public class MotifShootCommandGroup extends SequentialCommandGroup {
 
                 new ShootWithDistCommand(shooter, aprilTag),
                 new LogKittenCommand(Log.ASSERT,"auto3", "shooting ball three"),
-                new LogKittenCommand(Log.ASSERT,"auto1", "shooting"),
-                new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, StaticValues.getMotif(2), aprilTag, toPoint)
+                new LogKittenCommand(Log.ASSERT,"auto1", "shooting " + StaticValues.getMotif(2)),
+                new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, StaticValues.getMotif(2), aprilTag)
 //                new LogKittenCommand(Log.ASSERT,"auto3", "spindex"),
 //                new SpindexOutCommand(spindexer, StaticValues.getMotif(2)),
 //                new LogKittenCommand(Log.ASSERT,"auto3", "transfer arm up"),

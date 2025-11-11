@@ -9,12 +9,24 @@ public class StaticValues {
         return motif[place];
     }
 
+    public static void resetMotif(){
+        motif[0] = 1;
+        motif[1] = 1;
+        motif[2] = 1;
+    }
+
     private static int[] artifacts = {2, 1, 1};
     public static void setArtifacts(int place, int value){
         artifacts[place] = value;
     }
     public static int getArtifacts(int place){
         return artifacts[place];
+    }
+
+    public static void resetArtifacts(){
+        artifacts[0] = 2;
+        artifacts[1] = 1;
+        artifacts[2] = 1;
     }
 
     private static int m = 1;

@@ -73,6 +73,7 @@ public class AprilTagSubsystem extends SubsystemBase {
     }
 
     public double detect() {
+        Log.i("apriltag detecting", "detecting");
         tagProcessor.setDecimation(VisionConstants.decimation);
         if (!tagProcessor.getDetections().isEmpty()) {
             AprilTagDetection tag = tagProcessor.getDetections().get(0);
@@ -93,11 +94,13 @@ public class AprilTagSubsystem extends SubsystemBase {
             }
             else
                 bearing = 0;
+            Log.i("apriltag detecting", "detected" + (tag.id - 21));
             return tag.id - 21;
         }
         else
+            Log.i("apriltag detecting", "not detected");
             bearing = 0;
-        return 0;
+            return 0;
     }
     @Override
     public void periodic() {
