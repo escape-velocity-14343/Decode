@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.lib.SquIDController;
 import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 
 public class ShooterSubsystem extends SubsystemBase {
     private DcMotorEx shooterMotorRight;
@@ -28,9 +29,9 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
         velocityLUT.add(0,0);
         velocityLUT.add(40,-1500);
-        velocityLUT.add(60,-1600);
-        velocityLUT.add(70,-1800);
-        velocityLUT.add(100, -2000);
+        velocityLUT.add(60,-1650);
+        velocityLUT.add(70,-1850);
+        velocityLUT.add(100, -1900);
         velocityLUT.createLUT();
 
     }
@@ -40,8 +41,8 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotorLeft.setPower(1);
     }
     public void setPower(double power){
-        shooterMotorRight.setPower(power);
-        shooterMotorLeft.setPower(power);
+        shooterMotorRight.setPower(power* StaticValues.getVoltageScalar());
+        shooterMotorLeft.setPower(power* StaticValues.getVoltageScalar());
     }
     public void shootFromDistance(double distance) {
         double velocity = ShooterConstants.closeVelocity;
@@ -59,7 +60,7 @@ public class ShooterSubsystem extends SubsystemBase {
         return shooterMotorRight.getVelocity();
     }
     public boolean atVelocity() {
-        return Util.inRange(targetVelocity, shooterMotorRight.getVelocity(), 67);
+        return Util.inRange(targetVelocity, shooterMotorRight.getVelocity(), 67/2);
 
     }
 

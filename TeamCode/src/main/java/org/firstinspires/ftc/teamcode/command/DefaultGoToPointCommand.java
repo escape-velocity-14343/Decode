@@ -32,8 +32,8 @@ public class DefaultGoToPointCommand extends CommandBase {
     public static double headingkI = 0;
     public static double headingkD = 0;
 
-    public double tol = 3;
-    public double hTol = 4;
+    public double tol = 5;
+    public double hTol = 5;
 
     MecanumDriveSubsystem drive;
     PinpointSubsystem pinpoint;

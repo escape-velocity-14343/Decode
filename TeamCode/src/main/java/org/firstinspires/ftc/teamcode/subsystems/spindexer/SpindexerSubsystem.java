@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems.spindexer;
-import static org.firstinspires.ftc.teamcode.subsystems.StaticValues.getArtifacts;
 import static org.firstinspires.ftc.teamcode.subsystems.spindexer.ConstantsSpindexer.thres;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -15,7 +13,7 @@ import org.firstinspires.ftc.teamcode.lib.RevColorSensorDetector;
 import org.firstinspires.ftc.teamcode.lib.ThaiVPController;
 import org.firstinspires.ftc.teamcode.lib.sensOrangeEncoder;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
-import org.firstinspires.ftc.teamcode.subsystems.StaticValues;
+import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 
 public class SpindexerSubsystem extends SubsystemBase {
     DcMotor spindexer;
@@ -30,6 +28,7 @@ public class SpindexerSubsystem extends SubsystemBase {
     public SpindexerSubsystem(HardwareMap hwMap) {
         CommandScheduler.getInstance().registerSubsystem();
         spindexer = hwMap.get(DcMotor.class, "spindexerMotor");
+        //spindexer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         spindexerEncoder = new sensOrangeEncoder("spindexerEncoder", hwMap);
         spindexerEncoder.setPositionOffset(ConstantsSpindexer.offset);
         artifactSensor = new RevColorSensorDetector(hwMap); //@WILLIAM IS THIS PEAK RUNTIME POLYMORPHISM
@@ -90,6 +89,15 @@ public class SpindexerSubsystem extends SubsystemBase {
             }
         }
         return false;
+    }
+    public int getRemainingSpace() {
+        int space = 0;
+        for (int i = 0; i < 3; i++) {
+            if (StaticValues.getArtifacts(i) == 0) {
+                space++;
+            }
+        }
+        return space;
     }
 
     public void setTargetPosition(double targetPosition) {

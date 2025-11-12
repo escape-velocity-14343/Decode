@@ -5,8 +5,7 @@ import android.util.Log;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.StaticValues;
-import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 
 public class AprilTagMotifDetectionCommand extends CommandBase {
     double ID;

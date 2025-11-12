@@ -25,7 +25,9 @@ public class TurretAimDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         if (aprilTag.getBearing()!=0)
-            turret.setPowerManual(ConstantsTurret.apriltagkP*aprilTag.getBearing());
+            turret.setPowerManual(ConstantsTurret.apriltagkP*(aprilTag.getBearing() + ConstantsTurret.aprilTagOffset));
+        else
+            turret.setPowerManual(0);
         //else
             //turret.setTargetPosition(pinpointSubsystem.getTranslation().minus());
     }

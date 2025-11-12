@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.Auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.subsystems.StaticValues;
+import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 @Autonomous(name = "Red Auton", group = "Red")

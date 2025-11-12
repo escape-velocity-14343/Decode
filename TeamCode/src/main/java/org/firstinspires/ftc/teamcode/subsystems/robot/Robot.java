@@ -8,6 +8,7 @@ import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -54,7 +55,6 @@ public abstract class Robot extends LinearOpMode {
     public List<LynxModule> hubs;
 
     public void initialize(){
-
         CommandScheduler.getInstance().reset();
         CommandScheduler.getInstance().cancelAll();
         telemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
@@ -75,6 +75,11 @@ public abstract class Robot extends LinearOpMode {
         for (LynxModule hub : hubs) {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
+        for (LynxModule hub : hubs) {
+            hub.clearBulkCache();
+        }
+        StaticValues.setVoltageScalar(12.4/hardwareMap.getAll(VoltageSensor.class).iterator().next().getVoltage());
+
     }
 
     public void update() {
