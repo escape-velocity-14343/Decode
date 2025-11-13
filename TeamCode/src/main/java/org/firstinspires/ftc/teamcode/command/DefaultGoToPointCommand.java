@@ -131,7 +131,7 @@ public class DefaultGoToPointCommand extends CommandBase {
 
 
         if (toggle) {
-            drive.drive(-xMove, -yMove * 1.2, hMove);
+            drive.drive(-xMove, -yMove * 1.67, hMove);
         }
 
         // velocity end
