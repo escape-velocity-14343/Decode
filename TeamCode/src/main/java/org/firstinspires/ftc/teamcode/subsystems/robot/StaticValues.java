@@ -48,7 +48,16 @@ public class StaticValues {
     public static void setVoltageScalar(double value) {
         voltageScalar = value;
     }
+
     public static double getVoltageScalar() {
         return voltageScalar;
+    }
+
+    private static int ballOffset = 0;
+    public static void setBallOffset(int value) {
+        ballOffset = value;
+    }
+    public static int getBallOffset() {
+        return ballOffset;
     }
 }

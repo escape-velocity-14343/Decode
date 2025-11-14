@@ -19,6 +19,6 @@ public class TransferArmDownCommand extends CommandBase {
     }
     @Override
     public boolean isFinished() {
-        return timer.milliseconds() > 350;
+        return timer.milliseconds() > 150;
     }
 }

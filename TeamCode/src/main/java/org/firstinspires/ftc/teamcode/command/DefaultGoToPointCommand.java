@@ -32,8 +32,8 @@ public class DefaultGoToPointCommand extends CommandBase {
     public static double headingkI = 0;
     public static double headingkD = 0;
 
-    public double tol = 5;
-    public double hTol = 5;
+    public double tol = 6.7;
+    public double hTol = 6.7;
 
     MecanumDriveSubsystem drive;
     PinpointSubsystem pinpoint;
@@ -131,11 +131,11 @@ public class DefaultGoToPointCommand extends CommandBase {
 
 
         if (toggle) {
-            drive.drive(-xMove, -yMove * 1.67, hMove);
+            drive.drive(-xMove, -yMove * 2, hMove);
         }
 
         // velocity end
-        if (pinpoint.getVelocity().getTranslation().getNorm() < 0.1) {
+        if (pinpoint.getVelocity().getTranslation().getNorm() < 0.5) {
             if (!isZeroVelocity) {
                 zeroVelocityTimer.reset();
                 isZeroVelocity = true;
