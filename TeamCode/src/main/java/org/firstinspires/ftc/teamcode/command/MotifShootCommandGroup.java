@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSubsystem;
@@ -19,7 +20,7 @@ public class MotifShootCommandGroup extends SequentialCommandGroup {
         //Log.i("motif shoot", "motif is: " + StaticValues.getMotif(0) +  StaticValues.getMotif(1) + StaticValues.getMotif(2));
         //Log.i("motif shoot" , "artifacts are: " + StaticValues.getArtifacts(0) +  StaticValues.getArtifacts(1) + StaticValues.getArtifacts(2));
         addCommands(
-//                new LogKittenCommand()
+//                new LogKittenCommand(Log.ASSERT, "motif shoot", "motif is: " + (() -> StaticValues.getMotif(0)).get() +  StaticValues.getMotif(1) + StaticValues.getMotif(2));
                 //new ShootWithDistCommand(shooter, aprilTag),
                 //new ShootingPosCommand(toPoint),
                 new LogKittenCommand(Log.ASSERT,"motif shoot", "shooter on"),
