@@ -46,7 +46,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public void shootFromDistance(double distance) {
         double velocity = ShooterConstants.closeVelocity;
-        if (distance > 0 && distance < 100)
+        if (distance > 0 && distance < 200)
             velocity = velocityLUT.get(distance);
         Log.i("Shooter", "Shooting from distance: " + distance + " with velocity: " + velocity);
         setVelocity(velocity);
@@ -60,7 +60,7 @@ public class ShooterSubsystem extends SubsystemBase {
         return shooterMotorRight.getVelocity();
     }
     public boolean atVelocity() {
-        return Util.inRange(targetVelocity, shooterMotorRight.getVelocity(), 67/2);
+        return Util.inRange(targetVelocity, shooterMotorRight.getVelocity(),  67.41 /2.67);
 
     }
 

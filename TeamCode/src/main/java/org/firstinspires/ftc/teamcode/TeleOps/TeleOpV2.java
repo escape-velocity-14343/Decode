@@ -20,6 +20,8 @@ import org.firstinspires.ftc.teamcode.command.TransferArmDownCommand;
 import org.firstinspires.ftc.teamcode.command.TransferWheelOffCommand;
 import org.firstinspires.ftc.teamcode.command.TurretAimDefaultCommand;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
+
 @TeleOp (name = "TeleOp V2", group = "LinearOpMode")
 public class TeleOpV2 extends Robot {
     @Override
@@ -28,7 +30,7 @@ public class TeleOpV2 extends Robot {
         GamepadEx offsetter = new GamepadEx(gamepad2);
         initialize();
         pinpointSubsystem.update();
-        drive.setHeadingSupplier(() -> Math.toRadians(pinpointSubsystem.getHeading().getDegrees()+ (blueAlliance ? 90 : -90)));
+        drive.setHeadingSupplier(() -> Math.toRadians(pinpointSubsystem.getHeading().getDegrees() - 90 * StaticValues.getM()));
         drive.setDefaultCommand(new DefaultDriveCommand(drive,
                 () -> -controller.getLeftY(),
                 () -> -controller.getLeftX(),
@@ -40,7 +42,7 @@ public class TeleOpV2 extends Robot {
         controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint));
         controller.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor));
         controller.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new InstantCommand(()->intake.setPower(-0.5))).whenReleased(new IntakeOffCommand(intake));
-        new Trigger(()-> gamepad1.options && gamepad1.share).whileActiveOnce(new InstantCommand(()->pinpointSubsystem.setPose(new Pose2d(pinpointSubsystem.getTranslation(), Rotation2d.fromDegrees(blueAlliance ? -90 : 90)))));
+        new Trigger(()-> gamepad1.options && gamepad1.share).whileActiveOnce(new InstantCommand(()->pinpointSubsystem.setPose(new Pose2d(pinpointSubsystem.getTranslation(), Rotation2d.fromDegrees( - 90 * StaticValues.getM())))));
         new Trigger(()-> gamepad1.touchpad).whileActiveOnce(new ParallelCommandGroup(
                 new IntakeOffCommand(intake),
                 new TransferArmDownCommand(transferArm),

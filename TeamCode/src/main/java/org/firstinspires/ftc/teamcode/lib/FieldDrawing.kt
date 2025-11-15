@@ -51,17 +51,21 @@ class FieldDrawing {
         }
 
         // Draw rectangle outline: set style, move to first corner, then line to each corner and back
-        panelsField.setStyle(fill = "rgba(0,0,255,0.0)", outline = "yellow", width = 1.5)
+
         moveTo(c1.x, c1.y)
+        panelsField.setStyle(fill = "rgba(0,0,255,0.0)", outline = "blue", width = 1.5)
         lineTo(c2.x, c2.y)
+        panelsField.setStyle(fill = "rgba(0,0,255,0.0)", outline = "green", width = 1.5)
         lineTo(c3.x, c3.y)
+        panelsField.setStyle(fill = "rgba(0,0,255,0.0)", outline = "yellow", width = 1.5)
         lineTo(c4.x, c4.y)
+        panelsField.setStyle(fill = "rgba(0,0,255,0.0)", outline = "red", width = 1.5)
         lineTo(c1.x, c1.y) // close
 
         // Draw heading line from center to front of robot
         val frontX = cx + cos * halfLength
         val frontY = cy + sin * halfLength
-        panelsField.setStyle(fill = "rgba(0,0,0,0.0)", outline = "red", width = 2.0)
+        panelsField.setStyle(fill = "rgba(0,0,0,0.0)", outline = "purple", width = 2.0)
         moveTo(cx, cy)
         lineTo(frontX, frontY)
 

@@ -147,6 +147,9 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
     public void resetIMU() {
         pinpoint.setHeading(0, AngleUnit.RADIANS);
     }
+    public Rotation2d getRotationToPoint(Pose2d point){
+        return new Rotation2d(AngleUnit.normalizeRadians(Math.PI+Math.atan2(point.getY() - getPose().getY(), point.getX() - getPose().getX())));
+    }
 }
 
 

@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.turret.ConstantsTurret;
 
-@Autonomous(name = "AutonClose", group = "Auton")
+
 public abstract class AutonClose extends Robot {
     DefaultGoToPointCommand toPoint;
 
@@ -31,7 +31,7 @@ public abstract class AutonClose extends Robot {
         initialize();
         StaticValues.resetMotif();
         StaticValues.resetArtifacts();
-        turret.setTargetPosition(ConstantsTurret.obeliskPos);
+        turret.setTargetPosition(ConstantsTurret.obeliskPosClose);
         shooter.setVelocity(0);
         setExposure();
         pinpointSubsystem.setPose(new Pose2d(60,(48)*m, Rotation2d.fromDegrees(135)));

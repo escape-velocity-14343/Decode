@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 
 public class AprilTagMotifDetectionCommand extends CommandBase {
     double ID;
+    int obelisk;
 
     AprilTagSubsystem apriltag;
     public AprilTagMotifDetectionCommand(AprilTagSubsystem apriltag){
@@ -17,13 +18,25 @@ public class AprilTagMotifDetectionCommand extends CommandBase {
 
     @Override
     public void initialize(){
+        StaticValues.resetMotif();
         Log.i("AprilTagMotifDetectionCommand", "Starting motif detection: " + StaticValues.getMotif(0) + ", " + StaticValues.getMotif(1) + ", " + StaticValues.getMotif(2));
-        StaticValues.setMotif((int)apriltag.detect(), 2);
+        this.obelisk = apriltag.detect();
+        Log.i("AprilTagMotifDetectionCommand", "Detected: " + obelisk);
+        StaticValues.setMotif(obelisk, 2);
+        Log.i("AprilTagMotifDetectionCommand", "Detected motif after: " + StaticValues.getMotif(0) + ", " + StaticValues.getMotif(1) + ", " + StaticValues.getMotif(2));
+    }
+
+    @Override
+    public void execute(){
+        Log.i("AprilTagMotifDetectionCommand", "Starting motif detection: " + StaticValues.getMotif(0) + ", " + StaticValues.getMotif(1) + ", " + StaticValues.getMotif(2));
+        this.obelisk = apriltag.detect();
+        Log.i("AprilTagMotifDetectionCommand", "Detected: " + obelisk);
+        StaticValues.setMotif(obelisk, 2);
         Log.i("AprilTagMotifDetectionCommand", "Detected motif after: " + StaticValues.getMotif(0) + ", " + StaticValues.getMotif(1) + ", " + StaticValues.getMotif(2));
     }
 
     @Override
     public boolean isFinished(){
-        return true;
+        return obelisk != 0;
     }
 }

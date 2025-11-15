@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Auton;
 
+import android.util.Log;
+
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -14,11 +16,12 @@ import org.firstinspires.ftc.teamcode.command.DefaultGoToPointCommand;
 import org.firstinspires.ftc.teamcode.command.GoToPointWithDefaultCommand;
 import org.firstinspires.ftc.teamcode.command.IntakeAutoCommandGroup;
 import org.firstinspires.ftc.teamcode.command.MotifShootCommandGroup;
+import org.firstinspires.ftc.teamcode.command.TurretAimDefaultCommand;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.turret.ConstantsTurret;
 
-@Autonomous(name = "AutonFar", group = "Auton")
+
 public abstract class AutonFar extends Robot {
     DefaultGoToPointCommand toPoint;
 
@@ -27,9 +30,7 @@ public abstract class AutonFar extends Robot {
         StaticValues.resetMotif();
         StaticValues.resetArtifacts();
         turret.setTargetPosition(ConstantsTurret.obeliskPosFar);
-        timer.reset();
-        while(!aprilTag.isStreaming()||timer.milliseconds()>1000);
-        aprilTag.waitForSetExposure(1000,1000);
+        setExposure();
 
         pinpointSubsystem.setPose(new Pose2d(-57.3, 18.8, Rotation2d.fromDegrees(180)));
         toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(-57.3, 18.8, Rotation2d.fromDegrees(180)));
@@ -38,7 +39,7 @@ public abstract class AutonFar extends Robot {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new AprilTagMotifDetectionCommand(aprilTag),
-                        new GoToPointWithDefaultCommand(new Pose2d(-38, 11, Rotation2d.fromDegrees(180)), toPoint).alongWith(new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosFar))),
+                        new GoToPointWithDefaultCommand(new Pose2d(-30, 11, Rotation2d.fromDegrees(180)), toPoint).alongWith(new InstantCommand(() -> turret.setDefaultCommand(new TurretAimDefaultCommand(aprilTag,turret,pinpointSubsystem)))),
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint),
 
                         new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
@@ -62,5 +63,14 @@ public abstract class AutonFar extends Robot {
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint)
                 )
         );
+        waitForStart();
+        while (opModeIsActive()){
+            for (int i = 0; i < 3; i++){
+                Log.i("Motif", "ball" + StaticValues.getMotif(i));
+            }
+            //telemetry.addData("motif!", Robot.motif.toString());
+            telemetry.addData("shooter", spindexer.getDegrees());
+            update();
+        }
     }
 }

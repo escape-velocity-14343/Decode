@@ -11,9 +11,11 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.lib.DrivetrainSquIDController;
+import org.firstinspires.ftc.teamcode.lib.SquIDController;
 import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.PinpointSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 
 import java.util.function.DoubleSupplier;
 
@@ -21,14 +23,14 @@ import java.util.function.DoubleSupplier;
 public class DefaultGoToPointCommand extends CommandBase {
     public PIDController xPID = new PIDController(0,0,0);
     public PIDController yPID = new PIDController(0, 0,0);
-    public PIDController headingPID = new PIDController(0,0,0);
+    public SquIDController headingPID = new SquIDController();
 
     public DrivetrainSquIDController drivetrainSquIDController = new DrivetrainSquIDController();
 
     public static double translationkP = -0.08;
     public static double translationkI = 0;
     public static double translationkD = 0;
-    public static double headingkP = 0.002;
+    public static double headingkP = 0.06;
     public static double headingkI = 0;
     public static double headingkD = 0;
 
@@ -79,7 +81,6 @@ public class DefaultGoToPointCommand extends CommandBase {
     public void initialize(){
         xPID.setTolerance(tol);
         yPID.setTolerance(tol);
-        headingPID.setTolerance(hTol);
 
         currentPose = pinpoint.getPose();
         if (currentPose == null) {
@@ -88,10 +89,10 @@ public class DefaultGoToPointCommand extends CommandBase {
 
         xPID.setPID(translationkP,translationkI,translationkD);
         yPID.setPID(translationkP,translationkI,translationkD);
-        headingPID.setPID(headingkP,headingkI,headingkD);
+        headingPID.setPID(headingkP);
         drivetrainSquIDController.setPID(translationkP);
 
-        rotSpeedSupplier = () -> Util.signedSqrt(headingPID.calculate(currentPose.getRotation().getDegrees(), target.getRotation().getDegrees()));
+        rotSpeedSupplier = () -> headingPID.calculateAngleWrapping(target.getRotation().getDegrees(), currentPose.getRotation().getDegrees());
     }
 
     @Override
@@ -131,7 +132,7 @@ public class DefaultGoToPointCommand extends CommandBase {
 
 
         if (toggle) {
-            drive.drive(-xMove, -yMove * 2, hMove);
+            drive.drive(-xMove * StaticValues.getVoltageScalar(), -yMove * 1.67 * StaticValues.getVoltageScalar(), hMove * StaticValues.getVoltageScalar());
         }
 
         // velocity end

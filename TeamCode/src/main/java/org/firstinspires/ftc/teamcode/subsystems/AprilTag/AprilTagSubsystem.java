@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraControls;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -72,34 +73,62 @@ public class AprilTagSubsystem extends SubsystemBase {
         return rtn;
     }
 
-    public double detect() {
-        Log.i("apriltag detecting", "detecting");
-        tagProcessor.setDecimation(VisionConstants.decimation);
-        if (!tagProcessor.getDetections().isEmpty()) {
-            AprilTagDetection tag = tagProcessor.getDetections().get(0);
-            if (tag.id == 20 || tag.id == 24) {
-                bearing = tag.ftcPose.bearing;
-                distance = tag.ftcPose.range;
-                if (distance > 67)
-                    tagProcessor.setDecimation(1.5f);
-                else
-                    tagProcessor.setDecimation(3.0f);
-
-                telemetry.addData("Translation X", tag.ftcPose.x);
-                telemetry.addData("Translation Y", tag.ftcPose.y);
-                telemetry.addData("Translation Z", tag.ftcPose.z);
-                telemetry.addData("Distance", tag.ftcPose.range);
-                telemetry.addData("Bearing", tag.ftcPose.bearing);
-
-            } else
-                bearing = 0;
-            Log.i("apriltag detecting", "detected" + (tag.id - 21));
-            return tag.id - 21;
-        } else
-            Log.i("apriltag detecting", "not detected");
+    public int detect() {
         bearing = 0;
+        //tagProcessor.setDecimation(VisionConstants.decimation);
+        if (!tagProcessor.getDetections().isEmpty()) {
+            if (distance > 67)
+                tagProcessor.setDecimation(1f);
+            else
+                tagProcessor.setDecimation(1.67f);
+            for (int i = 0; i < tagProcessor.getDetections().size(); i++) {
+                AprilTagDetection tag = tagProcessor.getDetections().get(i);
+                if (tag.id == 20 && StaticValues.getM() == 1) {
+                    bearing = tag.ftcPose.bearing;
+                    distance = tag.ftcPose.range;
+                } else if (tag.id == 24 && StaticValues.getM() == -1) {
+                    bearing = tag.ftcPose.bearing;
+                    distance = tag.ftcPose.range;
+                } else if (tag.id >= 21 && tag.id <= 23) {
+                    Log.i("apriltag detecting", "detected" + (tag.id - 21));
+                    return tag.id - 21;
+                }
+            }
+        }
         return 0;
     }
+
+    //
+    //
+    //    Log.i("apriltag detecting", "detecting");
+    //    tagProcessor.setDecimation(VisionConstants.decimation);
+    //    if (!tagProcessor.getDetections().isEmpty()) {
+    //        AprilTagDetection tag = tagProcessor.getDetections().get(0);
+    //        if (tag.id == 20 || tag.id == 24) {
+    //
+    //            if (distance > 67)
+    //                tagProcessor.setDecimation(1f);
+    //            else
+    //                tagProcessor.setDecimation(3.0f);
+    //
+    //            telemetry.addData("Translation X", tag.ftcPose.x);
+    //            telemetry.addData("Translation Y", tag.ftcPose.y);
+    //            telemetry.addData("Translation Z", tag.ftcPose.z);
+    //            telemetry.addData("Distance", tag.ftcPose.range);
+    //            telemetry.addData("Bearing", tag.ftcPose.bearing);
+    //
+    //        } else
+    //            bearing = 0;
+    //        Log.i("apriltag detecting", "detected" + (tag.id - 21));
+    //        for (int i = 0; i<3; i++){
+    //
+    //        }
+    //
+    //    } else
+    //        Log.i("apriltag detecting", "not detected");
+    //    bearing = 0;
+    //    return 0;
+    //}
 
     @Override
     public void periodic() {
