@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
-@Autonomous(name = "Red Auton", group = "Red")
-public class RedAuton extends AutonV1{
+@Autonomous(name = "Red Auton Close", group = "Red")
+public class RedAutonClose extends AutonClose {
     @Override
     public void runOpMode() throws InterruptedException {
         Robot.blueAlliance = false;

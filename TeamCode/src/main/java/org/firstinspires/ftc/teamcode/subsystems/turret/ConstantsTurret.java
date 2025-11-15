@@ -11,8 +11,10 @@ public class ConstantsTurret {
     public static double targetposition = 0;
     public static double kp = 0.17;
     public static double apriltagkP = -0.0275;
-    public static double shootingPos = -90;
-    public static double obeliskPos = -25;
+    public static double shootingPosClose = -90;
+    public static double shootingPosFar = 169.5;
+    public static double obeliskPosClose = -25;
+    public static double obeliskPosFar = 0;
 
     public static double aprilTagOffset = -10;
 }

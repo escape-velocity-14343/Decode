@@ -22,7 +22,7 @@ public class SpindexOutCommand extends CommandBase {
     @Override
     public void initialize() {
         if (ballColor == -1){
-            Log.i("motif shoot", "motif is: " + StaticValues.getMotif(0) +  StaticValues.getMotif(1) + StaticValues.getMotif(2));
+            Log.i("motif shoot", "motif is: " + StaticValues.getMotif(0) +  StaticValues.getMotif(1) + StaticValues.getMotif(2) + " with color " + StaticValues.getMotif(ballNum));
             spindexer.outakeAuto(StaticValues.getMotif(ballNum));
         }
         spindexer.outakeAuto(ballColor);

@@ -21,7 +21,7 @@ public class MotifShootCommandGroup extends SequentialCommandGroup {
         addCommands(
 //                new LogKittenCommand()
                 //new ShootWithDistCommand(shooter, aprilTag),
-                //new ShootingPosCommand(toPoint),
+                new ShootingPosCommand(toPoint),
                 new LogKittenCommand(Log.ASSERT,"motif shoot", "shooter on"),
                 new LogKittenCommand(Log.ASSERT, "motif shoot", "motif is: " + StaticValues.getMotif(0) +  StaticValues.getMotif(1) + StaticValues.getMotif(2)),
                 new LogKittenCommand(Log.ASSERT,"motif shoot", "shooting ball one"),
