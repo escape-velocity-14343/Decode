@@ -23,8 +23,8 @@ import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.turret.ConstantsTurret;
 
-@Autonomous(name = "AutonV1", group = "Auton")
-public abstract class AutonV1 extends Robot {
+@Autonomous(name = "AutonClose", group = "Auton")
+public abstract class AutonClose extends Robot {
     DefaultGoToPointCommand toPoint;
 
     public void run(int m) throws InterruptedException {
@@ -52,7 +52,7 @@ public abstract class AutonV1 extends Robot {
                         //new WaitCommand(5000),
 
                         //new GoToPointWithDefaultCommand(new Pose2d(23, (36)*m, new Rotation2d((-2.3)*m)), toPoint), // shooting
-                        new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPos)),
+                        new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosClose)),
                         new LogKittenCommand(Log.ASSERT, "AUTO V1", "turret is ready"),
                         //new WaitCommand(5000),
                         //new LogKittenCommand(Log.ASSERT, "AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading()),
