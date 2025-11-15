@@ -31,7 +31,7 @@ public class ShooterSubsystem extends SubsystemBase {
         velocityLUT.add(40,-1500);
         velocityLUT.add(60,-1650);
         velocityLUT.add(70,-1850);
-        velocityLUT.add(100, -1900);
+        velocityLUT.add(100, -2000);
         velocityLUT.createLUT();
 
     }

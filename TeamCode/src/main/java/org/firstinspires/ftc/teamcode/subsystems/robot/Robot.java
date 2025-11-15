@@ -114,4 +114,10 @@ public abstract class Robot extends LinearOpMode {
     public static Pose2d getPose() {
         return pose;
     }
+    public void setExposure() {
+        timer.reset();
+        while(!aprilTag.isStreaming()||timer.milliseconds()>6700);
+        telemetry.addData("Camera has been initialized correctly: ",aprilTag.waitForSetExposure(67,67));
+        telemetry.update();
+    }
 }

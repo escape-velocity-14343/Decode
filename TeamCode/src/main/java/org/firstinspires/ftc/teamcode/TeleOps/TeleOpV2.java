@@ -53,8 +53,7 @@ public class TeleOpV2 extends Robot {
         offsetter.getGamepadButton(GamepadKeys.Button.A).whenPressed(new OffSetBallCommand(1));
         offsetter.getGamepadButton(GamepadKeys.Button.B).whenPressed(new OffSetBallCommand(2));
         //new Trigger(()-> controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5).whileActiveContinuous(new InstantCommand(()->aprilTag.detect()));
-        while(!aprilTag.isStreaming());
-        aprilTag.waitForSetExposure(1000,1000);
+        setExposure();
         waitForStart();
         while (opModeIsActive()){
             telemetry.addData("Pose x", pinpointSubsystem.getPose().getX());

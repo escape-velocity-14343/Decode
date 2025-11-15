@@ -33,9 +33,7 @@ public abstract class AutonV1 extends Robot {
         StaticValues.resetArtifacts();
         turret.setTargetPosition(ConstantsTurret.obeliskPos);
         shooter.setVelocity(0);
-        timer.reset();
-        while(!aprilTag.isStreaming()||timer.milliseconds()>1000);
-        aprilTag.waitForSetExposure(1000,1000);
+        setExposure();
         pinpointSubsystem.setPose(new Pose2d(60,(48)*m, Rotation2d.fromDegrees(135)));
         Log.i("AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading());
         toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(60,(48)*m, Rotation2d.fromDegrees(135)));
