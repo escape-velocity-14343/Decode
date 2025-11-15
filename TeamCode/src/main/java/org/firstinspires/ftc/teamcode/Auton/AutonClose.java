@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.command.IntakeAutoCommandGroup;
 import org.firstinspires.ftc.teamcode.command.IntakeOnCommand;
 import org.firstinspires.ftc.teamcode.command.LogKittenCommand;
 import org.firstinspires.ftc.teamcode.command.MotifShootCommandGroup;
+import org.firstinspires.ftc.teamcode.command.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.turret.ConstantsTurret;
@@ -31,12 +32,12 @@ public abstract class AutonClose extends Robot {
         initialize();
         StaticValues.resetMotif();
         StaticValues.resetArtifacts();
-        turret.setTargetPosition(ConstantsTurret.obeliskPosClose);
+        turret.setTargetPosition(ConstantsTurret.obeliskPosClose * m);
         shooter.setVelocity(0);
         setExposure();
-        pinpointSubsystem.setPose(new Pose2d(60,(48)*m, Rotation2d.fromDegrees(135)));
+        pinpointSubsystem.setPose(new Pose2d(60,(48)*m, Rotation2d.fromDegrees(135*m)));
         Log.i("AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading());
-        toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(60,(48)*m, Rotation2d.fromDegrees(135)));
+        toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(60,(48)*m, Rotation2d.fromDegrees(135*m)));
         Log.i("AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading());
         drive.setDefaultCommand(toPoint);
         Log.i("AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading());
@@ -44,7 +45,7 @@ public abstract class AutonClose extends Robot {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new LogKittenCommand(Log.ASSERT, "AUTO V1", "starting"),
-                        new GoToPointWithDefaultCommand(new Pose2d(23,(12)*m, Rotation2d.fromDegrees(135)), toPoint), // shooting
+                        new GoToPointWithDefaultCommand(new Pose2d(23,(12)*m, Rotation2d.fromDegrees(135*m)), toPoint), // shooting
                         new LogKittenCommand(Log.ASSERT, "AUTO V1", "is at pos"),
                         //new LogKittenCommand(Log.ASSERT, "AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading()),
                         new AprilTagMotifDetectionCommand(aprilTag),
@@ -52,7 +53,7 @@ public abstract class AutonClose extends Robot {
                         //new WaitCommand(5000),
 
                         //new GoToPointWithDefaultCommand(new Pose2d(23, (36)*m, new Rotation2d((-2.3)*m)), toPoint), // shooting
-                        new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosClose)),
+                        new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosClose * m)),
                         new LogKittenCommand(Log.ASSERT, "AUTO V1", "turret is ready"),
                         //new WaitCommand(5000),
                         //new LogKittenCommand(Log.ASSERT, "AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading()),
@@ -64,12 +65,12 @@ public abstract class AutonClose extends Robot {
                         new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
                                 new GoToPointWithDefaultCommand(new Pose2d(12, (28) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67)
                                         .andThen(new GoToPointWithDefaultCommand(new Pose2d(12, (36) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67)
-                                                .andThen(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<3))
+                                                .andThen(new TimeoutCommand(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<3), 1000))
                                                 .andThen(new GoToPointWithDefaultCommand(new Pose2d(12, (42) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67))
-                                                .andThen(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<2))
+                                                .andThen(new TimeoutCommand(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<2),1000))
                                                 .andThen(new GoToPointWithDefaultCommand(new Pose2d(12, (52) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67)))),
 
-                        new GoToPointWithDefaultCommand(new Pose2d(23,(12)*m, Rotation2d.fromDegrees(135)), toPoint), // shooting
+                        new GoToPointWithDefaultCommand(new Pose2d(23,(12)*m, Rotation2d.fromDegrees(135 * m)), toPoint), // shooting
                         new LogKittenCommand(Log.ASSERT, "AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading()),
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint),
 
@@ -79,10 +80,10 @@ public abstract class AutonClose extends Robot {
                                                         .andThen(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<3))
                                                         .andThen(new GoToPointWithDefaultCommand(new Pose2d(-13, (42)*m, Rotation2d.fromDegrees((90)*m)), toPoint, 15, 67))
                                                         .andThen(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<2))
-                                                        .andThen(new GoToPointWithDefaultCommand(new Pose2d(-13, (52)*m, Rotation2d.fromDegrees((90)*m)), toPoint, 15, 67)))),
-                        new GoToPointWithDefaultCommand(new Pose2d(23,(12)*m, Rotation2d.fromDegrees(135)), toPoint), // shooting
+                                                        .andThen(new GoToPointWithDefaultCommand(new Pose2d(-13, (62)*m, Rotation2d.fromDegrees((90)*m)), toPoint, 15, 67)))),
+                        new GoToPointWithDefaultCommand(new Pose2d(23,(12)*m, Rotation2d.fromDegrees(135 * m)), toPoint), // shooting
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint),
-                        new GoToPointWithDefaultCommand(new Pose2d(-60,(24)*m, Rotation2d.fromDegrees(135)), toPoint)
+                        new GoToPointWithDefaultCommand(new Pose2d(-60,(24)*m, Rotation2d.fromDegrees(135 * m)), toPoint)
                     )
                 );
         waitForStart();

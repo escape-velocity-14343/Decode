@@ -6,7 +6,7 @@ import com.bylazar.configurables.annotations.Configurable;
 public class ConstantsSpindexer {
     public static double offset = -17.5;
     public static double proximityThreshold = 3;
-    public static double purpleHue = 270;
+    public static double purpleHue = 230;
     public static double greenHue = 120;
     public static double kP = -0.0167;
     public static double thres = 6.7;

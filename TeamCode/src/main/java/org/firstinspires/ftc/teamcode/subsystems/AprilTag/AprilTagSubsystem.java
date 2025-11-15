@@ -4,19 +4,15 @@ import android.util.Log;
 import android.util.Size;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraControls;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
-import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.HashMap;
@@ -77,10 +73,6 @@ public class AprilTagSubsystem extends SubsystemBase {
         bearing = 0;
         //tagProcessor.setDecimation(VisionConstants.decimation);
         if (!tagProcessor.getDetections().isEmpty()) {
-            if (distance > 67)
-                tagProcessor.setDecimation(1f);
-            else
-                tagProcessor.setDecimation(1.67f);
             for (int i = 0; i < tagProcessor.getDetections().size(); i++) {
                 AprilTagDetection tag = tagProcessor.getDetections().get(i);
                 if (tag.id == 20 && StaticValues.getM() == 1) {
@@ -95,7 +87,7 @@ public class AprilTagSubsystem extends SubsystemBase {
                 }
             }
         }
-        return 0;
+        return -1;
     }
 
     //
@@ -162,16 +154,16 @@ public class AprilTagSubsystem extends SubsystemBase {
         }
         ExposureControl control = visionPortal.getCameraControl(ExposureControl.class);
         control.setMode(ExposureControl.Mode.Manual);
-        Log.i("camera", "exposure: " + control.getExposure(TimeUnit.MILLISECONDS));
-        return control.setExposure(exposure, TimeUnit.MILLISECONDS);
+        Log.i("camera", "exposure: " + control.getExposure(TimeUnit.MICROSECONDS));
+        return control.setExposure(exposure, TimeUnit.MICROSECONDS);
     }
 
     public boolean setExposure() {
-        return setExposure(VisionConstants.exposureMillis);
+        return setExposure(VisionConstants.exposureMicros);
     }
 
     public boolean waitForSetExposure(long timeoutMs, int maxAttempts) {
-        return waitForSetExposure(timeoutMs, maxAttempts, VisionConstants.exposureMillis);
+        return waitForSetExposure(timeoutMs, maxAttempts, VisionConstants.exposureMicros);
     }
 
     public boolean waitForSetExposure(long timeoutMs, int maxAttempts, int exposure) {
@@ -195,7 +187,7 @@ public double getExposure() {
             return -1;
         }
         ExposureControl control = visionPortal.getCameraControl(ExposureControl.class);
-        return control.getExposure(TimeUnit.MILLISECONDS);
+        return control.getExposure(TimeUnit.MICROSECONDS);
     }
 
     public void saveFrame(String name) {

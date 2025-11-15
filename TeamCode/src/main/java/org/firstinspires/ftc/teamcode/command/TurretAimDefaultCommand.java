@@ -30,10 +30,11 @@ public class TurretAimDefaultCommand extends CommandBase {
     public void execute() {
         if (aprilTag.getBearing() != 0)
             turret.setPowerManual(ConstantsTurret.apriltagkP * (aprilTag.getBearing() + ConstantsTurret.aprilTagOffset));
-        else if (usePinpoint)
-            targetRotation = pinpointSubsystem.getHeading().getDegrees() - pinpointSubsystem.getRotationToPoint(new Pose2d(67, 51, new Rotation2d(0))).getDegrees();
-        if (Util.inRange(targetRotation, 0, 80))
-            turret.setTargetPosition(targetRotation);
+        //else if (usePinpoint) {
+        //    targetRotation = pinpointSubsystem.getHeading().getDegrees() - pinpointSubsystem.getRotationToPoint(new Pose2d(67, 51, new Rotation2d(0))).getDegrees();
+        //    if (Util.inRange(targetRotation, 0, 80))
+        //        turret.setTargetPosition(targetRotation);
+        //}
         else
             turret.setPowerManual(0);
     }
