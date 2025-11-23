@@ -12,6 +12,8 @@ public class GoToPointWithDefaultCommand extends CommandBase {
     private Supplier<Pose2d> targetSupplier;
     private boolean useTargetSupplier = false;
     private DefaultGoToPointCommand gtpc;
+    double tol;
+    double hTol;
 
     /**
      * Sets the target point of the default go to point command
@@ -25,7 +27,9 @@ public class GoToPointWithDefaultCommand extends CommandBase {
     public GoToPointWithDefaultCommand(Pose2d target, DefaultGoToPointCommand gtpc, double tol, double hTol) {
         this.target = target;
         this.gtpc = gtpc;
-        gtpc.setTolerances(tol, hTol);
+        this.tol = tol;
+        this.hTol = hTol;
+
     }
 
     public GoToPointWithDefaultCommand(Supplier<Pose2d> targetSupplier, DefaultGoToPointCommand gtpc) {
@@ -45,6 +49,8 @@ public class GoToPointWithDefaultCommand extends CommandBase {
         if (useTargetSupplier) {
             target = targetSupplier.get();
         }
+        gtpc.setTolerances(tol, hTol);
+
         gtpc.setTarget(target);
     }
 
@@ -60,7 +66,7 @@ public class GoToPointWithDefaultCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        gtpc.setTolerances(3, 4);
+        gtpc.setTolerances(6.7, 6.7);
         return gtpc.isDone();
     }
 }

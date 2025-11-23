@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.lib.SquIDController;
 import org.firstinspires.ftc.teamcode.lib.Util;
@@ -28,15 +29,15 @@ public class ShooterSubsystem extends SubsystemBase {
         //reverse right motor
         shooterMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
         velocityLUT.add(0,0);
-        velocityLUT.add(40,-1500);
-        velocityLUT.add(60,-1650);
-        velocityLUT.add(70,-1850);
+        velocityLUT.add(50,-1667);
+        velocityLUT.add(60,-1700);
+        velocityLUT.add(70,-1867);
         velocityLUT.add(100, -2000);
         velocityLUT.createLUT();
 
     }
 
-    public void on(){
+    public void on() {
         shooterMotorRight.setPower(1);
         shooterMotorLeft.setPower(1);
     }
@@ -47,7 +48,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void shootFromDistance(double distance) {
         double velocity = ShooterConstants.closeVelocity;
         if (distance > 0 && distance < 200)
-            velocity = velocityLUT.get(distance);
+            velocity = velocityLUT.get(Range.clip(distance, 0, 99));
         Log.i("Shooter", "Shooting from distance: " + distance + " with velocity: " + velocity);
         setVelocity(velocity);
     }

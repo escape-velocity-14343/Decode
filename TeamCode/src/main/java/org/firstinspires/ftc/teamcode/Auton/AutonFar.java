@@ -39,7 +39,7 @@ public abstract class AutonFar extends Robot {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new AprilTagMotifDetectionCommand(aprilTag),
-                        new GoToPointWithDefaultCommand(new Pose2d(-2, 12 * m, Rotation2d.fromDegrees(180)), toPoint).alongWith(new InstantCommand(() -> turret.setDefaultCommand(new TurretAimDefaultCommand(aprilTag,turret,pinpointSubsystem)))),
+                        new GoToPointWithDefaultCommand(new Pose2d(-2, 12 * m, Rotation2d.fromDegrees(180)), toPoint).alongWith(new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosFar))),
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint),
 
                         new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(

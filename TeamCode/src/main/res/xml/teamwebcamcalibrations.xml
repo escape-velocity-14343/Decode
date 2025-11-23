@@ -159,13 +159,12 @@
     <!-- ======================================================================================= -->
 
     <!-- Waveshare OV9281, Calibrated by Allen B Hwang, 2025.11.8 using 3DF Zephyr -->
-    <Camera vid="32E6" pid="9251">
-
+    <Camera vid="0x32E6" pid="0x9251">
         <Calibration
             size="640 480"
-            focalLength="277.423f, 289.369f"
-            principalPoint="279.156f, 225.210f"
-            distortionCoefficients="-0.14056, 0.092566, -0.00233, -0.0199567, -0.0258788, 0, 0, 0"
+            focalLength="374.111f, 374.111f"
+            principalPoint="304.118f, 219.41f"
+            distortionCoefficients="-0.0925972, 0.128017, -0.0015081, 0.00326238, -0.0661054, 0, 0, 0"
             />
     </Camera>
 

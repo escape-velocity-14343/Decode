@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems.robot;
 
+import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.lights.PanelsLights;
+import com.bylazar.lights.RGBIndicator;
+
+@Configurable
 public class StaticValues {
     private static int[] motif = {1, 1, 2};
 
@@ -59,5 +64,21 @@ public class StaticValues {
     }
     public static int getBallOffset() {
         return ballOffset;
+    }
+
+    public static double maxSpeed = 1;
+    public static void setMaxSpeed(double value){
+        maxSpeed = value;
+    }
+    public static double getMaxSpeed(){
+        return maxSpeed;
+    }
+
+    public static double minSpeed = -1;
+    public static void setMinSpeed(double value){
+        minSpeed = value;
+    }
+    public static double getMinSpeed(){
+        return minSpeed;
     }
 }

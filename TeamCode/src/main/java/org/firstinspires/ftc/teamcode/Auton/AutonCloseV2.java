@@ -5,23 +5,29 @@ import android.util.Log;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 
 import org.firstinspires.ftc.teamcode.command.AprilTagMotifDetectionCommand;
+//import org.firstinspires.ftc.teamcode.command.CreepOnCommand;
 import org.firstinspires.ftc.teamcode.command.DefaultGoToPointCommand;
 import org.firstinspires.ftc.teamcode.command.GoToPointWithDefaultCommand;
 import org.firstinspires.ftc.teamcode.command.IntakeAutoCommandGroup;
 import org.firstinspires.ftc.teamcode.command.LogKittenCommand;
 import org.firstinspires.ftc.teamcode.command.MotifShootCommandGroup;
 import org.firstinspires.ftc.teamcode.command.TimeoutCommand;
-import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
+import org.firstinspires.ftc.teamcode.command.TurretAimCommand;
+import org.firstinspires.ftc.teamcode.command.TurretAimDefaultCommand;
+import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.turret.ConstantsTurret;
 
 
-public abstract class AutonClose extends Robot {
+public abstract class AutonCloseV2 extends Robot {
     DefaultGoToPointCommand toPoint;
 
     public void run(int m) throws InterruptedException {
@@ -41,9 +47,13 @@ public abstract class AutonClose extends Robot {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
                         new LogKittenCommand(Log.ASSERT, "AUTO V1", "starting"),
-                        new GoToPointWithDefaultCommand(new Pose2d(27,(16)*m, Rotation2d.fromDegrees(135*m)), toPoint).alongWith(new AprilTagMotifDetectionCommand(aprilTag)),// shooting
+                        new GoToPointWithDefaultCommand(new Pose2d(27,(16)*m, Rotation2d.fromDegrees(135*m)), toPoint).alongWith(
+                                new AprilTagMotifDetectionCommand(aprilTag).andThen(
+                                    new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosClose*m)).andThen(
+                                            new WaitUntilCommand(()-> Util.inRange(turret.getTurretPosition(), ConstantsTurret.shootingPosClose*m, 15)),
+                                            new InstantCommand(() -> turret.setDefaultCommand(new TurretAimDefaultCommand(aprilTag, turret, pinpointSubsystem)))))),// shooting
                         new LogKittenCommand(Log.ASSERT, "AUTO V1", "is at pos"),
-                        new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosClose*m)),
+
                         //new LogKittenCommand(Log.ASSERT, "AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading()),
 
 
@@ -62,14 +72,10 @@ public abstract class AutonClose extends Robot {
                         //new RaceAimShootAuto(new TurretAimDefaultCommand(aprilTag, turret), new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint)),
                         //new GoToPointWithDefaultCommand(new Pose2d(12, 28, Rotation2d.fromDegrees(90)), toPoint),
                         new GoToPointWithDefaultCommand(new Pose2d(12, (28) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 20, 67),
-                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
-                                (new TimeoutCommand(new GoToPointWithDefaultCommand(new Pose2d(12, (36) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67),1000)
-                                                .andThen(new TimeoutCommand(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<3), 1000))
-                                                .andThen(new TimeoutCommand(new GoToPointWithDefaultCommand(new Pose2d(12, (42) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67),1000))
-                                                .andThen(new TimeoutCommand(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<2),1000))
-                                                .andThen(new TimeoutCommand(new GoToPointWithDefaultCommand(new Pose2d(12, (52) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67),1000))
-                                                .andThen(new TimeoutCommand(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<1),1000)))), 5000),//.interruptOn(()->spindexer.getRemainingSpace()<1),
 
+                        new InstantCommand(() -> StaticValues.setMaxSpeed(0.1867)),
+                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(12, (54.67)*StaticValues.getM(), Rotation2d.fromDegrees((90)*StaticValues.getM())), toPoint)).interruptOn(() -> spindexer.getRemainingSpace()==0),4000),//.interruptOn(()->spindexer.getRemainingSpace()<1),
+                        new InstantCommand(() -> StaticValues.setMaxSpeed(1)),
                         //new GoToPointWithDefaultCommand(new Pose2d(5, (42)*m, Rotation2d.fromDegrees((90)*m)), toPoint).alongWith(new InstantCommand(() -> intake.setPower(-1))),
                         //new GoToPointWithDefaultCommand(new Pose2d(5, (56)*m, Rotation2d.fromDegrees((90)*m)), toPoint).alongWith(new InstantCommand(() -> intake.setPower(1))),
                         //new WaitCommand(750),
@@ -80,25 +86,17 @@ public abstract class AutonClose extends Robot {
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint).alongWith(new InstantCommand(() -> intake.setPower(0))),
 
                         new GoToPointWithDefaultCommand(new Pose2d(-15, (28) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67),
-                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
-                                (new TimeoutCommand(new GoToPointWithDefaultCommand(new Pose2d(-15, (36) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67),1000)
-                                        .andThen(new TimeoutCommand(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<3), 1000))
-                                        .andThen(new TimeoutCommand(new GoToPointWithDefaultCommand(new Pose2d(-15, (42) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67),1000))
-                                        .andThen(new TimeoutCommand(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<2),1000))
-                                        .andThen(new TimeoutCommand(new GoToPointWithDefaultCommand(new Pose2d(-15, (67) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67),1000))
-                                        .andThen(new TimeoutCommand(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<1),1000)))), 5000),
+                        new InstantCommand(() -> StaticValues.setMaxSpeed(0.1867)),
+                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-15, (67)*StaticValues.getM(), Rotation2d.fromDegrees((90)*StaticValues.getM())), toPoint)).interruptOn(() -> spindexer.getRemainingSpace()==0),4000),//.interruptOn(()->spindexer.getRemainingSpace()<1),
+                        new InstantCommand(() -> StaticValues.setMaxSpeed(1)),
                         //.interruptOn(()->spindexer.getRemainingSpace()<1),
                         new GoToPointWithDefaultCommand(new Pose2d(27,(16)*m, Rotation2d.fromDegrees(135 * m)), toPoint).alongWith(new InstantCommand(() -> intake.setPower(-1))), // shooting
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint).alongWith(new InstantCommand(() -> intake.setPower(0))),
 
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
-                                new GoToPointWithDefaultCommand(new Pose2d(-33, (24)*m, Rotation2d.fromDegrees((90)*m)), toPoint, 30, 67).interruptOn(()->pinpointSubsystem.getPose().getX()<=-12)
-                                        .andThen(new GoToPointWithDefaultCommand(new Pose2d(-33, (36)*m, Rotation2d.fromDegrees((90)*m)), toPoint, 15, 67)
-                                                .andThen(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<3))
-                                                .andThen(new GoToPointWithDefaultCommand(new Pose2d(-33, (42)*m, Rotation2d.fromDegrees((90)*m)), toPoint, 15, 67))
-                                                .andThen(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<2))
-                                                .andThen(new GoToPointWithDefaultCommand(new Pose2d(-33, (67)*m, Rotation2d.fromDegrees((90)*m)), toPoint, 15, 67))
-                                                .andThen(new TimeoutCommand(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<1),1000)))),//.interruptOn(()->spindexer.getRemainingSpace()<1),
+                        new GoToPointWithDefaultCommand(new Pose2d(-40, (28) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67),
+                        new InstantCommand(() -> StaticValues.setMaxSpeed(0.1867)),
+                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-40, (67)*StaticValues.getM(), Rotation2d.fromDegrees((90)*StaticValues.getM())), toPoint)).interruptOn(() -> spindexer.getRemainingSpace()==0),4000),//.interruptOn(()->spindexer.getRemainingSpace()<1),
+                        new InstantCommand(() -> StaticValues.setMaxSpeed(1)),
                         new GoToPointWithDefaultCommand(new Pose2d(27,(16)*m, Rotation2d.fromDegrees(135 * m)), toPoint).alongWith(new InstantCommand(() -> intake.setPower(-1))), // shooting
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint).alongWith(new InstantCommand(() -> intake.setPower(0))),
                         new GoToPointWithDefaultCommand(new Pose2d(-60,(24)*m, Rotation2d.fromDegrees(135 * m)), toPoint)

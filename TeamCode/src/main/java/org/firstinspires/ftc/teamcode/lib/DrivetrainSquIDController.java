@@ -10,7 +10,7 @@ import com.bylazar.configurables.annotations.Configurable;
 @Configurable
 
 public class DrivetrainSquIDController {
-    public static double looptimeAdjuster = 9;
+    public static double looptimeAdjuster = 15;
 
     private ElapsedTime loopTime;
 
@@ -55,6 +55,6 @@ public class DrivetrainSquIDController {
     private static double getDistanceFromVelocity(double velocity) {
         velocity *= looptimeAdjuster;
         //TODO: UPDATE THESE CONSTANTS
-        return 0.00286 * velocity * velocity + 0.304 * velocity - 0.837;
+        return 0.00462963 * velocity * velocity + 0.60734 * velocity - 0.60734;
     }
 }

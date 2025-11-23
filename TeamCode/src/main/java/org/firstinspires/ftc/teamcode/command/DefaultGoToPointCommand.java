@@ -9,6 +9,7 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.lib.DrivetrainSquIDController;
 import org.firstinspires.ftc.teamcode.lib.SquIDController;
@@ -132,7 +133,7 @@ public class DefaultGoToPointCommand extends CommandBase {
 
 
         if (toggle) {
-            drive.drive(-xMove * StaticValues.getVoltageScalar(), -yMove * 1.67 * StaticValues.getVoltageScalar(), hMove * StaticValues.getVoltageScalar());
+            drive.drive(-xMove * StaticValues.getVoltageScalar(), Range.clip(-yMove * 1.67, StaticValues.getMinSpeed(), StaticValues.getMaxSpeed()) * StaticValues.getVoltageScalar(), hMove * StaticValues.getVoltageScalar());
         }
 
         // velocity end

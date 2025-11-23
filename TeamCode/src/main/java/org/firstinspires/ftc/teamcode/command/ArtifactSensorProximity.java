@@ -15,7 +15,9 @@ public class ArtifactSensorProximity extends CommandBase {
         this.telemetry = Robot.getTelemetry();
     }
     @Override
-    public void initialize(){}
+    public void initialize(){
+
+    }
 
     public boolean isFinished(){
         if (artifactSensor.proximityDetected()){

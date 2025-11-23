@@ -4,7 +4,9 @@ import android.util.Log;
 import android.util.Size;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -13,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.Exposur
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.HashMap;
@@ -35,6 +38,7 @@ public class AprilTagSubsystem extends SubsystemBase {
     Rotation2d cameraPitch = Rotation2d.fromDegrees(19.484);
     double cameraOffsetX = 78.3 / 25.4;
     Telemetry telemetry;
+    AprilTagDetection relocTag = null;
 
     public AprilTagSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         shooterCam = hwMap.get(WebcamName.class, "shooterCam");
@@ -44,11 +48,6 @@ public class AprilTagSubsystem extends SubsystemBase {
                 .setDrawCubeProjection(true)
                 .setDrawTagID(true)
                 .setDrawTagOutline(true)
-                .setLensIntrinsics(
-                        341.44068944204895,
-                        310.9014398907107,
-                        360, //342.01300901026104
-                        240) //228.30715483016178
                 .build();
         tagProcessor.setDecimation(1f);
         visionPortal = new VisionPortal.Builder().addProcessor(tagProcessor)
@@ -77,10 +76,28 @@ public class AprilTagSubsystem extends SubsystemBase {
                 AprilTagDetection tag = tagProcessor.getDetections().get(i);
                 if (tag.id == 20 && StaticValues.getM() == 1) {
                     bearing = tag.ftcPose.bearing;
-                    distance = tag.ftcPose.range;
+                    distance = tag.ftcPose.range * Math.cos(Math.toRadians(tag.ftcPose.elevation) + cameraPitch.getRadians());
+                    double tagDist = tag.ftcPose.range * Math.cos(Math.toRadians(tag.ftcPose.elevation) + cameraPitch.getRadians());
+                    telemetry.addData("Translation X", tag.ftcPose.x);
+                    telemetry.addData("Translation Y", tag.ftcPose.y);
+                    telemetry.addData("Translation Z", tag.ftcPose.z);
+                    telemetry.addData("Pitch", tag.ftcPose.pitch);
+                    telemetry.addData("Distance", tag.ftcPose.range);
+                    telemetry.addData("Bearing", tag.ftcPose.bearing);
+                    telemetry.addData("Tag Distance", tagDist);
+                    relocTag = tag;
                 } else if (tag.id == 24 && StaticValues.getM() == -1) {
                     bearing = tag.ftcPose.bearing;
-                    distance = tag.ftcPose.range;
+                    distance = tag.ftcPose.range * Math.cos(Math.toRadians(tag.ftcPose.elevation) + cameraPitch.getRadians());
+                    double tagDist = tag.ftcPose.range * Math.cos(Math.toRadians(tag.ftcPose.elevation) + cameraPitch.getRadians());
+                    telemetry.addData("Tag Distance", tagDist);
+                    telemetry.addData("Translation X", tag.ftcPose.x);
+                    telemetry.addData("Translation Y", tag.ftcPose.y);
+                    telemetry.addData("Translation Z", tag.ftcPose.z);
+                    telemetry.addData("Pitch", tag.ftcPose.pitch);
+                    telemetry.addData("Distance", tag.ftcPose.range);
+                    telemetry.addData("Bearing", tag.ftcPose.bearing);
+                    relocTag = tag;
                 } else if (tag.id >= 21 && tag.id <= 23) {
                     Log.i("apriltag detecting", "detected" + (tag.id - 21));
                     return tag.id - 21;
@@ -90,37 +107,6 @@ public class AprilTagSubsystem extends SubsystemBase {
         return -1;
     }
 
-    //
-    //
-    //    Log.i("apriltag detecting", "detecting");
-    //    tagProcessor.setDecimation(VisionConstants.decimation);
-    //    if (!tagProcessor.getDetections().isEmpty()) {
-    //        AprilTagDetection tag = tagProcessor.getDetections().get(0);
-    //        if (tag.id == 20 || tag.id == 24) {
-    //
-    //            if (distance > 67)
-    //                tagProcessor.setDecimation(1f);
-    //            else
-    //                tagProcessor.setDecimation(3.0f);
-    //
-    //            telemetry.addData("Translation X", tag.ftcPose.x);
-    //            telemetry.addData("Translation Y", tag.ftcPose.y);
-    //            telemetry.addData("Translation Z", tag.ftcPose.z);
-    //            telemetry.addData("Distance", tag.ftcPose.range);
-    //            telemetry.addData("Bearing", tag.ftcPose.bearing);
-    //
-    //        } else
-    //            bearing = 0;
-    //        Log.i("apriltag detecting", "detected" + (tag.id - 21));
-    //        for (int i = 0; i<3; i++){
-    //
-    //        }
-    //
-    //    } else
-    //        Log.i("apriltag detecting", "not detected");
-    //    bearing = 0;
-    //    return 0;
-    //}
 
     @Override
     public void periodic() {
@@ -135,11 +121,25 @@ public class AprilTagSubsystem extends SubsystemBase {
         return distance;
     }
 
-    //public Pose2d getLocalization(double turretAngle) {
-    //    Rotation2d turretRotation = Rotation2d.fromDegrees(turretAngle).plus(new Rotation2d(Math.PI));
-    //    Pose2d robotRelativeCameraPose = new Pose2d(turretOffsetX + cameraOffsetX * turretRotation.getCos(), cameraOffsetX * turretRotation.getSin(), turretRotation);
-    //
-    //}
+    public Pose2d getLocalization(double turretAngle, Rotation2d robotAngle) {
+        if (relocTag == null) {
+            return new Pose2d(0, 0, new Rotation2d(0));
+        }
+        AprilTagPoseFtc tag = relocTag.ftcPose;
+        Rotation2d turretRotation = Rotation2d.fromDegrees(turretAngle).plus(new Rotation2d(Math.PI));
+        telemetry.addData("Turret Angle", turretRotation.getDegrees());
+        Pose2d robotRelativeCameraPose = new Pose2d(turretOffsetX + cameraOffsetX * turretRotation.getCos(), cameraOffsetX * turretRotation.getSin(), turretRotation);
+        telemetry.addData("Robot Relative Camera X", robotRelativeCameraPose.getX());
+        telemetry.addData("Robot Relative Camera Y", robotRelativeCameraPose.getY());
+        double tagDist = tag.range * Math.cos(Math.toRadians(tag.elevation) + cameraPitch.getRadians());
+        telemetry.addData("Tag Distance", tagDist);
+        Translation2d robotPose = new Translation2d(tagDist * -turretRotation.getCos() - robotRelativeCameraPose.getX(), tagDist * -turretRotation.getSin() - robotRelativeCameraPose.getY());
+        telemetry.addData("Robot Pose X", robotPose.getX());
+        telemetry.addData("Robot Pose Y", robotPose.getY());
+
+        Pose2d newPose = new Pose2d(robotPose.rotateBy(robotAngle), robotAngle);
+        return newPose;
+    }
     public void end() {
         visionPortal.close();
     }

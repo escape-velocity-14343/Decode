@@ -27,7 +27,7 @@ public class MotifShootCommandGroup extends SequentialCommandGroup {
                 new LogKittenCommand(Log.ASSERT, "motif shoot", "motif is: " + StaticValues.getMotif(0) +  StaticValues.getMotif(1) + StaticValues.getMotif(2)),
                 new LogKittenCommand(Log.ASSERT,"motif shoot", "shooting ball one"),
                 new LogKittenCommand(Log.ASSERT,"motif shoot", "shooting"),
-                new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, () -> -1, aprilTag, ()-> (0 + StaticValues.getBallOffset())%3),
+                new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, () -> -1, aprilTag, 0, ()-> StaticValues.getBallOffset()),
 //                new SpindexOutCommand(spindexer, StaticValues.getMotif(0)),
 //                new LogKittenCommand(Log.ASSERT,"auto1", "transferwheel on"),
 //                new TransferWheelOnCommand(transferWheel),
@@ -40,7 +40,7 @@ public class MotifShootCommandGroup extends SequentialCommandGroup {
                 //new ShootWithDistCommand(shooter, aprilTag),
                 new LogKittenCommand(Log.ASSERT,"motif shoot", "shooting ball two"),
                 new LogKittenCommand(Log.ASSERT,"motif shoot", "shooting"),
-                new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, () -> -1, aprilTag, ()-> (1 + StaticValues.getBallOffset())%3),
+                new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, () -> -1, aprilTag, 1, ()-> StaticValues.getBallOffset()),
 //                new LogKittenCommand(Log.ASSERT,"auto2", "spindex"),
 //                new SpindexOutCommand(spindexer, StaticValues.getMotif(1)),
 //                new LogKittenCommand(Log.ASSERT,"auto2", "transfer arm up"),
@@ -52,7 +52,7 @@ public class MotifShootCommandGroup extends SequentialCommandGroup {
                 //new ShootWithDistCommand(shooter, aprilTag),
                 new LogKittenCommand(Log.ASSERT,"motif shoot", "shooting ball three"),
                 new LogKittenCommand(Log.ASSERT,"motif shoot", "shooting " + StaticValues.getMotif(2)),
-                new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, () -> -1, aprilTag, ()-> (2 + StaticValues.getBallOffset())%3)
+                new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, () -> -1, aprilTag, 2, ()-> StaticValues.getBallOffset())
 //                new LogKittenCommand(Log.ASSERT,"auto3", "spindex"),
 //                new SpindexOutCommand(spindexer, StaticValues.getMotif(2)),
 //                new LogKittenCommand(Log.ASSERT,"auto3", "transfer arm up"),

@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
 
 public class ExposureCycle extends CommandBase {
     AprilTagSubsystem cam;
-    int exposureMillis = 1;
+    int exposureMillis = 100;
     boolean lastExposureSuccess = false;
     public ExposureCycle(AprilTagSubsystem camera) {
         cam = camera;

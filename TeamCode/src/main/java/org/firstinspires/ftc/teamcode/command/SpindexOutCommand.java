@@ -19,13 +19,15 @@ public class SpindexOutCommand extends CommandBase {
         addRequirements(spindexer);
     }
 
+
     @Override
     public void initialize() {
-        if (ballColor == -1){
-            Log.i("motif shoot", "motif is: " + StaticValues.getMotif(0) +  StaticValues.getMotif(1) + StaticValues.getMotif(2) + " with color " + StaticValues.getMotif(ballNum));
+         if (ballColor == -1){
+            Log.i("SPINDEX OUT COMMAND", "motif is: " + StaticValues.getMotif(0) +  StaticValues.getMotif(1) + StaticValues.getMotif(2) + " with color " + StaticValues.getMotif(ballNum));
             spindexer.outakeAuto(StaticValues.getMotif(ballNum));
+        } else {
+            spindexer.outakeAuto(ballColor);
         }
-        spindexer.outakeAuto(ballColor);
     }
     @Override
     public boolean isFinished() {

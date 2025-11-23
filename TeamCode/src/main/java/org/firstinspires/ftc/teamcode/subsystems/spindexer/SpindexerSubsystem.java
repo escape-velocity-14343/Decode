@@ -24,6 +24,7 @@ public class SpindexerSubsystem extends SubsystemBase {
     byte[] ballsInSpindexer = new byte[]{0, 0, 0}; //0 means no ball, 1 means purple, 2 means CODE GREEN WILLIAM
     Telemetry telemtry;
     int add = 0;
+    boolean manualControl = false;
 
     public SpindexerSubsystem(HardwareMap hwMap) {
         CommandScheduler.getInstance().registerSubsystem();
@@ -39,20 +40,23 @@ public class SpindexerSubsystem extends SubsystemBase {
 
 
     public void intake(int ballNum){
+        manualControl = false;
         setTargetPosition(120*(ballNum) + 180);
     }
 
     public void outake(int ballNum) {
+        manualControl = false;
         setTargetPosition((120*(ballNum)));
     }
 
 
 
 
-    public int intakeAuto(){
+    public int intakeAuto() {
+        manualControl = false;
         for (int i = 0; i < 3; i++){
             if (StaticValues.getArtifacts(i) == 0){
-                setTargetPosition(120*(i) + 180);
+                setTargetPosition(120 * (i) + 180);
                 return i;
             }
         }
@@ -60,9 +64,10 @@ public class SpindexerSubsystem extends SubsystemBase {
     }
 
     public int outakeAuto(int color){
+        manualControl = false;
         for (int i = 0; i < 3; i++){
             if (StaticValues.getArtifacts(i) == color){
-//                telemtry.addData("OUTAKE AUTO POS:", 120*i);
+                telemtry.addData("OUTAKE AUTO POS:", i);
 //                telemtry.addData("OUTAKE AUTO CURRENT:", spindexerEncoder.getDegrees());
                 setTargetPosition(120*i);
                 StaticValues.setArtifacts(i, 0);
@@ -73,8 +78,9 @@ public class SpindexerSubsystem extends SubsystemBase {
     }
 
 
-    public void addColor(int color){
-        for (int i = 0; i < 3; i++){
+    public void addColor(int color) {
+        manualControl = false;
+        for (int i = 0; i < 3; i++) {
             if (StaticValues.getArtifacts(i) == 0){
                 StaticValues.setArtifacts(i, color);;
                 break;
@@ -101,6 +107,7 @@ public class SpindexerSubsystem extends SubsystemBase {
     }
 
     public void setTargetPosition(double targetPosition) {
+        manualControl = false;
         this.targetPosition = targetPosition;
     }
 
@@ -108,6 +115,10 @@ public class SpindexerSubsystem extends SubsystemBase {
     public void setPower(double power){
         //spindexer.setPower(Range.clip(power, -0.5, 0.5));
         spindexer.setPower(power*StaticValues.getVoltageScalar());
+    }
+    public void setPowerManual(double power) {
+        manualControl = true;
+        setPower(power);
     }
 
     public double getDegrees() {
@@ -121,6 +132,9 @@ public class SpindexerSubsystem extends SubsystemBase {
 
     public boolean isClose() {
         return isClose(targetPosition, getDegrees(), thres);
+    }
+    public void setManualControl(boolean set) {
+        manualControl = set;
     }
 
 
@@ -136,7 +150,8 @@ public class SpindexerSubsystem extends SubsystemBase {
         telemtry.addData("power", rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees())*100);
 //        telemtry.addData("the statement it is close is:", isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
 //        telemtry.addData("not clolse", !isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
-        setPower(rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
+        if (!manualControl)
+            setPower(rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
         //setPower(squIDController.calculate(0.0, spindexerEncoder.getDegrees()));
 //        if (Util.inRange(spindexerEncoder.getDegrees() % 120, 0, 10)) {
 //            if (artifactSensor.proximityDetected()) {

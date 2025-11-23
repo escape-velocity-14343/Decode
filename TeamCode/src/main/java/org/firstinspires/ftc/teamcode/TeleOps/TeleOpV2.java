@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.command.ShooterOffCommand;
 import org.firstinspires.ftc.teamcode.command.TransferArmDownCommand;
 import org.firstinspires.ftc.teamcode.command.TransferWheelOffCommand;
 import org.firstinspires.ftc.teamcode.command.TurretAimDefaultCommand;
+import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 
@@ -38,13 +39,13 @@ public class TeleOpV2 extends Robot {
                 controller::getRightX));
         turret.setDefaultCommand(new TurretAimDefaultCommand(aprilTag, turret, pinpointSubsystem));
 
-        controller.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel,  () -> 1, aprilTag, () -> -1));
-        controller.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, () -> 2, aprilTag, ()-> -1));
+        controller.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel,  () -> 1, aprilTag, -1, () ->0));
+        controller.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, () -> 2, aprilTag, -1, () ->0));
         controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint));
         controller.getGamepadButton(GamepadKeys.Button.B).whenPressed(new PoopCommand(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint));
         controller.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor));
         controller.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new InstantCommand(()->intake.setPower(-0.5))).whenReleased(new IntakeOffCommand(intake));
-        new Trigger(()-> gamepad1.options && gamepad1.share).whileActiveOnce(new InstantCommand(()->pinpointSubsystem.setPose(new Pose2d(pinpointSubsystem.getTranslation(), Rotation2d.fromDegrees( - 90 * StaticValues.getM())))));
+        new Trigger(()-> gamepad1.options && gamepad1.share).whileActiveOnce(new InstantCommand(()->pinpointSubsystem.setPose(new Pose2d(pinpointSubsystem.getTranslation(), Rotation2d.fromDegrees(90 * StaticValues.getM())))));
         new Trigger(()-> gamepad1.touchpad).whileActiveOnce(new ParallelCommandGroup(
                 new IntakeOffCommand(intake),
                 new TransferArmDownCommand(transferArm),
@@ -52,6 +53,7 @@ public class TeleOpV2 extends Robot {
                 new InstantCommand(()->spindexer.setTargetPosition(spindexer.getDegrees())),
                 new ShooterOffCommand(shooter)
         ));
+        new Trigger(() -> !Util.inRange(gamepad2.left_stick_x, 0, 0.5)).whileActiveContinuous(()->spindexer.setPowerManual(gamepad2.left_stick_x)).whenInactive(()->spindexer.setPower(0));
 
         offsetter.getGamepadButton(GamepadKeys.Button.X).whenPressed(new OffSetBallCommand(0));
         offsetter.getGamepadButton(GamepadKeys.Button.A).whenPressed(new OffSetBallCommand(1));
@@ -63,6 +65,7 @@ public class TeleOpV2 extends Robot {
             telemetry.addData("Pose x", pinpointSubsystem.getPose().getX());
             telemetry.addData("Pose y", pinpointSubsystem.getPose().getY());
             telemetry.addData("Pose heading", pinpointSubsystem.getHeading().getDegrees());
+            telemetry.addData("Pose velocity", pinpointSubsystem.getTranslationalVelocity().getNorm());
             update();
         }
     }

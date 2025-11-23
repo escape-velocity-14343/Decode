@@ -9,5 +9,13 @@ import org.firstinspires.ftc.teamcode.subsystems.turret.TurretSubsystem;
 public class TurretAimCommand extends CommandBase {
     TurretSubsystem turret;
     PinpointSubsystem pinpointSubsystem;
-    AprilTagSubsystem aprilTagSubsystem;
+    public TurretAimCommand(TurretSubsystem turret, PinpointSubsystem pinpointSubsystem){
+        this.turret = turret;
+        this.pinpointSubsystem = pinpointSubsystem;
+        addRequirements(turret);
+    }
+    @Override
+    public void initialize() {
+
+    }
 }
