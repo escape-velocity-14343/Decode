@@ -13,7 +13,7 @@ class FieldDrawing {
 
     fun draw(pose : Pose2d) {
         panelsField.setOffsets(
-            FieldPresetParams(name = "FTC Field", rotation = CanvasRotation.DEG_90, offsetX = -36.0, offsetY = -36.0, reverseXY = true, flipX = true, flipY = true))
+            FieldPresetParams(name = "FTC Field", rotation = CanvasRotation.DEG_90, reverseXY = true, flipX = true, flipY = true))
 
         // Compute robot rectangle corners (robot size: 15" length x 14" width)
         val halfLength = 15.0 / 2.0
