@@ -10,7 +10,7 @@ import com.bylazar.configurables.annotations.Configurable;
 @Configurable
 
 public class DrivetrainSquIDController {
-    public static double looptimeAdjuster = 15;
+    public static double looptimeAdjuster = 1.5;
 
     private ElapsedTime loopTime;
 
@@ -35,13 +35,13 @@ public class DrivetrainSquIDController {
 
         double distance = Math.max(getDistanceFromVelocity(currentVelMag), 0);
 
-        //currentPose =
-        //        currentPose.plus(
-        //                new Transform2d(
-        //                        new Translation2d(
-        //                                Math.cos(velAngle) * distance,
-        //                                Math.sin(velAngle) * distance),
-        //                        new Rotation2d()));
+        currentPose =
+                currentPose.plus(
+                        new Transform2d(
+                                new Translation2d(
+                                        Math.cos(velAngle) * distance,
+                                        Math.sin(velAngle) * distance),
+                                new Rotation2d()));
 
         double magnitude = currentPose.getTranslation().getDistance(targetPose.getTranslation());
         magnitude = squid.calculate(magnitude, 0);

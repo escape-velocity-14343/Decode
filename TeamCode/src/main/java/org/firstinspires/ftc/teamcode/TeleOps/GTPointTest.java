@@ -19,7 +19,7 @@ public class GTPointTest extends Robot {
     public void runOpMode() throws InterruptedException {
 
         initialize();
-        pinpointSubsystem.setPose(new Pose2d( 0, 0, new Rotation2d(0)));
+        //pinpointSubsystem.setPose(new Pose2d( 0, 0, new Rotation2d(0)));
         waitForStart();
 
         DefaultGoToPointCommand gtpc = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(x, y, Rotation2d.fromDegrees(rot)));

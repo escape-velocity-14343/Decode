@@ -21,6 +21,6 @@ public class TransferArmUpCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.milliseconds() > 200;
+        return timer.milliseconds() > 100;
     }
 }

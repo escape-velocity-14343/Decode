@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.SquIDController;
+import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.lib.sensOrangeEncoder;
 
 public class TurretSubsystem extends SubsystemBase {
@@ -18,6 +19,7 @@ public class TurretSubsystem extends SubsystemBase {
     private double targetpos = ConstantsTurret.targetposition;
     private Telemetry telemetry;
     boolean manualControl = false;
+    double lastPower = 0;
 
     public TurretSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         powerManage = new SquIDController();
@@ -37,10 +39,13 @@ public class TurretSubsystem extends SubsystemBase {
         return turretEncoder.getDegrees();
     }
     private void setPower(double power) {
+        if (Util.inRange(lastPower, power, 0.01))
+            return;
         if (!(turretEncoder.getDegrees() > ConstantsTurret.max && power > 0) && !(turretEncoder.getDegrees() < ConstantsTurret.min && power < 0))
             turretMotor.setPower(power);
         else
             turretMotor.setPower(0);
+        lastPower = power;
     }
     public void setPowerManual(double power) {
         manualControl = true;

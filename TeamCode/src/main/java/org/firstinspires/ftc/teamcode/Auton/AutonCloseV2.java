@@ -74,7 +74,12 @@ public abstract class AutonCloseV2 extends Robot {
                         new GoToPointWithDefaultCommand(new Pose2d(12, (28) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 20, 67),
 
                         new InstantCommand(() -> StaticValues.setMaxSpeed(0.1867)),
-                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(12, (54.67)*StaticValues.getM(), Rotation2d.fromDegrees((90)*StaticValues.getM())), toPoint)).interruptOn(() -> spindexer.getRemainingSpace()==0),4000),//.interruptOn(()->spindexer.getRemainingSpace()<1),
+                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
+                                new GoToPointWithDefaultCommand(new Pose2d(8, (54.67)*StaticValues.getM(), Rotation2d.fromDegrees((90)*StaticValues.getM())), toPoint)).interruptOn(() -> spindexer.getRemainingSpace()==0),4000).alongWith(
+                                    new TimeoutCommand(new WaitUntilCommand(() -> spindexer.getRemainingSpace()== 2).andThen(
+                                    new InstantCommand(() -> StaticValues.setMaxSpeed(0.5))), 4000)).alongWith(
+                                            new TimeoutCommand(new WaitUntilCommand(() -> spindexer.getRemainingSpace() == 1).andThen(
+                                            new InstantCommand(() -> StaticValues.setMaxSpeed(1))), 4000)),//.interruptOn(()->spindexer.getRemainingSpace()<1),
                         new InstantCommand(() -> StaticValues.setMaxSpeed(1)),
                         //new GoToPointWithDefaultCommand(new Pose2d(5, (42)*m, Rotation2d.fromDegrees((90)*m)), toPoint).alongWith(new InstantCommand(() -> intake.setPower(-1))),
                         //new GoToPointWithDefaultCommand(new Pose2d(5, (56)*m, Rotation2d.fromDegrees((90)*m)), toPoint).alongWith(new InstantCommand(() -> intake.setPower(1))),
@@ -87,7 +92,12 @@ public abstract class AutonCloseV2 extends Robot {
 
                         new GoToPointWithDefaultCommand(new Pose2d(-15, (28) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67),
                         new InstantCommand(() -> StaticValues.setMaxSpeed(0.1867)),
-                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-15, (67)*StaticValues.getM(), Rotation2d.fromDegrees((90)*StaticValues.getM())), toPoint)).interruptOn(() -> spindexer.getRemainingSpace()==0),4000),//.interruptOn(()->spindexer.getRemainingSpace()<1),
+                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
+                                new GoToPointWithDefaultCommand(new Pose2d(-15, (60)*StaticValues.getM(), Rotation2d.fromDegrees((90)*StaticValues.getM())), toPoint)).interruptOn(() -> spindexer.getRemainingSpace()==0),4000).alongWith(
+                                new TimeoutCommand(new WaitUntilCommand(() -> spindexer.getRemainingSpace()== 2).andThen(
+                                        new InstantCommand(() -> StaticValues.setMaxSpeed(0.5))), 4000)).alongWith(
+                                new TimeoutCommand(new WaitUntilCommand(() -> spindexer.getRemainingSpace() == 1).andThen(
+                                        new InstantCommand(() -> StaticValues.setMaxSpeed(1))), 4000)),//.interruptOn(()->spindexer.getRemainingSpace()<1),
                         new InstantCommand(() -> StaticValues.setMaxSpeed(1)),
                         //.interruptOn(()->spindexer.getRemainingSpace()<1),
                         new GoToPointWithDefaultCommand(new Pose2d(27,(16)*m, Rotation2d.fromDegrees(135 * m)), toPoint).alongWith(new InstantCommand(() -> intake.setPower(-1))), // shooting
@@ -95,7 +105,12 @@ public abstract class AutonCloseV2 extends Robot {
 
                         new GoToPointWithDefaultCommand(new Pose2d(-40, (28) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67),
                         new InstantCommand(() -> StaticValues.setMaxSpeed(0.1867)),
-                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(new GoToPointWithDefaultCommand(new Pose2d(-40, (67)*StaticValues.getM(), Rotation2d.fromDegrees((90)*StaticValues.getM())), toPoint)).interruptOn(() -> spindexer.getRemainingSpace()==0),4000),//.interruptOn(()->spindexer.getRemainingSpace()<1),
+                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
+                                new GoToPointWithDefaultCommand(new Pose2d(-40, (60)*StaticValues.getM(), Rotation2d.fromDegrees((90)*StaticValues.getM())), toPoint)).interruptOn(() -> spindexer.getRemainingSpace()==0),4000).alongWith(
+                                new TimeoutCommand(new WaitUntilCommand(() -> spindexer.getRemainingSpace()==2).andThen(
+                                        new InstantCommand(() -> StaticValues.setMaxSpeed(0.5))), 4000)).alongWith(
+                                new TimeoutCommand(new WaitUntilCommand(() -> spindexer.getRemainingSpace() ==1).andThen(
+                                        new InstantCommand(() -> StaticValues.setMaxSpeed(1))), 4000)),//.interruptOn(()->spindexer.getRemainingSpace()<1),
                         new InstantCommand(() -> StaticValues.setMaxSpeed(1)),
                         new GoToPointWithDefaultCommand(new Pose2d(27,(16)*m, Rotation2d.fromDegrees(135 * m)), toPoint).alongWith(new InstantCommand(() -> intake.setPower(-1))), // shooting
                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint).alongWith(new InstantCommand(() -> intake.setPower(0))),

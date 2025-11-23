@@ -16,6 +16,7 @@ public class RevColorSensorDetector implements ArtifactSensor {
 
     public RevColorSensorDetector(HardwareMap hardwareMap) {
         colorSensor = hardwareMap.get(RevColorSensorV3.class, "colorSensor");
+        colorSensor.setGain(5.9f);
     }
     @Override
     public boolean greenDetected() {

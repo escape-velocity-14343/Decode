@@ -18,21 +18,22 @@ import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 public class ShooterSubsystem extends SubsystemBase {
     private DcMotorEx shooterMotorRight;
     private DcMotor shooterMotorLeft;
+    private DcMotorEx encoderMotor;
     SquIDController velocityController = new SquIDController();
 
     double targetVelocity = 0;
     InterpLUT velocityLUT = new InterpLUT();
+    double lastPower = 0;
 
     public ShooterSubsystem (HardwareMap hwMap) {
         shooterMotorRight = (DcMotorEx) hwMap.get(DcMotor.class, "shooterMotorRight");
         shooterMotorLeft = hwMap.get(DcMotor.class, "shooterMotorLeft");
+        encoderMotor = (DcMotorEx) hwMap.get(DcMotor.class, "driveFrontLeft");
         //reverse right motor
         shooterMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
         velocityLUT.add(0,0);
-        velocityLUT.add(50,-1667);
-        velocityLUT.add(60,-1700);
-        velocityLUT.add(70,-1867);
-        velocityLUT.add(100, -2000);
+        velocityLUT.add(50,-1750);
+        velocityLUT.add(100, -2050);
         velocityLUT.createLUT();
 
     }
@@ -42,8 +43,11 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotorLeft.setPower(1);
     }
     public void setPower(double power){
-        shooterMotorRight.setPower(power* StaticValues.getVoltageScalar());
-        shooterMotorLeft.setPower(power* StaticValues.getVoltageScalar());
+        if (Util.inRange(lastPower, power, 0.01))
+            return;
+        shooterMotorRight.setPower(power * StaticValues.getVoltageScalar());
+        shooterMotorLeft.setPower(power * StaticValues.getVoltageScalar());
+        lastPower = power;
     }
     public void shootFromDistance(double distance) {
         double velocity = ShooterConstants.closeVelocity;
@@ -58,10 +62,10 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public double getVelocity(){
-        return shooterMotorRight.getVelocity();
+        return encoderMotor.getVelocity();
     }
     public boolean atVelocity() {
-        return Util.inRange(targetVelocity, shooterMotorRight.getVelocity(),  67.41 /2.67);
+        return Util.inRange(targetVelocity, encoderMotor.getVelocity(),  67.41 /2.67);
 
     }
 
@@ -72,9 +76,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Robot.getTelemetry().addData("shooter velocity", shooterMotorRight.getVelocity());
+        Robot.getTelemetry().addData("shooter velocity", encoderMotor.getVelocity());
         velocityController.setPID(ShooterConstants.kvp);
-        setPower(velocityController.calculate(targetVelocity, shooterMotorRight.getVelocity()) + ShooterConstants.kv * targetVelocity);
+        setPower(velocityController.calculate(targetVelocity, encoderMotor.getVelocity()) + ShooterConstants.kv * targetVelocity);
     }
 
 }

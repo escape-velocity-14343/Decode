@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.lib.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.lib.RevColorSensorDetector;
 import org.firstinspires.ftc.teamcode.lib.ThaiVPController;
+import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.lib.sensOrangeEncoder;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
@@ -25,6 +26,7 @@ public class SpindexerSubsystem extends SubsystemBase {
     Telemetry telemtry;
     int add = 0;
     boolean manualControl = false;
+    double lastPower = 0;
 
     public SpindexerSubsystem(HardwareMap hwMap) {
         CommandScheduler.getInstance().registerSubsystem();
@@ -82,7 +84,7 @@ public class SpindexerSubsystem extends SubsystemBase {
         manualControl = false;
         for (int i = 0; i < 3; i++) {
             if (StaticValues.getArtifacts(i) == 0){
-                StaticValues.setArtifacts(i, color);;
+                StaticValues.setArtifacts(i, color);
                 break;
             }
         }
@@ -109,12 +111,17 @@ public class SpindexerSubsystem extends SubsystemBase {
     public void setTargetPosition(double targetPosition) {
         manualControl = false;
         this.targetPosition = targetPosition;
+        if (targetPosition == 120) //correct for encoder nonlinearity (who made this encoder???)
+            this.targetPosition = 115;
     }
 
 
     public void setPower(double power){
         //spindexer.setPower(Range.clip(power, -0.5, 0.5));
+        if (Util.inRange(power, lastPower, 0.01))
+            return;
         spindexer.setPower(power*StaticValues.getVoltageScalar());
+        lastPower = power;
     }
     public void setPowerManual(double power) {
         manualControl = true;

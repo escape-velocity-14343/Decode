@@ -72,20 +72,14 @@ public abstract class Robot extends LinearOpMode {
         aprilTag = new AprilTagSubsystem(hardwareMap, telemetry);
 
         hubs = hardwareMap.getAll(LynxModule.class);
-        for (LynxModule hub : hubs) {
-            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-        }
-        for (LynxModule hub : hubs) {
-            hub.clearBulkCache();
-        }
+        hubs.get(0).setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+
         StaticValues.setVoltageScalar(12.4/hardwareMap.getAll(VoltageSensor.class).iterator().next().getVoltage());
 
     }
 
     public void update() {
-        for (LynxModule hub : hubs) {
-            hub.clearBulkCache();
-        }
+        hubs.get(0).clearBulkCache();
         pose = pinpointSubsystem.getPose();
         CommandScheduler.getInstance().run();
         publicTelemetry.addData("Loop Time", loopTime);
