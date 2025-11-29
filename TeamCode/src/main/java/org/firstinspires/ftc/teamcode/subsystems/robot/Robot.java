@@ -10,11 +10,14 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.RobotLog;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.command.DefaultGoToPointCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeCam.IntakeCamSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.PinpointSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.hood.HoodSubsystem;
@@ -25,8 +28,14 @@ import org.firstinspires.ftc.teamcode.subsystems.spindexer.SpindexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.transferWheel.TransferWheelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.turret.TurretSubsystem;
+import org.firstinspires.ftc.vision.VisionPortal;
 
+import java.io.File;
 import java.util.List;
+
+import dev.nullftc.profiler.Profiler;
+import dev.nullftc.profiler.entry.BasicProfilerEntryFactory;
+import dev.nullftc.profiler.exporter.CSVProfilerExporter;
 
 public abstract class Robot extends LinearOpMode {
 //    public AprilTagSubsystem apriltag;
@@ -41,6 +50,7 @@ public abstract class Robot extends LinearOpMode {
     public ColorSensorSubsystem artifactSensor;
     public PinpointSubsystem pinpointSubsystem;
     public AprilTagSubsystem aprilTag;
+    public IntakeCamSubsystem intakeCam;
     public static Telemetry publicTelemetry;
     public static Pose2d pose;
     public static int atagBearing = 0;
@@ -49,6 +59,7 @@ public abstract class Robot extends LinearOpMode {
     int loopTimerCounter = 0;
     double loopTime = 0;
     public DefaultGoToPointCommand toPoint;
+    public Profiler profiler;
 
     public static boolean useTestTelemetry = true;
 
@@ -57,6 +68,9 @@ public abstract class Robot extends LinearOpMode {
     public void initialize(){
         CommandScheduler.getInstance().reset();
         CommandScheduler.getInstance().cancelAll();
+        int[] portals = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
+        StaticValues.setPortalIDIntake(portals[0]);
+        StaticValues.setPortalIDShooter(portals[1]);
         telemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
         publicTelemetry = useTestTelemetry? telemetry : PanelsTelemetry.INSTANCE.getFtcTelemetry();
         artifactSensor = new ColorSensorSubsystem(hardwareMap);
@@ -70,12 +84,14 @@ public abstract class Robot extends LinearOpMode {
         transferArm = new TransferArmSubsystem(hardwareMap);
         transferWheel = new TransferWheelSubsystem(hardwareMap);
         aprilTag = new AprilTagSubsystem(hardwareMap, telemetry);
+        intakeCam = new IntakeCamSubsystem(hardwareMap, telemetry);
 
         hubs = hardwareMap.getAll(LynxModule.class);
         hubs.get(0).setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
 
         StaticValues.setVoltageScalar(12.4/hardwareMap.getAll(VoltageSensor.class).iterator().next().getVoltage());
-
+        intakeCam.setEnableLiveView(false);
+        aprilTag.setEnableLiveView(false);
     }
 
     public void update() {
@@ -98,6 +114,7 @@ public abstract class Robot extends LinearOpMode {
         CommandScheduler.getInstance().cancelAll();
         CommandScheduler.getInstance().reset();
         aprilTag.end();
+        intakeCam.end();
         Log.d("RADIAN DEGREE MISMATCH", "Mecanum + " );
 
     }
@@ -108,10 +125,31 @@ public abstract class Robot extends LinearOpMode {
     public static Pose2d getPose() {
         return pose;
     }
-    public void setExposure() {
+    public void setTurretCamExposure() {
         timer.reset();
-        while(!aprilTag.isStreaming()||timer.milliseconds()>6700);
+        while(!(aprilTag.isStreaming()||timer.milliseconds()>670));
         telemetry.addData("Camera has been initialized correctly: ",aprilTag.waitForSetExposure(67,67));
         telemetry.update();
+    }
+    public void setIntakeCamExposure() {
+        timer.reset();
+        while(!(intakeCam.isStreaming()||timer.milliseconds()>670));
+        telemetry.addData("Intake Camera has been initialized correctly: ",intakeCam.waitForSetExposure(67,67));
+        telemetry.update();
+    }
+    protected void exportProfiler(File file) {
+        RobotLog.i("Starting async profiler export to: " + file.getAbsolutePath());
+
+        Thread exportThread = new Thread(() -> {
+            try {
+                profiler.export();
+                profiler.shutdown();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        exportThread.setDaemon(true);
+        exportThread.start();
     }
 }

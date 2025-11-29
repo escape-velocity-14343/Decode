@@ -42,6 +42,11 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotorRight.setPower(1);
         shooterMotorLeft.setPower(1);
     }
+
+    public void intake(){
+        targetVelocity = 20000;
+    }
+
     public void setPower(double power){
         if (Util.inRange(lastPower, power, 0.01))
             return;
@@ -65,7 +70,7 @@ public class ShooterSubsystem extends SubsystemBase {
         return encoderMotor.getVelocity();
     }
     public boolean atVelocity() {
-        return Util.inRange(targetVelocity, encoderMotor.getVelocity(),  67.41 /2.67);
+        return Util.inRange(targetVelocity, encoderMotor.getVelocity(),  ShooterConstants.tolerance);
 
     }
 

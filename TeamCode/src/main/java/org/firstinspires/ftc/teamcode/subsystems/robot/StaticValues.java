@@ -81,4 +81,18 @@ public class StaticValues {
     public static double getMinSpeed(){
         return minSpeed;
     }
+    public static int portalIDIntake = 0;
+    public static void setPortalIDIntake(int value){
+        portalIDIntake = value;
+    }
+    public static int getPortalIDIntake(){
+        return portalIDIntake;
+    }
+    public static int portalIDShooter = 1;
+    public static void setPortalIDShooter(int value) {
+        portalIDShooter = value;
+    }
+    public static int getPortalIDShooter() {
+        return portalIDShooter;
+    }
 }

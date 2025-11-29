@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.lib.DrivetrainSquIDController;
 import org.firstinspires.ftc.teamcode.lib.SquIDController;
 import org.firstinspires.ftc.teamcode.lib.Util;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeCam.IntakeCamSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.PinpointSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
@@ -61,12 +62,16 @@ public class DefaultGoToPointCommand extends CommandBase {
 
     Pose2d offset = new Pose2d(0,0,new Rotation2d(0));
 
+    private boolean useCamera = false;
+    private IntakeCamSubsystem intakeCam;
+
 
     private boolean shouldLog = true;
 
     public DefaultGoToPointCommand(MecanumDriveSubsystem driveSubsystem, PinpointSubsystem otosSubsystem, Pose2d targetPose, double hTol){
         this(driveSubsystem, otosSubsystem, targetPose);
         this.hTol = hTol;
+        useCamera = false;
     }
 
     public DefaultGoToPointCommand(MecanumDriveSubsystem driveSubsystem, PinpointSubsystem otosSubsystem, Pose2d targetPose) {
@@ -76,6 +81,16 @@ public class DefaultGoToPointCommand extends CommandBase {
 
 
         addRequirements(drive);
+        useCamera = false;
+    }
+
+    public DefaultGoToPointCommand(MecanumDriveSubsystem driveSubsystem, PinpointSubsystem otosSubsystem, IntakeCamSubsystem intakeCam) {
+        this.intakeCam = intakeCam;
+        drive = driveSubsystem;
+        pinpoint = otosSubsystem;
+
+        addRequirements(drive);
+        useCamera = true;
     }
 
     @Override
@@ -99,12 +114,14 @@ public class DefaultGoToPointCommand extends CommandBase {
     @Override
     public void execute() {
         currentPose = pinpoint.getPose();
-        if (currentPose == null) {
-            Log.w("execute", "currentPose was null (why?????)");
-        } else {
-            //Log.i("execute", "current pose was NOT null");
+        //if (currentPose == null) {
+        //    Log.w("execute", "currentPose was null (why?????)");
+        //} else {
+        //    //Log.i("execute", "current pose was NOT null");
+        //}
+        if (useCamera){
+            this.target = intakeCam.getArtifactPose();
         }
-
 
         double xDist = target.getX() - currentPose.getX();
         double yDist = target.getY() - currentPose.getY();

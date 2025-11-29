@@ -5,11 +5,9 @@ import android.util.Log;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
-import com.arcrobotics.ftclib.geometry.Translation2d;
 
 import org.firstinspires.ftc.teamcode.command.AprilTagMotifDetectionCommand;
 //import org.firstinspires.ftc.teamcode.command.CreepOnCommand;
@@ -19,7 +17,6 @@ import org.firstinspires.ftc.teamcode.command.IntakeAutoCommandGroup;
 import org.firstinspires.ftc.teamcode.command.LogKittenCommand;
 import org.firstinspires.ftc.teamcode.command.MotifShootCommandGroup;
 import org.firstinspires.ftc.teamcode.command.TimeoutCommand;
-import org.firstinspires.ftc.teamcode.command.TurretAimCommand;
 import org.firstinspires.ftc.teamcode.command.TurretAimDefaultCommand;
 import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
@@ -36,7 +33,7 @@ public abstract class AutonCloseV2 extends Robot {
         StaticValues.resetArtifacts();
         turret.setTargetPosition(ConstantsTurret.obeliskPosClose * m);
         shooter.setVelocity(0);
-        setExposure();
+        setTurretCamExposure();
         pinpointSubsystem.setPose(new Pose2d(60,(48)*m, Rotation2d.fromDegrees(135*m)));
         Log.i("AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading());
         toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(60,(48)*m, Rotation2d.fromDegrees(135*m)));

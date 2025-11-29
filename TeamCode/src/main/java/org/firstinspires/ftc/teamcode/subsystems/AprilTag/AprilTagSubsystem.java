@@ -48,6 +48,7 @@ public class AprilTagSubsystem extends SubsystemBase {
                 .setDrawCubeProjection(true)
                 .setDrawTagID(true)
                 .setDrawTagOutline(true)
+                .setNumThreads(2)
                 .build();
         tagProcessor.setDecimation(1f);
         visionPortal = new VisionPortal.Builder().addProcessor(tagProcessor)
@@ -55,9 +56,11 @@ public class AprilTagSubsystem extends SubsystemBase {
                 .setCameraResolution(new Size(640, 480))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .enableLiveView(true)
+                .setLiveViewContainerId(StaticValues.getPortalIDShooter())
                 .build();
         goalTags.put("Blue", 20);
         goalTags.put("Red", 24);
+
         //PanelsCameraStream.INSTANCE.startStream(visionPortal, 30);
 
         this.telemetry = telemetry;
@@ -154,16 +157,18 @@ public class AprilTagSubsystem extends SubsystemBase {
         }
         ExposureControl control = visionPortal.getCameraControl(ExposureControl.class);
         control.setMode(ExposureControl.Mode.Manual);
-        Log.i("camera", "exposure: " + control.getExposure(TimeUnit.MICROSECONDS));
-        return control.setExposure(exposure, TimeUnit.MICROSECONDS);
+        Log.i("shoter camera", "exposure before: " + control.getExposure(TimeUnit.MICROSECONDS));
+        boolean worked = control.setExposure(exposure, TimeUnit.MICROSECONDS);
+        Log.i("shooter camera", "exposure after: " + control.getExposure(TimeUnit.MICROSECONDS));
+        return worked;
     }
 
     public boolean setExposure() {
-        return setExposure(VisionConstants.exposureMicros);
+        return setExposure(VisionConstants.shooterExposureMicros);
     }
 
     public boolean waitForSetExposure(long timeoutMs, int maxAttempts) {
-        return waitForSetExposure(timeoutMs, maxAttempts, VisionConstants.exposureMicros);
+        return waitForSetExposure(timeoutMs, maxAttempts, VisionConstants.shooterExposureMicros);
     }
 
     public boolean waitForSetExposure(long timeoutMs, int maxAttempts, int exposure) {
@@ -182,7 +187,8 @@ public class AprilTagSubsystem extends SubsystemBase {
         Log.e("camera", "Set exposure failed");
         return false;
     }
-public double getExposure() {
+
+    public double getExposure() {
         if (!isStreaming()) {
             return -1;
         }
@@ -192,6 +198,16 @@ public double getExposure() {
 
     public void saveFrame(String name) {
         visionPortal.saveNextFrameRaw(name);
+    }
+    public void setEnableLiveView(boolean enable) {
+        if (enable) {
+            visionPortal.resumeLiveView();
+            return;
+        }
+        visionPortal.stopLiveView();
+    }
+    public double getFPS() {
+        return visionPortal.getFps();
     }
 }
 

@@ -13,8 +13,13 @@ public class SpindexGoToCommand extends CommandBase {
         addRequirements(spindexer);
     }
 
+    @Override
     public void initialize(){
         spindexer.setTargetPosition(pos);
     }
 
+    @Override
+    public boolean isFinished(){
+        return true;
+    }
 }

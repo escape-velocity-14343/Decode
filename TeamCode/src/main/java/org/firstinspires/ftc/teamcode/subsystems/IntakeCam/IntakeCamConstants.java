@@ -9,4 +9,6 @@ public class IntakeCamConstants {
     public static double maxContourArea = 20000.0;
     public static double minCircularity = 0.6;
     public static double maxCircularity = 1.0;
+    public static int width = 320;
+    public static int height = 240;
 }

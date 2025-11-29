@@ -2,21 +2,18 @@ package org.firstinspires.ftc.teamcode.Auton;
 
 import android.util.Log;
 
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.command.AprilTagMotifDetectionCommand;
 import org.firstinspires.ftc.teamcode.command.DefaultGoToPointCommand;
 import org.firstinspires.ftc.teamcode.command.GoToPointWithDefaultCommand;
 import org.firstinspires.ftc.teamcode.command.IntakeAutoCommandGroup;
 import org.firstinspires.ftc.teamcode.command.MotifShootCommandGroup;
-import org.firstinspires.ftc.teamcode.command.TurretAimDefaultCommand;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.turret.ConstantsTurret;
@@ -30,7 +27,7 @@ public abstract class AutonFar extends Robot {
         StaticValues.resetMotif();
         StaticValues.resetArtifacts();
         turret.setTargetPosition(ConstantsTurret.obeliskPosFar * m);
-        setExposure();
+        setTurretCamExposure();
 
         pinpointSubsystem.setPose(new Pose2d(-57.3, 18.8 * m, Rotation2d.fromDegrees(180)));
         toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(-58, 21 * m, Rotation2d.fromDegrees(180)));

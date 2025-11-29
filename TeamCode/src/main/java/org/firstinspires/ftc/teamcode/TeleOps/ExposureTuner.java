@@ -16,11 +16,11 @@ public class ExposureTuner extends Robot {
         while(!aprilTag.isStreaming()||timer.milliseconds()>1000);
 
         while (opModeIsActive()) {
-            if (VisionConstants.exposureMicros != lastExposure) {
-                telemetry.addData("Camera has been initialized correctly: ",aprilTag.setExposure(VisionConstants.exposureMicros));
+            if (VisionConstants.shooterExposureMicros != lastExposure) {
+                telemetry.addData("Camera has been initialized correctly: ",aprilTag.setExposure(VisionConstants.shooterExposureMicros));
                 telemetry.update();
             }
-            lastExposure = VisionConstants.exposureMicros;
+            lastExposure = VisionConstants.shooterExposureMicros;
         }
 
     }

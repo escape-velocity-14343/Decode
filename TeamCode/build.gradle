@@ -41,4 +41,5 @@ dependencies {
     implementation project(':FtcRobotController')
     implementation 'org.ftclib.ftclib:core:2.1.1'
     implementation "com.bylazar:fullpanels:1.0.10"
+    implementation("dev.nullftc:Profiler:SNAPSHOT-8e16b25")
 }

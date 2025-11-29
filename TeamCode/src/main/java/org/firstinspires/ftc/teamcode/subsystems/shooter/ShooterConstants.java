@@ -7,4 +7,5 @@ public class ShooterConstants {
     public static double kv = -0.00048; //12.39V
     public static double closeVelocity = -1600;
     public static double testVelocity = 0;
+    public static double tolerance = 67;
 }

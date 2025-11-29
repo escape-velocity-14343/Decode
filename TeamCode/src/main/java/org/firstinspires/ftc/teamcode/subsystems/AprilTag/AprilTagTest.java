@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.subsystems.AprilTag;
 
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
@@ -12,7 +11,7 @@ public class AprilTagTest extends Robot {
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
-        setExposure();
+        setTurretCamExposure();
         waitForStart();
         while (opModeIsActive()) {
             for (LynxModule hub : hubs) {

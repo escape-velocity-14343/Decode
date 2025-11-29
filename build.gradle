@@ -27,6 +27,11 @@ allprojects {
         google()
         maven {
             url = "https://mymaven.bylazar.com/releases"
+
+        }
+        maven {
+            name = "nullftcReleases"
+            url = "https://maven.nullftc.dev/releases"
         }
     }
 }
