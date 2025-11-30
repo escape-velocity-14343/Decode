@@ -70,9 +70,11 @@ public class TeleOpV2 extends Robot {
         //offsetter.getGamepadButton(GamepadKeys.Button.B).whenPressed(new OffSetBallCommand(2));
         //new Trigger(()-> controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5).whileActiveContinuous(new InstantCommand(()->aprilTag.detect()));
         setTurretCamExposure();
-        intakeCam.end();
+        setIntakeCamExposure();
 
         waitForStart();
+        intakeCam.setEnableLiveView(false);
+        aprilTag.setEnableLiveView(false);
         while (opModeIsActive()) {
             telemetry.addData("Pose x", pinpointSubsystem.getPose().getX());
             telemetry.addData("Pose y", pinpointSubsystem.getPose().getY());

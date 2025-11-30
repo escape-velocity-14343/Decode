@@ -90,8 +90,8 @@ public abstract class Robot extends LinearOpMode {
         hubs.get(0).setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
 
         StaticValues.setVoltageScalar(12.4/hardwareMap.getAll(VoltageSensor.class).iterator().next().getVoltage());
-        intakeCam.setEnableLiveView(false);
-        aprilTag.setEnableLiveView(false);
+        intakeCam.setEnableLiveView(true);
+        aprilTag.setEnableLiveView(true);
     }
 
     public void update() {

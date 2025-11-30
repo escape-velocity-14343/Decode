@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit.INCH;
 import static org.firstinspires.ftc.teamcode.lib.Util.Pose2DConverter;
-import static org.firstinspires.ftc.teamcode.lib.Util.Pose2dConverter;
 
 import android.util.Log;
 
@@ -14,7 +13,6 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
@@ -81,7 +79,7 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
             Log.i("%Pinpoint Status Change", pinpoint.getDeviceStatus().toString());
             deviceStatus = pinpoint.getDeviceStatus();
         }
-        fieldDrawing.draw(getPose());
+        fieldDrawing.drawRobot(getPose());
     }
 
     private Pose2D getSDKPose() {

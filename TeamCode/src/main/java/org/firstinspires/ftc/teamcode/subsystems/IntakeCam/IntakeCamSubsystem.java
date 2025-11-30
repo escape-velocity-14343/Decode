@@ -8,7 +8,9 @@ import android.util.Size;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.arcrobotics.ftclib.geometry.Vector2d;
+import com.bylazar.camerastream.PanelsCameraStream;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.SortOrder;
@@ -17,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 
+import org.firstinspires.ftc.teamcode.lib.RobotPnP;
 import org.firstinspires.ftc.teamcode.lib.VisionPortal.ColorBlobLocatorProcessorMulti;
 import org.firstinspires.ftc.teamcode.lib.VisionPortal.ColorRange;
 import org.firstinspires.ftc.teamcode.lib.VisionPortal.GlowUpPipeline;
@@ -44,30 +47,33 @@ public class IntakeCamSubsystem extends SubsystemBase {
     VisionPortal visionPortal;
     private final WebcamName intakeCam;
     private double angle = 0;
+    RobotPnP pnp = new RobotPnP();
 
 
     public IntakeCamSubsystem(HardwareMap hMap, Telemetry telemetry) {
         colorLocator = new ColorBlobLocatorProcessorMulti(
-                new org.firstinspires.ftc.teamcode.lib.VisionPortal.ColorRange(ColorSpace.HSV, new Scalar(126, 30, 30), new Scalar(161, 255, 255)),
+                new ColorRange(ColorSpace.HSV, new Scalar(255, 255, 255), new Scalar(161, 255, 255)),
                 org.firstinspires.ftc.teamcode.lib.VisionPortal.ImageRegion.asImageCoordinates(0, 0, IntakeCamConstants.width, IntakeCamConstants.height),
                 ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY,
                 Color.rgb(255, 120, 31),
                 Color.rgb(255, 255, 255),
                 Color.rgb(3, 227, 252)
         );
-        //colorLocator.addColors(new ColorRange());
-
+        colorLocator.addColor(new ColorRange(ColorSpace.HSV, new Scalar(50, 50, 40), new Scalar(95, 255, 255)));
+        colorLocator.addColor(new ColorRange(ColorSpace.HSV, new Scalar(126, 50, 50), new Scalar(161, 255, 255)));
+        colorLocator.addFilter(new ColorBlobLocatorProcessor.BlobFilter(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA, 500, 1000000));
         intakeCam = hMap.get(WebcamName.class, "intakeCam");
         visionPortal = new VisionPortal.Builder()
                 .addProcessors(colorLocator)
                 .setCameraResolution(new Size(320, 240))
                 .setCamera(intakeCam)
+                .setShowStatsOverlay(false)
                 .setStreamFormat(VisionPortal.StreamFormat.YUY2)
                 .setLiveViewContainerId(StaticValues.getPortalIDIntake())
                 .build();
         setEnabled(true);
-        visionPortal.stopLiveView();
         this.telemetry = telemetry;
+        //PanelsCameraStream.INSTANCE.startStream(colorLocator, 15);
     }
 
 
@@ -76,7 +82,7 @@ public class IntakeCamSubsystem extends SubsystemBase {
         pixelPos = 0;
 
         if (visionPortal.getProcessorEnabled(colorLocator)) {
-            artifactPose = new Vector2d(colorLocator.getCircle().getCenter().x, colorLocator.getCircle().getCenter().y);
+            artifactPose = new Vector2d(320-colorLocator.getCircle().getCenter().x, 240-colorLocator.getCircle().getCenter().y);
         }
     }
 
@@ -88,6 +94,24 @@ public class IntakeCamSubsystem extends SubsystemBase {
             return null;
         }
         return new Pose2d(artifactPose.getX(), artifactPose.getY(), Rotation2d.fromDegrees(angle));
+    }
+    public Translation2d getArtifactTranslation() {
+        if (Objects.isNull(artifactPose)) {
+            return null;
+        }
+        return new Translation2d(artifactPose.getX(), artifactPose.getY());
+    }
+    public Translation2d getRobotCentricTranslation() {
+        if (Objects.isNull(artifactPose)) {
+            return null;
+        }
+        return pnp.getRobotCentricTranslation((int) artifactPose.getX(), (int) artifactPose.getY());
+    }
+    public Translation2d getFieldCoordinates(Pose2d robotPose) {
+        if (Objects.isNull(artifactPose)) {
+            return null;
+        }
+        return pnp.getFieldCoordinates((int) artifactPose.getX(), (int) artifactPose.getY(), robotPose);
     }
 
 

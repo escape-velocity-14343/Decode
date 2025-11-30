@@ -56,6 +56,7 @@ public class AprilTagSubsystem extends SubsystemBase {
                 .setCameraResolution(new Size(640, 480))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .enableLiveView(true)
+                .setShowStatsOverlay(false)
                 .setLiveViewContainerId(StaticValues.getPortalIDShooter())
                 .build();
         goalTags.put("Blue", 20);

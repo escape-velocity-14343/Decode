@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
-@TeleOp
+@TeleOp (name = "Shooter PID Test", group = "Test")
 public class ShooterPIDTest extends Robot {
     @Override
     public void runOpMode() throws InterruptedException {

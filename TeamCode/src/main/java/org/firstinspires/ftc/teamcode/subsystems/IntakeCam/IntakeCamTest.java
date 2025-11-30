@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeleOps;
+package org.firstinspires.ftc.teamcode.subsystems.IntakeCam;
 
 import android.util.Log;
 
@@ -18,6 +18,10 @@ public class IntakeCamTest extends Robot {
 
         while (opModeIsActive()) {
             update();
+            telemetry.addData("Artifact Pose X", intakeCam.getRobotCentricTranslation().getX());
+            telemetry.addData("Artifact Pose Y", intakeCam.getRobotCentricTranslation().getY());
+            telemetry.addData("Artifact Pixel X", intakeCam.getArtifactPos().getX());
+            telemetry.addData("Artifact Pixel Y", intakeCam.getArtifactPos().getY());
             Log.i("IntakeCamTest", "Hue: " + intakeCam.getArtifactPose());
         }
         end();

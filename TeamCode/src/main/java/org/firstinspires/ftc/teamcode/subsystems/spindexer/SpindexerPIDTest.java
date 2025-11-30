@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
-@TeleOp
+@TeleOp (name = "Spindexer PID Test", group = "Test")
 public class SpindexerPIDTest extends Robot {
     @Override
     public void runOpMode() throws InterruptedException {

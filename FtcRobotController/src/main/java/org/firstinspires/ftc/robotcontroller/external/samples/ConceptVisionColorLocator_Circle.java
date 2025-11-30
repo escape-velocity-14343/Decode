@@ -70,6 +70,7 @@ import java.util.List;
 
 
 @TeleOp(name = "Concept: Vision Color-Locator (Circle)", group = "Concept")
+@Disabled
 public class ConceptVisionColorLocator_Circle extends LinearOpMode {
     @Override
     public void runOpMode() {

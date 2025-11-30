@@ -4,10 +4,12 @@ import android.util.Log;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.command.AprilTagMotifDetectionCommand;
 //import org.firstinspires.ftc.teamcode.command.CreepOnCommand;
@@ -34,6 +36,7 @@ public abstract class AutonCloseV2 extends Robot {
         turret.setTargetPosition(ConstantsTurret.obeliskPosClose * m);
         shooter.setVelocity(0);
         setTurretCamExposure();
+        setIntakeCamExposure();
         pinpointSubsystem.setPose(new Pose2d(60,(48)*m, Rotation2d.fromDegrees(135*m)));
         Log.i("AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading());
         toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(60,(48)*m, Rotation2d.fromDegrees(135*m)));
@@ -69,18 +72,9 @@ public abstract class AutonCloseV2 extends Robot {
                         //new RaceAimShootAuto(new TurretAimDefaultCommand(aprilTag, turret), new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint)),
                         //new GoToPointWithDefaultCommand(new Pose2d(12, 28, Rotation2d.fromDegrees(90)), toPoint),
                         new GoToPointWithDefaultCommand(new Pose2d(12, (28) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 20, 67),
-
-                        new InstantCommand(() -> StaticValues.setMaxSpeed(0.1867)),
                         new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
-                                new GoToPointWithDefaultCommand(new Pose2d(8, (54.67)*StaticValues.getM(), Rotation2d.fromDegrees((90)*StaticValues.getM())), toPoint)).interruptOn(() -> spindexer.getRemainingSpace()==0),4000).alongWith(
-                                    new TimeoutCommand(new WaitUntilCommand(() -> spindexer.getRemainingSpace()== 2).andThen(
-                                    new InstantCommand(() -> StaticValues.setMaxSpeed(0.5))), 4000)).alongWith(
-                                            new TimeoutCommand(new WaitUntilCommand(() -> spindexer.getRemainingSpace() == 1).andThen(
-                                            new InstantCommand(() -> StaticValues.setMaxSpeed(1))), 4000)),//.interruptOn(()->spindexer.getRemainingSpace()<1),
-                        new InstantCommand(() -> StaticValues.setMaxSpeed(1)),
-                        //new GoToPointWithDefaultCommand(new Pose2d(5, (42)*m, Rotation2d.fromDegrees((90)*m)), toPoint).alongWith(new InstantCommand(() -> intake.setPower(-1))),
-                        //new GoToPointWithDefaultCommand(new Pose2d(5, (56)*m, Rotation2d.fromDegrees((90)*m)), toPoint).alongWith(new InstantCommand(() -> intake.setPower(1))),
-                        //new WaitCommand(750),
+                                new RunCommand(()->toPoint.setTarget(new Pose2d(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getX(), Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getY(), -54.67, 54.67), Rotation2d.fromDegrees(90*m)))).interruptOn(()->!spindexer.hasSpace())), 5000),
+
 
 
                         new GoToPointWithDefaultCommand(new Pose2d(27,(16)*m, Rotation2d.fromDegrees(135 * m)), toPoint).alongWith(new InstantCommand(() -> intake.setPower(-1))), // shooting
@@ -115,6 +109,8 @@ public abstract class AutonCloseV2 extends Robot {
                     )
                 );
         waitForStart();
+        aprilTag.setEnableLiveView(false);
+        intakeCam.setEnableLiveView(false);
         while (opModeIsActive()){
             for (int i = 0; i < 3; i++){
                 Log.i("Motif", "ball" + StaticValues.getMotif(i));

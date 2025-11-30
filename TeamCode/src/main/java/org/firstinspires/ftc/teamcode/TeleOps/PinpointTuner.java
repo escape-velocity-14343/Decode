@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.TeleOps;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
-@TeleOp
+@TeleOp (name = "Pinpoint Tuner", group = "Test")
 public class PinpointTuner extends Robot {
     @Override
     public void runOpMode() throws InterruptedException {

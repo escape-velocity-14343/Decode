@@ -5,13 +5,11 @@ import com.arcrobotics.ftclib.geometry.Translation2d
 import com.bylazar.field.CanvasRotation
 import com.bylazar.field.FieldPresetParams
 import com.bylazar.field.PanelsField
-import com.qualcomm.robotcore.eventloop.opmode.OpMode
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 
 class FieldDrawing {
     private val panelsField = PanelsField.field
 
-    fun draw(pose : Pose2d) {
+    fun drawRobot(pose : Pose2d) {
         panelsField.setOffsets(
             FieldPresetParams(name = "FTC Field", rotation = CanvasRotation.DEG_90, reverseXY = true, flipX = true, flipY = true))
 
@@ -70,5 +68,10 @@ class FieldDrawing {
         lineTo(frontX, frontY)
 
         panelsField.update()
+    }
+    fun drawCircle(pose : Pose2d) {
+        panelsField.moveCursor(pose.x, pose.y)
+        panelsField.setStyle(fill = "rgba(255,0,255,0.0)", outline = "green", width = 1.5)
+        panelsField.circle(10.0)
     }
 }

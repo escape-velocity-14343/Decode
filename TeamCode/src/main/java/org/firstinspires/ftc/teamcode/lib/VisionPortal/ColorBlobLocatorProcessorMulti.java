@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.lib.VisionPortal;
 
+import static android.graphics.Bitmap.createBitmap;
+
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -10,11 +13,15 @@ import androidx.annotation.ColorInt;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.SortOrder;
 
+import org.firstinspires.ftc.robotcore.external.function.Consumer;
+import org.firstinspires.ftc.robotcore.external.function.Continuation;
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.opencv.Circle;
 import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
 import org.firstinspires.ftc.vision.opencv.ColorSpace;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfInt;
@@ -32,18 +39,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class ColorBlobLocatorProcessorMulti extends ColorBlobLocatorProcessor implements VisionProcessor
+public class ColorBlobLocatorProcessorMulti extends ColorBlobLocatorProcessor implements VisionProcessor, CameraStreamSource
 {
     private org.firstinspires.ftc.teamcode.lib.VisionPortal.ColorRange colorRange;
     private org.firstinspires.ftc.teamcode.lib.VisionPortal.ImageRegion roiImg;
     private Rect roi;
     private int frameWidth;
     private int frameHeight;
-    private Mat roiMat;
     private Mat roiMat_userColorSpace;
     private final int contourCode;
-    MatOfPoint maskShape;
 
     private Mat mask = new Mat();
 
@@ -58,18 +64,12 @@ public class ColorBlobLocatorProcessorMulti extends ColorBlobLocatorProcessor im
     private volatile ArrayList<Blob> userBlobs = new ArrayList<>();
     private ArrayList<ColorRange> colors = new ArrayList<>();
     private Mat temp = new Mat();
-    private Mat roiMask = new Mat();
 
-    public boolean onlyFirstColor = false;
     private Circle circle = new Circle(0, 0, 0);
     ElapsedTime timer = new ElapsedTime();
 
-    Point[] points = {
-            new Point(0,0),
-            new Point(0,480),
-            new Point(640,480),
-            new Point(640, 0),
-    };
+    private AtomicReference<Bitmap> lastFrame = new AtomicReference<>(createBitmap(1, 1, Bitmap.Config.RGB_565));
+
 
 
     public ColorBlobLocatorProcessorMulti(ColorRange colorRange, ImageRegion roiImg, ContourMode contourMode,
@@ -107,21 +107,24 @@ public class ColorBlobLocatorProcessorMulti extends ColorBlobLocatorProcessor im
     @Override
     public void init(int width, int height, CameraCalibration calibration)
     {
+        lastFrame.set(createBitmap(width, height, Bitmap.Config.RGB_565));
         Log.i("cv test", "gotten to init of processor");
         frameWidth = width;
         frameHeight = height;
 
         roi = roiImg.asOpenCvRect(width, height);
-        roiMask = new Mat(height, width, 0);
 
         Core.setNumThreads(1);
     }
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
+        Bitmap b = createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(frame, b);
+        lastFrame.set(b);
 
         roiMat_userColorSpace = frame.clone();
-        timer.reset();
+        //timer.reset();
         Imgproc.cvtColor(roiMat_userColorSpace, roiMat_userColorSpace, Imgproc.COLOR_RGB2HSV);
         //Log.i("cv test", "time to convert color: " + timer.milliseconds());
         if (colors.isEmpty())
@@ -129,7 +132,8 @@ public class ColorBlobLocatorProcessorMulti extends ColorBlobLocatorProcessor im
         else {
             mask = new Mat();
             boolean first = true;
-            for (ColorRange color : onlyFirstColor ? colors.subList(0, 1) : colors) {
+            for (ColorRange color : colors) {
+                Log.i("cv test", "color: " + color.toString());
                 if (first) {
                     Core.inRange(roiMat_userColorSpace, color.min, color.max, mask);
                     first = false;
@@ -205,7 +209,7 @@ public class ColorBlobLocatorProcessorMulti extends ColorBlobLocatorProcessor im
         if (!blobs.isEmpty())
             circle = blobs.get(0).getCircle();
         else
-            circle = new Circle(0,0,0);
+            circle = new Circle(67000000,6700000,0);
         //Log.i("cv test", "time to get circle: " + timer.milliseconds());
 
         return blobs;
@@ -229,6 +233,7 @@ public class ColorBlobLocatorProcessorMulti extends ColorBlobLocatorProcessor im
         if (circle != null)
             canvas.drawCircle(circle.getX() * scaleBmpPxToCanvasPx, circle.getY() * scaleBmpPxToCanvasPx, circle.getRadius() * scaleBmpPxToCanvasPx, contourPaint);
     }
+
 
     private android.graphics.Rect makeGraphicsRect(Rect rect, float scaleBmpPxToCanvasPx)
     {
@@ -281,6 +286,18 @@ public class ColorBlobLocatorProcessorMulti extends ColorBlobLocatorProcessor im
 
     public void addColors(ColorRange... colorRanges) {
         Collections.addAll(colors, colorRanges);
+    }
+    public void addColor(ColorRange color) {
+        Log.i("cv test", "adding color: " + color.toString());
+        colors.add(color);
+        Log.i("cv test", "total colors: " + colors.size());
+    }
+
+    @Override
+    public void getFrameBitmap(Continuation<? extends Consumer<Bitmap>> continuation) {
+        continuation.dispatch(bitmapConsumer ->
+                bitmapConsumer.accept(lastFrame.get())
+        );
     }
 
     class BlobImpl extends Blob
