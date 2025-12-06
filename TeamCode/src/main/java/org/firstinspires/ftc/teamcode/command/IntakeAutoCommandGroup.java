@@ -16,13 +16,13 @@ public class IntakeAutoCommandGroup extends SequentialCommandGroup {
         addCommands(
                 new RepeatCommand(new SequentialCommandGroup(
                     new IntakeOnCommand(intake),
-                    new LogKittenCommand(Log.ASSERT, "INTAKE AUTO", "intake is on!"),
+                    //new LogKittenCommand(Log.ASSERT, "INTAKE AUTO", "intake is on!"),
                     new SpindexInCommand(spindexer),
-                    new LogKittenCommand(Log.ASSERT, "INTAKE AUTO", "spindexing done"),
+                    //new LogKittenCommand(Log.ASSERT, "INTAKE AUTO", "spindexing done"),
                     new ArtifactSensorProximity(artifactSensor),
-                    new LogKittenCommand(Log.ASSERT, "INTAKE AUTO", "artifact proximity reached"),
-                    new DetectColor(artifactSensor, spindexer),
-                    new LogKittenCommand(Log.ASSERT, "INTAKE AUTO", "color inputed into array")
+                    //new LogKittenCommand(Log.ASSERT, "INTAKE AUTO", "artifact proximity reached"),
+                    new DetectColor(artifactSensor, spindexer)
+                    //new LogKittenCommand(Log.ASSERT, "INTAKE AUTO", "color inputed into array")
                 )).interruptOn(()->!spindexer.hasSpace()),
                 new IntakeOffCommand(intake)
 

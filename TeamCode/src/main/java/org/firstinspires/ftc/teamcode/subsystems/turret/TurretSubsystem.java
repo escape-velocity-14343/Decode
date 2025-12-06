@@ -8,21 +8,24 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.lib.SquIDController;
+import org.firstinspires.ftc.teamcode.lib.ThaiVPController;
 import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.lib.sensOrangeEncoder;
 
 public class TurretSubsystem extends SubsystemBase {
     private DcMotor turretMotor;
     private sensOrangeEncoder turretEncoder;
-    private SquIDController powerManage;
+    private ThaiVPController powerManage;
     private double targetpos = ConstantsTurret.targetposition;
     private Telemetry telemetry;
     boolean manualControl = false;
     double lastPower = 0;
 
     public TurretSubsystem(HardwareMap hwMap, Telemetry telemetry) {
-        powerManage = new SquIDController();
+        powerManage = new ThaiVPController();
+        powerManage.setExponent(ConstantsTurret.exponent);
         turretMotor = hwMap.get(DcMotor.class, "turretMotor");
         turretEncoder = new sensOrangeEncoder("turretEncoder", hwMap);
         turretEncoder.setPositionOffset(ConstantsTurret.offset);
@@ -51,12 +54,15 @@ public class TurretSubsystem extends SubsystemBase {
         manualControl = true;
         setPower(power);
     }
+    public double getError() {
+        return AngleUnit.normalizeDegrees(targetpos - turretEncoder.getDegrees());
+    }
 
     @Override
     public void periodic() {
         powerManage.setPID(ConstantsTurret.kp);
-        telemetry.addData("Kp is", ConstantsTurret.kp);
-        telemetry.addData("setting power to", powerManage.calculateAngleWrapping(targetpos, turretEncoder.getDegrees()));
+        //telemetry.addData("Kp is", ConstantsTurret.kp);
+        //telemetry.addData("setting power to", powerManage.calculateAngleWrapping(targetpos, turretEncoder.getDegrees()));
         telemetry.addData("turret position", turretEncoder.getDegrees());
         if (!manualControl)
             setPower(powerManage.calculate(targetpos, turretEncoder.getDegrees())); //NO ANGLE WRAP BECAUSE THE WIRING CANT WRAP

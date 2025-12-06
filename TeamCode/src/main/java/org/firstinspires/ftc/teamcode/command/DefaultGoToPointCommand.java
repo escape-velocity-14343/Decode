@@ -29,7 +29,7 @@ public class DefaultGoToPointCommand extends CommandBase {
 
     public DrivetrainSquIDController drivetrainSquIDController = new DrivetrainSquIDController();
 
-    public static double translationkP = -0.1;
+    public static double translationkP = -0.076;
     public static double translationkI = 0;
     public static double translationkD = 0;
     public static double headingkP = 0.06;
@@ -139,7 +139,7 @@ public class DefaultGoToPointCommand extends CommandBase {
         double yMove = Math.sin(angle)*magnitude;
         Log.v("GTPC", "target: (" + getTargetX() + ", " + getTargetY() + ")");
         Log.v("GTPC", "attempted movement: (" + xMove + ", " + yMove + ")");
-        drivetrainSquIDController.setPID(translationkP);
+        //drivetrainSquIDController.setPID(translationkP);
 
         if (useVelCompensated) {
             Pose2d xyMove = drivetrainSquIDController.calculate(target, currentPose, pinpoint.getVelocity());
@@ -234,6 +234,9 @@ public class DefaultGoToPointCommand extends CommandBase {
     public void setTolerances(double tol, double Htol) {
         this.tol = tol;
         this.hTol = Htol;
+    }
+    public void setDriveKP(double driveKP) {
+        drivetrainSquIDController.setPID(driveKP);
     }
     public void setOffset(Pose2d offset) {
         this.offset = offset;

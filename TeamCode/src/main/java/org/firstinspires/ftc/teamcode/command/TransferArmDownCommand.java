@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.command;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.transferArm.TransferArmSubsystem;
 
 public class TransferArmDownCommand extends CommandBase {
@@ -19,6 +20,6 @@ public class TransferArmDownCommand extends CommandBase {
     }
     @Override
     public boolean isFinished() {
-        return timer.milliseconds() > 100;
+        return timer.milliseconds() > StaticValues.TRANSFER_ARM_MILLIS;
     }
 }

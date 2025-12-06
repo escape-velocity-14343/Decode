@@ -5,7 +5,7 @@ import com.bylazar.configurables.annotations.Configurable;
 @Configurable
 public class ConstantsSpindexer {
     public static double offset = -158;
-    public static double proximityThreshold = 3;
+    public static double proximityThreshold = 1.67;
     public static double purpleHue = 230;
     public static double greenHue = 170;
     public static double kP = -0.0167;

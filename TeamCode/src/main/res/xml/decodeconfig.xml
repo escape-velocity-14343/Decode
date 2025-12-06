@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <Robot type="FirstInspires-FTC">
     <Webcam name="shooterCam" serialNumber="5423534724" />
-    <Webcam name="intakeCam" serialNumber="835F0D40" />
+    <Webcam name="intakeCam" serialNumber="VendorProduct:vendor=0x0bda|product=0x5844|connection=" />
     <LynxUsbDevice name="Control Hub Portal" serialNumber="(embedded)" parentModuleAddress="173">
         <LynxModule name="Expansion Hub" port="2">
             <goBILDA5202SeriesMotor name="shooterMotorRight" port="0" />
@@ -23,8 +23,8 @@
             <AnalogInput name="spindexerEncoder" port="0" />
             <AnalogInput name="turretEncoder" port="1" />
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
-            <RevColorSensorV3 name="colorSensor" port="0" bus="1"/>
-            <goBILDAPinpoint name="pinpoint" port="0" bus="2"/>
+            <RevColorSensorV3 name="colorSensor" port="0" bus="0"/>
+            <goBILDAPinpoint name="pinpoint" port="0" bus="1"/>
         </LynxModule>
     </LynxUsbDevice>
 </Robot>

@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -39,6 +40,7 @@ public class AprilTagSubsystem extends SubsystemBase {
     double cameraOffsetX = 78.3 / 25.4;
     Telemetry telemetry;
     AprilTagDetection relocTag = null;
+    boolean stale = false;
 
     public AprilTagSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         shooterCam = hwMap.get(WebcamName.class, "shooterCam");
@@ -74,7 +76,7 @@ public class AprilTagSubsystem extends SubsystemBase {
 
     public int detect() {
         bearing = 0;
-        //tagProcessor.setDecimation(VisionConstants.decimation);
+        stale = true;
         if (!tagProcessor.getDetections().isEmpty()) {
             for (int i = 0; i < tagProcessor.getDetections().size(); i++) {
                 AprilTagDetection tag = tagProcessor.getDetections().get(i);
@@ -90,6 +92,7 @@ public class AprilTagSubsystem extends SubsystemBase {
                     telemetry.addData("Bearing", tag.ftcPose.bearing);
                     telemetry.addData("Tag Distance", tagDist);
                     relocTag = tag;
+                    stale = false;
                 } else if (tag.id == 24 && StaticValues.getM() == -1) {
                     bearing = tag.ftcPose.bearing;
                     distance = tag.ftcPose.range * Math.cos(Math.toRadians(tag.ftcPose.elevation) + cameraPitch.getRadians());
@@ -102,6 +105,7 @@ public class AprilTagSubsystem extends SubsystemBase {
                     telemetry.addData("Distance", tag.ftcPose.range);
                     telemetry.addData("Bearing", tag.ftcPose.bearing);
                     relocTag = tag;
+                    stale = false;
                 } else if (tag.id >= 21 && tag.id <= 23) {
                     Log.i("apriltag detecting", "detected" + (tag.id - 21));
                     return tag.id - 21;
@@ -126,18 +130,22 @@ public class AprilTagSubsystem extends SubsystemBase {
     }
 
     public Pose2d getLocalization(double turretAngle, Rotation2d robotAngle) {
-        if (relocTag == null) {
-            return new Pose2d(0, 0, new Rotation2d(0));
+        if (relocTag == null || stale) {
+            return null;
         }
         AprilTagPoseFtc tag = relocTag.ftcPose;
-        Rotation2d turretRotation = Rotation2d.fromDegrees(turretAngle).plus(new Rotation2d(Math.PI));
+        Rotation2d turretRotation = Rotation2d.fromDegrees(AngleUnit.normalizeDegrees(180 - turretAngle));
         telemetry.addData("Turret Angle", turretRotation.getDegrees());
         Pose2d robotRelativeCameraPose = new Pose2d(turretOffsetX + cameraOffsetX * turretRotation.getCos(), cameraOffsetX * turretRotation.getSin(), turretRotation);
         telemetry.addData("Robot Relative Camera X", robotRelativeCameraPose.getX());
         telemetry.addData("Robot Relative Camera Y", robotRelativeCameraPose.getY());
         double tagDist = tag.range * Math.cos(Math.toRadians(tag.elevation) + cameraPitch.getRadians());
+        double tagSideways = tag.x;
         telemetry.addData("Tag Distance", tagDist);
-        Translation2d robotPose = new Translation2d(tagDist * -turretRotation.getCos() - robotRelativeCameraPose.getX(), tagDist * -turretRotation.getSin() - robotRelativeCameraPose.getY());
+        Translation2d turretRelativeTranslation = new Translation2d(tagDist * turretRotation.getCos() - tagSideways * turretRotation.getSin(), tagDist * turretRotation.getSin() + tagSideways * turretRotation.getCos());
+        telemetry.addData("Turret Relative X", turretRelativeTranslation.getX());
+        telemetry.addData("Turret Relative Y", turretRelativeTranslation.getY());
+        Translation2d robotPose = new Translation2d(tagDist * turretRotation.getCos() - tagSideways * turretRotation.getSin() - robotRelativeCameraPose.getX(), tagDist * turretRotation.getSin() + tagSideways * turretRotation.getCos() - robotRelativeCameraPose.getY());
         telemetry.addData("Robot Pose X", robotPose.getX());
         telemetry.addData("Robot Pose Y", robotPose.getY());
 

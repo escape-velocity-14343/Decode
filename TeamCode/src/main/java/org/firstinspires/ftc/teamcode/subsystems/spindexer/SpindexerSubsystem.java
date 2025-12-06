@@ -31,7 +31,6 @@ public class SpindexerSubsystem extends SubsystemBase {
     public SpindexerSubsystem(HardwareMap hwMap) {
         CommandScheduler.getInstance().registerSubsystem();
         spindexer = hwMap.get(DcMotor.class, "spindexerMotor");
-        //spindexer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         spindexerEncoder = new sensOrangeEncoder("spindexerEncoder", hwMap);
         spindexerEncoder.setPositionOffset(ConstantsSpindexer.offset);
         artifactSensor = new RevColorSensorDetector(hwMap); //@WILLIAM IS THIS PEAK RUNTIME POLYMORPHISM
@@ -150,24 +149,12 @@ public class SpindexerSubsystem extends SubsystemBase {
         for (int i = 0; i < 3; i++){
             telemtry.addData("SPINDEXER BALLS", "balls" + StaticValues.getArtifacts(i));
         }
-//        telemtry.addData("SPINDEXER BALLS", artifacts.toString());
         rotationController.setPID(ConstantsSpindexer.kP);
         telemtry.addData("spidnexer encoder pos", spindexerEncoder.getDegrees());
-        telemtry.addData("targetposis", targetPosition);
-        telemtry.addData("power", rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees())*100);
-//        telemtry.addData("the statement it is close is:", isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
-//        telemtry.addData("not clolse", !isClose(targetPosition, spindexerEncoder.getDegrees(), 5));
+        //telemtry.addData("targetposis", targetPosition);
+        //telemtry.addData("power", rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees())*100);
         if (!manualControl)
             setPower(rotationController.calculateAngleWrapping(targetPosition, spindexerEncoder.getDegrees()));
-        //setPower(squIDController.calculate(0.0, spindexerEncoder.getDegrees()));
-//        if (Util.inRange(spindexerEncoder.getDegrees() % 120, 0, 10)) {
-//            if (artifactSensor.proximityDetected()) {
-//                ballsInSpindexer[(int) (spindexerEncoder.getDegrees() / 120)] = (byte) (artifactSensor.greenDetected() ? 2 : 1);
-//            }
-//            else
-//            {
-//                ballsInSpindexer[(int) (spindexerEncoder.getDegrees() / 120)] = 0;
-//            }
-//        }
+
     }
 }

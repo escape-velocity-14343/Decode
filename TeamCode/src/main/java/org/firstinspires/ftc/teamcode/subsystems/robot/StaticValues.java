@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.robot;
 
+import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.lights.PanelsLights;
 import com.bylazar.lights.RGBIndicator;
@@ -95,4 +97,7 @@ public class StaticValues {
     public static int getPortalIDShooter() {
         return portalIDShooter;
     }
+
+    public static double TRANSFER_ARM_MILLIS = 67.0;
+    public static Pose2d goalPos = new Pose2d(72, 72, new Rotation2d(0));
 }

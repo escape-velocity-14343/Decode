@@ -6,9 +6,11 @@ import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.PinpointSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.turret.ConstantsTurret;
 import org.firstinspires.ftc.teamcode.subsystems.turret.TurretSubsystem;
 
@@ -28,17 +30,18 @@ public class TurretAimDefaultCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (aprilTag.getBearing() != 0)
+        if (usePinpoint) {
+            targetRotation = pinpointSubsystem.getHeading().getDegrees() - pinpointSubsystem.getRotationToPoint(StaticValues.goalPos).getDegrees();
+            targetRotation = AngleUnit.normalizeDegrees(targetRotation);
+            if (Util.inRange(targetRotation, 0, 90))
+                turret.setTargetPosition(targetRotation);
+        }
+        else if (aprilTag.getBearing() != 0)
             turret.setPowerManual(ConstantsTurret.apriltagkP * (aprilTag.getBearing() + ConstantsTurret.aprilTagOffset));
-        //else if (usePinpoint) {
-        //    targetRotation = pinpointSubsystem.getHeading().getDegrees() - pinpointSubsystem.getRotationToPoint(new Pose2d(67, 51, new Rotation2d(0))).getDegrees();
-        //    if (Util.inRange(targetRotation, 0, 80))
-        //        turret.setTargetPosition(targetRotation);
-        //}
+
         else
             turret.setPowerManual(0);
     }
-
     public void setUsePinpoint(boolean usePinpoint) {
         this.usePinpoint = usePinpoint;
     }

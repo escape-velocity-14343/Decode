@@ -133,7 +133,7 @@ public class ColorBlobLocatorProcessorMulti extends ColorBlobLocatorProcessor im
             mask = new Mat();
             boolean first = true;
             for (ColorRange color : colors) {
-                Log.i("cv test", "color: " + color.toString());
+                //Log.i("cv test", "color: " + color.toString());
                 if (first) {
                     Core.inRange(roiMat_userColorSpace, color.min, color.max, mask);
                     first = false;

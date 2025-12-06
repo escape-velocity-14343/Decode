@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
 import org.firstinspires.ftc.teamcode.lib.FieldDrawing;
 import org.firstinspires.ftc.teamcode.lib.Localizer;
+import org.firstinspires.ftc.teamcode.subsystems.turret.TurretSubsystem;
 
 
 @Configurable
@@ -33,6 +34,7 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
 
     private Pose2D lastGoodPose = new Pose2D(INCH, 0, 0, AngleUnit.DEGREES, 0);
     FieldDrawing fieldDrawing = new FieldDrawing();
+    double turretOffsetX = -81 / 25.4;
 
     public PinpointSubsystem(HardwareMap hMap) {
         pinpoint = hMap.get(GoBildaPinpointDriver.class, "pinpoint");
@@ -147,6 +149,9 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
     }
     public Rotation2d getRotationToPoint(Pose2d point){
         return new Rotation2d(AngleUnit.normalizeRadians(Math.PI+Math.atan2(point.getY() - getPose().getY(), point.getX() - getPose().getX())));
+    }
+    public Rotation2d getRotationToPointWithTurret(Pose2d point) {
+        return new Rotation2d(AngleUnit.normalizeRadians(Math.PI+Math.atan2(point.getY() - turretOffsetX*getHeading().getSin() - getPose().getY(), point.getX() - turretOffsetX*getHeading().getCos() - getPose().getX())));
     }
 }
 

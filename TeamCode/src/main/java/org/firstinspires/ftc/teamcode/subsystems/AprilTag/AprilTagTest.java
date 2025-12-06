@@ -22,10 +22,12 @@ public class AprilTagTest extends Robot {
             turret.setPowerManual(0);
             turret.periodic();
             Pose2d robotPose = aprilTag.getLocalization(turret.getTurretPosition(), pinpointSubsystem.getHeading());
-            pinpointSubsystem.setPose(robotPose);
-            telemetry.addData("Robot X", robotPose.getX());
-            telemetry.addData("Robot Y", robotPose.getY());
-            telemetry.addData("Robot Heading", robotPose.getRotation().getDegrees());
+            if (robotPose != null) {
+                pinpointSubsystem.setPose(robotPose);
+                telemetry.addData("Robot X", robotPose.getX());
+                telemetry.addData("Robot Y", robotPose.getY());
+                telemetry.addData("Robot Heading", robotPose.getRotation().getDegrees());
+            }
             telemetry.update();
         }
     }

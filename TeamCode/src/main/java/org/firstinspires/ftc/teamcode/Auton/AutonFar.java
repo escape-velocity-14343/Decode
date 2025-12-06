@@ -4,16 +4,22 @@ import android.util.Log;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.command.AprilTagMotifDetectionCommand;
 import org.firstinspires.ftc.teamcode.command.DefaultGoToPointCommand;
 import org.firstinspires.ftc.teamcode.command.GoToPointWithDefaultCommand;
 import org.firstinspires.ftc.teamcode.command.IntakeAutoCommandGroup;
+import org.firstinspires.ftc.teamcode.command.LogKittenCommand;
 import org.firstinspires.ftc.teamcode.command.MotifShootCommandGroup;
+import org.firstinspires.ftc.teamcode.command.TimeoutCommand;
+import org.firstinspires.ftc.teamcode.command.TurretAimDefaultCommand;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.turret.ConstantsTurret;
@@ -21,6 +27,7 @@ import org.firstinspires.ftc.teamcode.subsystems.turret.ConstantsTurret;
 
 public abstract class AutonFar extends Robot {
     DefaultGoToPointCommand toPoint;
+    Pose2d shootingPose = new Pose2d(-50, 12, Rotation2d.fromDegrees(180));
 
     public void run(int m) throws InterruptedException{
         initialize();
@@ -29,42 +36,45 @@ public abstract class AutonFar extends Robot {
         turret.setTargetPosition(ConstantsTurret.obeliskPosFar * m);
         setTurretCamExposure();
 
-        pinpointSubsystem.setPose(new Pose2d(-57.3, 18.8 * m, Rotation2d.fromDegrees(180)));
-        toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(-58, 21 * m, Rotation2d.fromDegrees(180)));
+        pinpointSubsystem.setPose(new Pose2d(-62, 18 * m, Rotation2d.fromDegrees(180)));
+        toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(-62, 18 * m, Rotation2d.fromDegrees(180)));
         drive.setDefaultCommand(toPoint);
         CommandScheduler.getInstance().cancelAll();
         CommandScheduler.getInstance().schedule(
-                new SequentialCommandGroup(
-                        new AprilTagMotifDetectionCommand(aprilTag),
-                        new GoToPointWithDefaultCommand(new Pose2d(-2, 12 * m, Rotation2d.fromDegrees(180)), toPoint).alongWith(new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosFar))),
-                        new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint),
+                new WaitCommand(0).alongWith(
+                        new TimeoutCommand(
+                                new SequentialCommandGroup(
+                                        new AprilTagMotifDetectionCommand(aprilTag),
+                                        new InstantCommand(() -> turret.setDefaultCommand(new TurretAimDefaultCommand(aprilTag, turret, pinpointSubsystem))),
+                                        new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, pinpointSubsystem).alongWith(new InstantCommand (()->Log.println(Log.ASSERT, "shooter aligned", "turret err: " + turret.getError()))),
 
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
-                                new GoToPointWithDefaultCommand(new Pose2d(-33, (28) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67)
-                                        .andThen(new GoToPointWithDefaultCommand(new Pose2d(-33, (36) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67)
-                                                .andThen(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<3))
-                                                .andThen(new GoToPointWithDefaultCommand(new Pose2d(-33, (42) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67))
-                                                .andThen(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<2))
-                                                .andThen(new GoToPointWithDefaultCommand(new Pose2d(-33, (64) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67)))),
-                        new GoToPointWithDefaultCommand(new Pose2d(-2, 12, Rotation2d.fromDegrees(180)), toPoint).alongWith(new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosFar))),
-                        new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint),
+                                        new GoToPointWithDefaultCommand(new Pose2d(-30, (23) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 10, 67),
+                                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
+                                                new RunCommand(() -> toPoint.setTarget(new Pose2d(Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getX(), -65, 65), Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getY(), -65, 65), Rotation2d.fromDegrees(90 * m)))).interruptOn(() -> !spindexer.hasSpace())), 5000),
+                                        new GoToPointWithDefaultCommand(shootingPose, toPoint).alongWith(new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosFar))),
+                                        new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, pinpointSubsystem).alongWith(new InstantCommand (()->Log.println(Log.ASSERT, "shooter aligned", "turret err: " + turret.getError()))),
 
-                        new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
-                                new GoToPointWithDefaultCommand(new Pose2d(-43, (67) * m, Rotation2d.fromDegrees((180) * m)), toPoint, 15, 67)
-                                        .andThen(new GoToPointWithDefaultCommand(new Pose2d(-45, (67) * m, Rotation2d.fromDegrees((180) * m)), toPoint, 15, 67)
-                                                .andThen(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<3))
-                                                .andThen(new GoToPointWithDefaultCommand(new Pose2d(-51, (67) * m, Rotation2d.fromDegrees((180) * m)), toPoint, 15, 67))
-                                                .andThen(new WaitUntilCommand(()-> spindexer.getRemainingSpace()<2))
-                                                .andThen(new GoToPointWithDefaultCommand(new Pose2d(-57, (67) * m, Rotation2d.fromDegrees((180) * m)), toPoint, 15, 67)))),
-                        new GoToPointWithDefaultCommand(new Pose2d(-2, 12, Rotation2d.fromDegrees(180)), toPoint).alongWith(new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosFar))),
-                        new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint)
+                                        new GoToPointWithDefaultCommand(new Pose2d(-40, (54) * m, Rotation2d.fromDegrees((175) * m)), toPoint, 10, 67),
+                                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
+                                                new RunCommand(() -> toPoint.setTarget(new Pose2d(Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getX(), -65, 65), Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getY(), -65, 65), Rotation2d.fromDegrees(175)))).interruptOn(() -> !spindexer.hasSpace())), 5000),
+                                        new GoToPointWithDefaultCommand(shootingPose, toPoint).alongWith(new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosFar))),
+                                        new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, pinpointSubsystem).alongWith(new InstantCommand (()->Log.println(Log.ASSERT, "shooter aligned", "turret err: " + turret.getError()))),
+
+                                        new GoToPointWithDefaultCommand(new Pose2d(-40, (54) * m, Rotation2d.fromDegrees((175) * m)), toPoint, 10, 67),
+                                        new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
+                                                new RunCommand(() -> toPoint.setTarget(new Pose2d(Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getX(), -65, 65), Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getY(), -65, 65), Rotation2d.fromDegrees(175)))).interruptOn(() -> !spindexer.hasSpace())), 5000),
+                                        new GoToPointWithDefaultCommand(shootingPose, toPoint).alongWith(new InstantCommand(() -> turret.setTargetPosition(ConstantsTurret.shootingPosFar))),
+                                        new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, pinpointSubsystem).alongWith(new InstantCommand (()->Log.println(Log.ASSERT, "shooter aligned", "turret err: " + turret.getError())))
+                                ), 29000).andThen(
+                                new GoToPointWithDefaultCommand(new Pose2d(-36.7, (46) * m, Rotation2d.fromDegrees(0)), toPoint)
+                        )
                 )
         );
         waitForStart();
         while (opModeIsActive()){
-            for (int i = 0; i < 3; i++){
-                Log.i("Motif", "ball" + StaticValues.getMotif(i));
-            }
+            //for (int i = 0; i < 3; i++){
+            //    Log.i("Motif", "ball" + StaticValues.getMotif(i));
+            //}
             //telemetry.addData("motif!", Robot.motif.toString());
             telemetry.addData("shooter", spindexer.getDegrees());
             update();

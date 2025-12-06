@@ -20,7 +20,6 @@ import org.firstinspires.ftc.teamcode.subsystems.AprilTag.AprilTagSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeCam.IntakeCamSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.PinpointSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.hood.HoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.spindexer.ColorSensorSubsystem;
@@ -38,8 +37,7 @@ import dev.nullftc.profiler.entry.BasicProfilerEntryFactory;
 import dev.nullftc.profiler.exporter.CSVProfilerExporter;
 
 public abstract class Robot extends LinearOpMode {
-//    public AprilTagSubsystem apriltag;
-    public HoodSubsystem hood;
+
     public IntakeSubsystem intake;
     public ShooterSubsystem shooter;
     public SpindexerSubsystem spindexer;
@@ -75,7 +73,6 @@ public abstract class Robot extends LinearOpMode {
         publicTelemetry = useTestTelemetry? telemetry : PanelsTelemetry.INSTANCE.getFtcTelemetry();
         artifactSensor = new ColorSensorSubsystem(hardwareMap);
         pinpointSubsystem = new PinpointSubsystem(hardwareMap);
-        hood = new HoodSubsystem(hardwareMap);
         drive = new MecanumDriveSubsystem(hardwareMap, () -> pinpointSubsystem.getHeading().getRadians());
         turret = new TurretSubsystem(hardwareMap, telemetry);
         intake = new IntakeSubsystem(hardwareMap);
@@ -105,6 +102,8 @@ public abstract class Robot extends LinearOpMode {
             timer.reset();
             loopTimerCounter = 0;
         }
+        telemetry.addData("ATAG FPS", aprilTag.getFPS());
+        telemetry.addData("Intake Cam FPS", intakeCam.getFPS());
 
         telemetry.update();
 
@@ -136,20 +135,5 @@ public abstract class Robot extends LinearOpMode {
         while(!(intakeCam.isStreaming()||timer.milliseconds()>670));
         telemetry.addData("Intake Camera has been initialized correctly: ",intakeCam.waitForSetExposure(67,67));
         telemetry.update();
-    }
-    protected void exportProfiler(File file) {
-        RobotLog.i("Starting async profiler export to: " + file.getAbsolutePath());
-
-        Thread exportThread = new Thread(() -> {
-            try {
-                profiler.export();
-                profiler.shutdown();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-        exportThread.setDaemon(true);
-        exportThread.start();
     }
 }

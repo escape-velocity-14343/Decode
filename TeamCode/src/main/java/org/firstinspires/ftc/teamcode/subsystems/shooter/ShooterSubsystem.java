@@ -31,9 +31,12 @@ public class ShooterSubsystem extends SubsystemBase {
         encoderMotor = (DcMotorEx) hwMap.get(DcMotor.class, "driveFrontLeft");
         //reverse right motor
         shooterMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        velocityLUT.add(0,0);
-        velocityLUT.add(50,-1750);
-        velocityLUT.add(100, -2050);
+        velocityLUT.add(0,-660);
+        velocityLUT.add(35, -1220);
+        velocityLUT.add(50,-1260);
+        velocityLUT.add(75, -1380);
+        velocityLUT.add(120,-1820);
+        velocityLUT.add(130, -1920);
         velocityLUT.createLUT();
 
     }
@@ -57,7 +60,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void shootFromDistance(double distance) {
         double velocity = ShooterConstants.closeVelocity;
         if (distance > 0 && distance < 200)
-            velocity = velocityLUT.get(Range.clip(distance, 0, 99));
+            velocity = velocityLUT.get(Range.clip(distance, 0, 129));
         Log.i("Shooter", "Shooting from distance: " + distance + " with velocity: " + velocity);
         setVelocity(velocity);
     }

@@ -13,9 +13,11 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.command.DefaultDriveCommand;
 import org.firstinspires.ftc.teamcode.command.IntakeAutoCommandGroup;
 import org.firstinspires.ftc.teamcode.command.IntakeOffCommand;
+import org.firstinspires.ftc.teamcode.command.IntakeOnCommand;
 import org.firstinspires.ftc.teamcode.command.MotifShootCommandGroup;
 import org.firstinspires.ftc.teamcode.command.PoopCommand;
 import org.firstinspires.ftc.teamcode.command.ShootCommandGroup;
+import org.firstinspires.ftc.teamcode.command.ShootWithDistCommand;
 import org.firstinspires.ftc.teamcode.command.ShooterIntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.command.ShooterOffCommand;
 import org.firstinspires.ftc.teamcode.command.TransferArmDownCommand;
@@ -45,14 +47,14 @@ public class TeleOpV2 extends Robot {
                 () -> -controller.getLeftX(),
                 controller::getRightX));
         turret.setDefaultCommand(new TurretAimDefaultCommand(aprilTag, turret, pinpointSubsystem));
+        //shooter.setDefaultCommand(new ShooterVelocityDefaultCommand(shooter, aprilTag));
 
-        controller.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel,  () -> 1, aprilTag, -1, () ->0));
-        controller.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, () -> 2, aprilTag, -1, () ->0));
-        controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint));
-        controller.getGamepadButton(GamepadKeys.Button.B).whenPressed(new PoopCommand(spindexer, shooter, transferWheel, transferArm, aprilTag, toPoint));
+        controller.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel,  () -> 1, pinpointSubsystem, -1, () ->0));
+        controller.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new ShootCommandGroup(shooter, spindexer, transferArm, transferWheel, () -> 2, pinpointSubsystem, -1, () ->0));
+        controller.getGamepadButton(GamepadKeys.Button.A).whenPressed(new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, pinpointSubsystem));
+        controller.getGamepadButton(GamepadKeys.Button.B).whenPressed(new PoopCommand(spindexer, shooter, transferWheel, transferArm, pinpointSubsystem));
         controller.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor));
         controller.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new InstantCommand(()->intake.setPower(-0.5))).whenReleased(new IntakeOffCommand(intake));
-        controller2.getGamepadButton(GamepadKeys.Button.A).whenPressed(new ShooterIntakeCommandGroup(shooter, spindexer));
         new Trigger(()-> gamepad1.options && gamepad1.share).whileActiveOnce(new InstantCommand(()->pinpointSubsystem.setPose(new Pose2d(pinpointSubsystem.getTranslation(), Rotation2d.fromDegrees(90 * StaticValues.getM())))));
         new Trigger(()-> gamepad1.touchpad).whileActiveOnce(new ParallelCommandGroup(
                 new IntakeOffCommand(intake),
@@ -61,27 +63,35 @@ public class TeleOpV2 extends Robot {
                 new InstantCommand(()->spindexer.setTargetPosition(spindexer.getDegrees())),
                 new ShooterOffCommand(shooter)
         ));
-        new Trigger(() -> !Util.inRange(gamepad2.left_stick_x, 0, 0.5)).whileActiveContinuous(()->spindexer.setPowerManual(gamepad2.left_stick_x)).whenInactive(()->spindexer.setPower(0));
-        controller2.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(()->{intakeCam.setEnabled(true); intakeCam.setEnableLiveView(true); aprilTag.setEnableLiveView(true);}));
-        controller2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()->{intakeCam.setEnabled(false); intakeCam.setEnableLiveView(false); aprilTag.setEnableLiveView(false);}));
+        new Trigger(() -> !Util.inRange(gamepad1.right_trigger, 0, 0.5)).whileActiveOnce(new IntakeOnCommand(intake)).whenInactive(new IntakeOffCommand(intake));
 
-        //offsetter.getGamepadButton(GamepadKeys.Button.X).whenPressed(new OffSetBallCommand(0));
-        //offsetter.getGamepadButton(GamepadKeys.Button.A).whenPressed(new OffSetBallCommand(1));
-        //offsetter.getGamepadButton(GamepadKeys.Button.B).whenPressed(new OffSetBallCommand(2));
-        //new Trigger(()-> controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5).whileActiveContinuous(new InstantCommand(()->aprilTag.detect()));
+        new Trigger(()-> gamepad2.touchpad).whileActiveOnce(new ParallelCommandGroup(
+                new IntakeOffCommand(intake),
+                new TransferArmDownCommand(transferArm),
+                new TransferWheelOffCommand(transferWheel),
+                new InstantCommand(()->spindexer.setTargetPosition(spindexer.getDegrees())),
+                new ShooterOffCommand(shooter)
+        ));
+        new Trigger(()->!spindexer.hasSpace()).whileActiveOnce(new ShootWithDistCommand(shooter, pinpointSubsystem)).whileActiveOnce(new InstantCommand(()->gamepad1.rumble(250)));
+        new Trigger(() -> !Util.inRange(gamepad2.left_stick_x, 0, 0.5)).whileActiveContinuous(()->spindexer.setPowerManual(gamepad2.left_stick_x)).whenInactive(()->spindexer.setPower(0));
+        //controller2.getGamepadButton(GamepadKeys.Button.X).whenPressed(new InstantCommand(()->{intakeCam.setEnabled(true); intakeCam.setEnableLiveView(true); aprilTag.setEnableLiveView(true);}));
+        //controller2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()->{intakeCam.setEnabled(false); intakeCam.setEnableLiveView(false); aprilTag.setEnableLiveView(false);}));
+        controller2.getGamepadButton(GamepadKeys.Button.A).whenPressed(new ShooterIntakeCommandGroup(shooter, spindexer));
+        controller2.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> toPoint.setTarget(new Pose2d(-37, 40, new Rotation2d(0)))));
+
         setTurretCamExposure();
         setIntakeCamExposure();
 
         waitForStart();
         intakeCam.setEnableLiveView(false);
         aprilTag.setEnableLiveView(false);
+        intakeCam.end();
         while (opModeIsActive()) {
             telemetry.addData("Pose x", pinpointSubsystem.getPose().getX());
             telemetry.addData("Pose y", pinpointSubsystem.getPose().getY());
             telemetry.addData("Pose heading", pinpointSubsystem.getHeading().getDegrees());
             telemetry.addData("Pose velocity", pinpointSubsystem.getTranslationalVelocity().getNorm());
-            telemetry.addData("ATAG FPS", aprilTag.getFPS());
-            telemetry.addData("Intake Cam FPS", intakeCam.getFPS());
+
             update();
         }
         //end();

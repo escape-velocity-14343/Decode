@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.Auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 
-@Autonomous(name = "Blue Auton Close", group = "Blue")
-@Disabled
-public class BlueAutonClose extends AutonClose {
+@Autonomous(name = "Blue Auton TW Auton", group = "Blue")
+public class BlueTwAuton extends TwAuton{
     @Override
     public void runOpMode() throws InterruptedException {
         Robot.blueAlliance = true;

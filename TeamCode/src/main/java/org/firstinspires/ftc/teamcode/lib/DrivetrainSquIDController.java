@@ -10,7 +10,7 @@ import com.bylazar.configurables.annotations.Configurable;
 @Configurable
 
 public class DrivetrainSquIDController {
-    public static double looptimeAdjuster = 1.5;
+    public static double looptimeAdjuster = 4;
 
     private ElapsedTime loopTime;
 
