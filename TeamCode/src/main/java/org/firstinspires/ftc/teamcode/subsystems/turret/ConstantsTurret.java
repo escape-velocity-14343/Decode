@@ -9,7 +9,7 @@ public class ConstantsTurret {
     public static double offset = 112;
 
     public static double targetposition = 0;
-    public static double kp = 0.0325;
+    public static double kp = 0.04;
     public static double apriltagkP = -0.025;
     public static double obeliskPosClose = -45;
     public static double shootingPosClose = -93;

@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.command.CreepOffCommand;
 import org.firstinspires.ftc.teamcode.command.CreepOnCommand;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 
 @Autonomous
+@Disabled
 public class IntakeCreepTest extends Robot {
     DefaultGoToPointCommand toPoint;
     @Override

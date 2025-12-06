@@ -30,6 +30,7 @@ public abstract class AutonFar extends Robot {
     Pose2d shootingPose = new Pose2d(-50, 12, Rotation2d.fromDegrees(180));
 
     public void run(int m) throws InterruptedException{
+        shootingPose = new Pose2d(-50, 12*m, Rotation2d.fromDegrees(180));
         initialize();
         StaticValues.resetMotif();
         StaticValues.resetArtifacts();
