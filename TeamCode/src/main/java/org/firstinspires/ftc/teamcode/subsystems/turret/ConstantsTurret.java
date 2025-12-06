@@ -6,10 +6,10 @@ import com.bylazar.configurables.annotations.Configurable;
 public class ConstantsTurret {
     public static double min = -90;
     public static double max = 90;
-    public static double offset = 115;
+    public static double offset = 112;
 
     public static double targetposition = 0;
-    public static double kp = 0.02;
+    public static double kp = 0.0267;
     public static double apriltagkP = -0.025;
     public static double obeliskPosClose = -45;
     public static double shootingPosClose = -93;

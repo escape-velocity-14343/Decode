@@ -89,6 +89,7 @@ public abstract class Robot extends LinearOpMode {
         StaticValues.setVoltageScalar(12.4/hardwareMap.getAll(VoltageSensor.class).iterator().next().getVoltage());
         intakeCam.setEnableLiveView(true);
         aprilTag.setEnableLiveView(true);
+
     }
 
     public void update() {

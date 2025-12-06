@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.command;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 
 import org.firstinspires.ftc.teamcode.lib.Localizer;
 import org.firstinspires.ftc.teamcode.lib.Util;
@@ -39,7 +40,7 @@ public class ShootWithDistCommand extends CommandBase {
             distance = atag.getDistance();
         }
         if (pinpointSubsystem != null) {
-            distance = pinpointSubsystem.getPose().getTranslation().getDistance(StaticValues.goalPos.getTranslation());
+            distance = pinpointSubsystem.getPose().getTranslation().getDistance(new Translation2d(StaticValues.goalPos.getX(), StaticValues.getM() * StaticValues.goalPos.getY()));
         }
         shooterSubsystem.shootFromDistance(distance);
     }

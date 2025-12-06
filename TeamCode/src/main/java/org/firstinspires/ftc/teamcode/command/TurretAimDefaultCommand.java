@@ -31,7 +31,7 @@ public class TurretAimDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         if (usePinpoint) {
-            targetRotation = pinpointSubsystem.getHeading().getDegrees() - pinpointSubsystem.getRotationToPoint(StaticValues.goalPos).getDegrees();
+            targetRotation = pinpointSubsystem.getHeading().getDegrees() - pinpointSubsystem.getRotationToPoint(new Pose2d(StaticValues.goalPos.getX(), StaticValues.getM() * StaticValues.goalPos.getY(), StaticValues.goalPos.getRotation())).getDegrees();
             targetRotation = AngleUnit.normalizeDegrees(targetRotation);
             if (Util.inRange(targetRotation, 0, 90))
                 turret.setTargetPosition(targetRotation);

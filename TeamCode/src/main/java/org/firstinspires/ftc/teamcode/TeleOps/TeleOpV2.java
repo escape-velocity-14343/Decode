@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOps;
 
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -7,6 +8,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
@@ -35,6 +37,7 @@ import dev.nullftc.profiler.exporter.CSVProfilerExporter;
 
 @TeleOp (name = "TeleOp V2", group = "LinearOpMode")
 public class TeleOpV2 extends Robot {
+    Translation2d cornerRelocPos = new Translation2d(-55, -59*StaticValues.getM());
     @Override
     public void runOpMode() throws InterruptedException{
         GamepadEx controller = new GamepadEx(gamepad1);
@@ -78,11 +81,15 @@ public class TeleOpV2 extends Robot {
         //controller2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(new InstantCommand(()->{intakeCam.setEnabled(false); intakeCam.setEnableLiveView(false); aprilTag.setEnableLiveView(false);}));
         controller2.getGamepadButton(GamepadKeys.Button.A).whenPressed(new ShooterIntakeCommandGroup(shooter, spindexer));
         controller2.getGamepadButton(GamepadKeys.Button.B).whenPressed(new InstantCommand(() -> toPoint.setTarget(new Pose2d(-37, 40, new Rotation2d(0)))));
+        controller.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
+                new InstantCommand(()->pinpointSubsystem.setPose(new Pose2d(cornerRelocPos, Rotation2d.fromDegrees(-90 * StaticValues.getM()))))
+        );
 
         setTurretCamExposure();
         setIntakeCamExposure();
 
         waitForStart();
+        cornerRelocPos = new Translation2d(-65, -59*StaticValues.getM());
         intakeCam.setEnableLiveView(false);
         aprilTag.setEnableLiveView(false);
         intakeCam.end();

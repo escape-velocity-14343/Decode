@@ -8,7 +8,7 @@ import com.bylazar.configurables.annotations.Configurable;
 
 @Configurable
 public class RobotPnP {
-    double rx = -1;
+    double rx = -3.5;
     double ry = 0;
     double rz = 12;
     double rp = Math.toRadians(-45); //robot xyz, robot pitch
