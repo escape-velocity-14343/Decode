@@ -45,15 +45,6 @@ public class ShootWithDistCommand extends CommandBase {
     }
     @Override
     public void execute() {
-        if (atag != null) {
-            distance = atag.getDistance();
-        }
-        if (pinpointSubsystem != null) {
-            distance = pinpointSubsystem.getPose().getTranslation().getDistance(StaticValues.goalPos.getTranslation());
-        }
-        if (distance < 85){
-            StaticValues.goalPos = new Pose2d(66, 66, new Rotation2d(0));
-        }
     }
     @Override
     public boolean isFinished() {

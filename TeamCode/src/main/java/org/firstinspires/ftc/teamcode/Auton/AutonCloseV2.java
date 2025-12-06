@@ -39,7 +39,7 @@ public abstract class AutonCloseV2 extends Robot {
         shooter.setVelocity(0);
         setTurretCamExposure();
         setIntakeCamExposure();
-        Pose2d shootingPose = new Pose2d(12, 12*m, Rotation2d.fromDegrees(135*m));
+        Pose2d shootingPose = new Pose2d(12, 21*m, Rotation2d.fromDegrees(135*m));
         pinpointSubsystem.setPose(new Pose2d(56.4, (46.8) * m, Rotation2d.fromDegrees(135 * m)));
         Log.i("AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading());
         toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(56.4, (46.8) * m, Rotation2d.fromDegrees(135 * m)));
@@ -60,20 +60,20 @@ public abstract class AutonCloseV2 extends Robot {
                                         new GoToPointWithDefaultCommand(new Pose2d(10, (20) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 20, 67).alongWith(new InstantCommand(()->toPoint.setDriveKP(-0.1))),
                                         new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
                                                 new InstantCommand(()->toPoint.setDriveKP(DefaultGoToPointCommand.translationkP)),
-                                                new RunCommand(() -> toPoint.setTarget(new Pose2d(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getX(), Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getY(), -55, 55), Rotation2d.fromDegrees(90 * m)))).interruptOn(() -> !spindexer.hasSpace())), 5000),
+                                                new RunCommand(() -> toPoint.setTarget(new Pose2d(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getX(), Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getY(), -54, 54), Rotation2d.fromDegrees(90 * m)))).interruptOn(() -> !spindexer.hasSpace())), 5000),
                                         new GoToPointWithDefaultCommand(shootingPose, toPoint).alongWith(new InstantCommand(()->toPoint.setDriveKP(DefaultGoToPointCommand.translationkP)), new InstantCommand(() -> intake.setPower(-1))), // shooting
                                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, pinpointSubsystem).alongWith(new InstantCommand(() -> intake.setPower(0))),
                                         new GoToPointWithDefaultCommand(new Pose2d(-17, (20) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67).alongWith(new InstantCommand(()->toPoint.setDriveKP(-0.1))),
                                         new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
                                                 new InstantCommand(()->toPoint.setDriveKP(DefaultGoToPointCommand.translationkP)),
-                                                new RunCommand(() -> toPoint.setTarget(new Pose2d(Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getX(), -24, -8), Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getY(), -63, 63), Rotation2d.fromDegrees(90 * m)))).interruptOn(() -> !spindexer.hasSpace())), 5000),
+                                                new RunCommand(() -> toPoint.setTarget(new Pose2d(Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getX(), -24, -8), Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getY(), -60, 60), Rotation2d.fromDegrees(90 * m)))).interruptOn(() -> !spindexer.hasSpace())), 5000),
                                         new GoToPointWithDefaultCommand(shootingPose, toPoint).alongWith(new InstantCommand(()->toPoint.setDriveKP(DefaultGoToPointCommand.translationkP)), new InstantCommand(() -> intake.setPower(-1))), // shooting
                                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, pinpointSubsystem).alongWith(new InstantCommand(() -> intake.setPower(0))),
 
                                         new GoToPointWithDefaultCommand(new Pose2d(-38, (20) * m, Rotation2d.fromDegrees((90) * m)), toPoint, 15, 67).alongWith(new InstantCommand(()->toPoint.setDriveKP(-0.1))),
                                         new TimeoutCommand(new IntakeAutoCommandGroup(spindexer, intake, artifactSensor).alongWith(
                                                 new InstantCommand(()->toPoint.setDriveKP(DefaultGoToPointCommand.translationkP)),
-                                                new RunCommand(() -> toPoint.setTarget(new Pose2d(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getX(), Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getY(), -63, 63), Rotation2d.fromDegrees(90 * m)))).interruptOn(() -> !spindexer.hasSpace())), 5000),
+                                                new RunCommand(() -> toPoint.setTarget(new Pose2d(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getX(), Range.clip(intakeCam.getFieldCoordinates(pinpointSubsystem.getPose()).getY(), -60, 60), Rotation2d.fromDegrees(90 * m)))).interruptOn(() -> !spindexer.hasSpace())), 5000),
                                         new GoToPointWithDefaultCommand(shootingPose, toPoint).alongWith(new InstantCommand(()->toPoint.setDriveKP(DefaultGoToPointCommand.translationkP)), new InstantCommand(() -> intake.setPower(-1))), // shooting
                                         new MotifShootCommandGroup(spindexer, shooter, transferWheel, transferArm, pinpointSubsystem).alongWith(new InstantCommand(() -> intake.setPower(0))),
                                         new GoToPointWithDefaultCommand(new Pose2d(-20, (24) * m, Rotation2d.fromDegrees(135 * m)), toPoint)), 29000).andThen(
