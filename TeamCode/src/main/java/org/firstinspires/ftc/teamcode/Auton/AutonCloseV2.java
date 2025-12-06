@@ -39,7 +39,7 @@ public abstract class AutonCloseV2 extends Robot {
         shooter.setVelocity(0);
         setTurretCamExposure();
         setIntakeCamExposure();
-        Pose2d shootingPose = new Pose2d(12, 21*m, Rotation2d.fromDegrees(135*m));
+        Pose2d shootingPose = new Pose2d(15, 15*m, Rotation2d.fromDegrees(160*m));
         pinpointSubsystem.setPose(new Pose2d(56.4, (46.8) * m, Rotation2d.fromDegrees(135 * m)));
         Log.i("AUTO PINPOINT", "x is" + pinpointSubsystem.getPose().getX() + "Y is" + pinpointSubsystem.getPose().getY() + "Heading is" + pinpointSubsystem.getPose().getHeading());
         toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(56.4, (46.8) * m, Rotation2d.fromDegrees(135 * m)));

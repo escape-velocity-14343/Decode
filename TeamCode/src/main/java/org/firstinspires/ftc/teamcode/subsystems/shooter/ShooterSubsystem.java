@@ -23,6 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     double targetVelocity = 0;
     InterpLUT velocityLUT = new InterpLUT();
+    InterpLUT AtagVelocityLUT = new InterpLUT();
     double lastPower = 0;
 
     public ShooterSubsystem (HardwareMap hwMap) {
@@ -31,14 +32,22 @@ public class ShooterSubsystem extends SubsystemBase {
         encoderMotor = (DcMotorEx) hwMap.get(DcMotor.class, "driveFrontLeft");
         //reverse right motor
         shooterMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        //pinpoint
         velocityLUT.add(0,-660);
-        velocityLUT.add(35, -1220);
-        velocityLUT.add(50,-1220);
-        velocityLUT.add(75, -1380);
+        velocityLUT.add(35, -1160);
+        velocityLUT.add(50,-1180);
+        velocityLUT.add(75, -1360);
         velocityLUT.add(120,-1820);
         velocityLUT.add(130, -1920);
         velocityLUT.createLUT();
 
+        AtagVelocityLUT.add(0,-660);
+        AtagVelocityLUT.add(35, -1180);
+        AtagVelocityLUT.add(50,-1200);
+        AtagVelocityLUT.add(75, -1240);
+        AtagVelocityLUT.add(120,-1840);
+        AtagVelocityLUT.add(130, -1940);
+        AtagVelocityLUT.createLUT();
     }
 
     public void on() {

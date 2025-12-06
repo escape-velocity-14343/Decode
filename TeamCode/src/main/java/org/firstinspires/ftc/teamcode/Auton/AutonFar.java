@@ -12,6 +12,7 @@ import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.teamcode.command.AprilTagMotifDetectionCommand;
 import org.firstinspires.ftc.teamcode.command.DefaultGoToPointCommand;
 import org.firstinspires.ftc.teamcode.command.GoToPointWithDefaultCommand;
@@ -27,22 +28,26 @@ import org.firstinspires.ftc.teamcode.subsystems.turret.ConstantsTurret;
 
 public abstract class AutonFar extends Robot {
     DefaultGoToPointCommand toPoint;
-    Pose2d shootingPose = new Pose2d(-50, 12, Rotation2d.fromDegrees(180));
+    Pose2d shootingPose = new Pose2d(-62, 12, Rotation2d.fromDegrees(180));
 
     public void run(int m) throws InterruptedException{
-        shootingPose = new Pose2d(-50, 12*m, Rotation2d.fromDegrees(180));
+        shootingPose = new Pose2d(-62, 12*m, Rotation2d.fromDegrees(180));
         initialize();
         StaticValues.resetMotif();
         StaticValues.resetArtifacts();
         turret.setTargetPosition(ConstantsTurret.obeliskPosFar * m);
         setTurretCamExposure();
-
-        pinpointSubsystem.setPose(new Pose2d(-62, 18 * m, Rotation2d.fromDegrees(180)));
+        if (m == -1) {
+            ConstantsTurret.offset = 114;
+        }
+        else {
+            ConstantsTurret.offset = 117;
+        }
         toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(-62, 18 * m, Rotation2d.fromDegrees(180)));
         drive.setDefaultCommand(toPoint);
         CommandScheduler.getInstance().cancelAll();
         CommandScheduler.getInstance().schedule(
-                new WaitCommand(0).alongWith(
+                new WaitCommand(0).andThen(
                         new TimeoutCommand(
                                 new SequentialCommandGroup(
                                         new AprilTagMotifDetectionCommand(aprilTag),
