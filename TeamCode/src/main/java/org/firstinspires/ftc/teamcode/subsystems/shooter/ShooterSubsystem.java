@@ -33,7 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
         velocityLUT.add(0,-660);
         velocityLUT.add(35, -1220);
-        velocityLUT.add(50,-1260);
+        velocityLUT.add(50,-1220);
         velocityLUT.add(75, -1380);
         velocityLUT.add(120,-1820);
         velocityLUT.add(130, -1920);
