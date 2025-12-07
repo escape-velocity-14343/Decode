@@ -100,4 +100,5 @@ public class StaticValues {
 
     public static double TRANSFER_ARM_MILLIS = 67.0;
     public static Pose2d goalPos = new Pose2d(72, 72, new Rotation2d(0));
+    public static double tagDist = 0;
 }

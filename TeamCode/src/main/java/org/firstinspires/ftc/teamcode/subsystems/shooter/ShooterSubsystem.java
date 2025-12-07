@@ -24,6 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
     double targetVelocity = 0;
     InterpLUT velocityLUT = new InterpLUT();
     InterpLUT AtagVelocityLUT = new InterpLUT();
+    InterpLUT usingLUT;
     double lastPower = 0;
 
     public ShooterSubsystem (HardwareMap hwMap) {
@@ -48,6 +49,16 @@ public class ShooterSubsystem extends SubsystemBase {
         AtagVelocityLUT.add(120,-1840);
         AtagVelocityLUT.add(130, -1940);
         AtagVelocityLUT.createLUT();
+
+        usingLUT = velocityLUT;
+    }
+
+    public void useAtag(boolean yes){
+        if (yes){
+            usingLUT = AtagVelocityLUT;
+        } else{
+            usingLUT = velocityLUT;
+        }
     }
 
     public void on() {
@@ -69,7 +80,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void shootFromDistance(double distance) {
         double velocity = ShooterConstants.closeVelocity;
         if (distance > 0 && distance < 200)
-            velocity = velocityLUT.get(Range.clip(distance, 0, 129));
+            velocity = usingLUT.get(Range.clip(distance, 0, 129));
         Log.i("Shooter", "Shooting from distance: " + distance + " with velocity: " + velocity);
         setVelocity(velocity);
     }

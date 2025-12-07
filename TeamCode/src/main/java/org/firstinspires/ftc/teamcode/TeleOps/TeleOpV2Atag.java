@@ -35,10 +35,11 @@ public class TeleOpV2Atag extends Robot {
     Translation2d cornerRelocPos = new Translation2d(-55, -59*StaticValues.getM());
     @Override
     public void runOpMode() throws InterruptedException{
-
         GamepadEx controller = new GamepadEx(gamepad1);
         GamepadEx controller2 = new GamepadEx(gamepad2);
         initialize();
+        shooter.useAtag(true);
+
         pinpointSubsystem.update();
         drive.setHeadingSupplier(() -> Math.toRadians(pinpointSubsystem.getHeading().getDegrees() - 90 * StaticValues.getM()));
         drive.setDefaultCommand(new DefaultDriveCommand(drive,

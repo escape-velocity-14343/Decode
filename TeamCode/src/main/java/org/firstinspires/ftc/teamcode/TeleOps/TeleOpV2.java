@@ -28,6 +28,7 @@ import org.firstinspires.ftc.teamcode.command.TurretAimDefaultCommand;
 import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSubsystem;
 
 import java.io.File;
 
@@ -40,6 +41,7 @@ public class TeleOpV2 extends Robot {
     Translation2d cornerRelocPos = new Translation2d(-55, -59*StaticValues.getM());
     @Override
     public void runOpMode() throws InterruptedException{
+        shooter.useAtag(false);
         GamepadEx controller = new GamepadEx(gamepad1);
         GamepadEx controller2 = new GamepadEx(gamepad2);
         initialize();
