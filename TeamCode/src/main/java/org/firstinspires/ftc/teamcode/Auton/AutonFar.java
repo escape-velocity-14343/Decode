@@ -31,19 +31,20 @@ public abstract class AutonFar extends Robot {
     Pose2d shootingPose = new Pose2d(-62, 12, Rotation2d.fromDegrees(180));
 
     public void run(int m) throws InterruptedException{
-        shootingPose = new Pose2d(-62, 12*m, Rotation2d.fromDegrees(180));
+        shootingPose = new Pose2d(-50, 12*m, Rotation2d.fromDegrees(180));
         initialize();
         StaticValues.resetMotif();
         StaticValues.resetArtifacts();
         turret.setTargetPosition(ConstantsTurret.obeliskPosFar * m);
+        pinpointSubsystem.setPose(new Pose2d(-62, 12, Rotation2d.fromDegrees(180)));
         setTurretCamExposure();
         if (m == -1) {
             ConstantsTurret.offset = 114;
         }
         else {
-            ConstantsTurret.offset = 117;
+            ConstantsTurret.offset = 112;
         }
-        toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(-62, 18 * m, Rotation2d.fromDegrees(180)));
+        toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(-62, 12 * m, Rotation2d.fromDegrees(180)));
         drive.setDefaultCommand(toPoint);
         CommandScheduler.getInstance().cancelAll();
         CommandScheduler.getInstance().schedule(
