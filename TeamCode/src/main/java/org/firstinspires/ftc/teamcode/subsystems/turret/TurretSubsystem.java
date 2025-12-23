@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems.turret;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -13,6 +14,8 @@ import org.firstinspires.ftc.teamcode.lib.SquIDController;
 import org.firstinspires.ftc.teamcode.lib.ThaiVPController;
 import org.firstinspires.ftc.teamcode.lib.Util;
 import org.firstinspires.ftc.teamcode.lib.sensOrangeEncoder;
+import org.firstinspires.ftc.teamcode.subsystems.PinpointSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.robot.StaticValues;
 
 public class TurretSubsystem extends SubsystemBase {
     private DcMotor turretMotor;
@@ -22,6 +25,8 @@ public class TurretSubsystem extends SubsystemBase {
     private Telemetry telemetry;
     boolean manualControl = false;
     double lastPower = 0;
+
+    boolean useMoveShoot = false;
 
     public TurretSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         powerManage = new ThaiVPController();
@@ -41,6 +46,10 @@ public class TurretSubsystem extends SubsystemBase {
     public double getTurretPosition() {
         return turretEncoder.getDegrees();
     }
+
+    public double getTurretPositionRadians(){
+        return turretEncoder.getRadians();
+    }
     private void setPower(double power) {
         if (Util.inRange(lastPower, power, 0.01))
             return;
@@ -56,6 +65,12 @@ public class TurretSubsystem extends SubsystemBase {
     }
     public double getError() {
         return AngleUnit.normalizeDegrees(targetpos - turretEncoder.getDegrees());
+    }
+
+    public Pose2d movingShoot(PinpointSubsystem robotPose){
+        double yTranslation = robotPose.getVelocity().getY()*ConstantsTurret.ballTravelTime;
+        double xTranslation = robotPose.getVelocity().getX()*ConstantsTurret.ballTravelTime;
+        return new Pose2d(StaticValues.goalPos.getY() + yTranslation, StaticValues.goalPos.getX() + xTranslation, StaticValues.goalPos.getRotation());
     }
 
     @Override

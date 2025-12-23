@@ -21,7 +21,7 @@ public class AprilTagTest extends Robot {
             aprilTag.periodic();
             turret.setPowerManual(0);
             turret.periodic();
-            Pose2d robotPose = aprilTag.getLocalization(turret.getTurretPosition(), pinpointSubsystem.getHeading());
+            Pose2d robotPose = aprilTag.getLocalization(turret.getTurretPositionRadians(), pinpointSubsystem.getHeading());
             if (robotPose != null) {
                 pinpointSubsystem.setPose(robotPose);
                 telemetry.addData("Robot X", robotPose.getX());

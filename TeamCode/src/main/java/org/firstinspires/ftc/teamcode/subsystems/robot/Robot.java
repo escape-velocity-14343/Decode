@@ -32,9 +32,6 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import java.io.File;
 import java.util.List;
 
-import dev.nullftc.profiler.Profiler;
-import dev.nullftc.profiler.entry.BasicProfilerEntryFactory;
-import dev.nullftc.profiler.exporter.CSVProfilerExporter;
 
 public abstract class Robot extends LinearOpMode {
 
@@ -57,7 +54,6 @@ public abstract class Robot extends LinearOpMode {
     int loopTimerCounter = 0;
     double loopTime = 0;
     public DefaultGoToPointCommand toPoint;
-    public Profiler profiler;
 
     public static boolean useTestTelemetry = true;
 

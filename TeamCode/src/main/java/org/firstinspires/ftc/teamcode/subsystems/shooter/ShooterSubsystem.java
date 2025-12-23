@@ -38,14 +38,14 @@ public class ShooterSubsystem extends SubsystemBase {
         velocityLUT.add(35, -1160);
         velocityLUT.add(50,-1180);
         velocityLUT.add(75, -1360);
-        velocityLUT.add(120,-1820);
-        velocityLUT.add(130, -1920);
+        velocityLUT.add(120,-1880);
+        velocityLUT.add(130, -1980);
         velocityLUT.createLUT();
 
         AtagVelocityLUT.add(0,-660);
-        AtagVelocityLUT.add(35, -1180);
-        AtagVelocityLUT.add(50,-1200);
-        AtagVelocityLUT.add(75, -1240);
+        AtagVelocityLUT.add(35, -1220);
+        AtagVelocityLUT.add(50,-1300);
+        AtagVelocityLUT.add(75, -1400);
         AtagVelocityLUT.add(120,-1840);
         AtagVelocityLUT.add(130, -1940);
         AtagVelocityLUT.createLUT();
@@ -90,10 +90,10 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public double getVelocity(){
-        return encoderMotor.getVelocity();
+        return -encoderMotor.getVelocity();
     }
     public boolean atVelocity() {
-        return Util.inRange(targetVelocity, encoderMotor.getVelocity(),  ShooterConstants.tolerance);
+        return Util.inRange(targetVelocity, getVelocity(),  ShooterConstants.tolerance);
 
     }
 
@@ -104,9 +104,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Robot.getTelemetry().addData("shooter velocity", encoderMotor.getVelocity());
+        Robot.getTelemetry().addData("shooter velocity", getVelocity());
         velocityController.setPID(ShooterConstants.kvp);
-        setPower(velocityController.calculate(targetVelocity, encoderMotor.getVelocity()) + ShooterConstants.kv * targetVelocity);
+        setPower(velocityController.calculate(targetVelocity, getVelocity()) + ShooterConstants.kv * targetVelocity);
     }
 
 }

@@ -89,7 +89,7 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
     }
 
     public int[] getEncoderCounts() {
-        return new int[]{pinpoint.getEncoderX(), pinpoint.getEncoderY()};
+        return new int[] {pinpoint.getEncoderX(), pinpoint.getEncoderY()};
     }
 
     public Pose2d getPose() {

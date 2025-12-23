@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.command.GoToPointWithDefaultCommand;
 import org.firstinspires.ftc.teamcode.command.IntakeAutoCommandGroup;
 import org.firstinspires.ftc.teamcode.command.LogKittenCommand;
 import org.firstinspires.ftc.teamcode.command.MotifShootCommandGroup;
+import org.firstinspires.ftc.teamcode.command.ShootWithDistCommand;
 import org.firstinspires.ftc.teamcode.command.TimeoutCommand;
 import org.firstinspires.ftc.teamcode.command.TurretAimDefaultCommand;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
@@ -32,23 +33,20 @@ public abstract class AutonFar extends Robot {
 
     public void run(int m) throws InterruptedException{
         shootingPose = new Pose2d(-50, 12*m, Rotation2d.fromDegrees(180));
+
         initialize();
+        shooter.useAtag(false);
         StaticValues.resetMotif();
         StaticValues.resetArtifacts();
         turret.setTargetPosition(ConstantsTurret.obeliskPosFar * m);
-        pinpointSubsystem.setPose(new Pose2d(-62, 12, Rotation2d.fromDegrees(180)));
+        pinpointSubsystem.setPose(new Pose2d(-62, 24*m, Rotation2d.fromDegrees(180)));
         setTurretCamExposure();
-        if (m == -1) {
-            ConstantsTurret.offset = 114;
-        }
-        else {
-            ConstantsTurret.offset = 110;
-        }
-        toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(-62, 12 * m, Rotation2d.fromDegrees(180)));
+        toPoint = new DefaultGoToPointCommand(drive, pinpointSubsystem, new Pose2d(-62, 24 * m, Rotation2d.fromDegrees(180)));
         drive.setDefaultCommand(toPoint);
         CommandScheduler.getInstance().cancelAll();
         CommandScheduler.getInstance().schedule(
-                new WaitCommand(0).andThen(
+                new ShootWithDistCommand(shooter, pinpointSubsystem),
+                new WaitCommand(1500).andThen(
                         new TimeoutCommand(
                                 new SequentialCommandGroup(
                                         new AprilTagMotifDetectionCommand(aprilTag),

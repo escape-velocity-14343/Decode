@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.command;
 
+import android.util.Log;
+
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
@@ -20,6 +22,7 @@ public class TurretAimDefaultCommand extends CommandBase {
     private PinpointSubsystem pinpointSubsystem;
     boolean usePinpoint = true;
     double targetRotation = 0;
+    //Pose2d goalPos;
 
     public TurretAimDefaultCommand(AprilTagSubsystem aprilTag, TurretSubsystem turret, PinpointSubsystem pinpointSubsystem) {
         this.aprilTag = aprilTag;
@@ -30,11 +33,17 @@ public class TurretAimDefaultCommand extends CommandBase {
 
     @Override
     public void execute() {
+        if (aprilTag.tagSeen()){
+            pinpointSubsystem.setPose(aprilTag.getLocalization(turret.getTurretPositionRadians(), pinpointSubsystem.getHeading()));
+        }
+        Pose2d goalPos = turret.movingShoot(pinpointSubsystem);
         if (usePinpoint) {
-            targetRotation = pinpointSubsystem.getHeading().getDegrees() - pinpointSubsystem.getRotationToPoint(new Pose2d(StaticValues.goalPos.getX(), StaticValues.getM() * StaticValues.goalPos.getY(), StaticValues.goalPos.getRotation())).getDegrees();
+            targetRotation = pinpointSubsystem.getHeading().getDegrees() - pinpointSubsystem.getRotationToPoint(new Pose2d(goalPos.getX(), StaticValues.getM() * goalPos.getY(), goalPos.getRotation())).getDegrees();
             targetRotation = AngleUnit.normalizeDegrees(targetRotation);
-            if (Util.inRange(targetRotation, 0, 75))
+            if (Util.inRange(targetRotation, 0, 75)) {
+                Log.i("Turret", "Updated Target Degrees: " + targetRotation);
                 turret.setTargetPosition(targetRotation);
+            }
         }
         else if (aprilTag.getBearing() != 0)
             turret.setPowerManual(ConstantsTurret.apriltagkP * (aprilTag.getBearing() + ConstantsTurret.aprilTagOffset));

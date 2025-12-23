@@ -42,7 +42,7 @@ public class ShootWithDistCommand extends CommandBase {
         if (pinpointSubsystem != null) {
             distance = pinpointSubsystem.getPose().getTranslation().getDistance(new Translation2d(StaticValues.goalPos.getX(), StaticValues.getM() * StaticValues.goalPos.getY()));
         }
-        shooterSubsystem.shootFromDistance(distance);
+        shooterSubsystem.shootFromDistance(StaticValues.tagDist);
     }
     @Override
     public void execute() {
