@@ -33,9 +33,11 @@ public class TurretAimDefaultCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (aprilTag.tagSeen()){
-            pinpointSubsystem.setPose(aprilTag.getLocalization(turret.getTurretPositionRadians(), pinpointSubsystem.getHeading()));
-        }
+
+        //if (aprilTag.tagSeen()){
+        //    pinpointSubsystem.setTranslation(aprilTag.getLocalization(turret.getTurretPositionRadians(), pinpointSubsystem.getHeading()));
+        //}
+
         Pose2d goalPos = turret.movingShoot(pinpointSubsystem);
         if (usePinpoint) {
             targetRotation = pinpointSubsystem.getHeading().getDegrees() - pinpointSubsystem.getRotationToPoint(new Pose2d(goalPos.getX(), StaticValues.getM() * goalPos.getY(), goalPos.getRotation())).getDegrees();

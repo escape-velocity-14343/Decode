@@ -27,7 +27,7 @@ public class AprilTagAimDefaultCommand extends CommandBase {
 
     @Override
     public void execute() {
-        pinpointSubsystem.setPose(aprilTag.getLocalization(turret.getTurretPositionRadians(), pinpointSubsystem.getHeading()));
+        pinpointSubsystem.setTranslation(aprilTag.getLocalization(turret.getTurretPositionRadians(), pinpointSubsystem.getHeading()));
         if (usePinpoint) {
             targetRotation = pinpointSubsystem.getHeading().getDegrees() - pinpointSubsystem.getRotationToPoint(new Pose2d(StaticValues.goalPos.getX(), StaticValues.getM() * StaticValues.goalPos.getY(), StaticValues.goalPos.getRotation())).getDegrees();
             targetRotation = AngleUnit.normalizeDegrees(targetRotation);

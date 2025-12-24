@@ -35,6 +35,7 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
     private Pose2D lastGoodPose = new Pose2D(INCH, 0, 0, AngleUnit.DEGREES, 0);
     FieldDrawing fieldDrawing = new FieldDrawing();
     double turretOffsetX = -81 / 25.4;
+    Pose2d offset = new Pose2d(0, 0, new Rotation2d(0));
 
     public PinpointSubsystem(HardwareMap hMap) {
         pinpoint = hMap.get(GoBildaPinpointDriver.class, "pinpoint");
@@ -94,14 +95,18 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
 
     public Pose2d getPose() {
         return new Pose2d(
-                getSDKPose().getX(INCH),
-                getSDKPose().getY(INCH),
-                Rotation2d.fromDegrees(getSDKPose().getHeading(AngleUnit.DEGREES)));
+                getSDKPose().getX(INCH) + offset.getX(),
+                getSDKPose().getY(INCH) + offset.getY(),
+                Rotation2d.fromDegrees(getSDKPose().getHeading(AngleUnit.DEGREES)).plus(offset.getRotation()));
     }
 
     @Override
     public void setPose(Pose2d pose) {
         pinpoint.setPosition(Pose2DConverter(pose));
+    }
+
+    public void setTranslation(Translation2d translation) {
+        pinpoint.setPosition(new Pose2D(INCH, translation.getX(), translation.getY(), AngleUnit.DEGREES, pinpoint.getHeading(AngleUnit.DEGREES)));
     }
 
     @Override
@@ -153,6 +158,13 @@ public class PinpointSubsystem extends SubsystemBase implements Localizer {
     public Rotation2d getRotationToPointWithTurret(Pose2d point) {
         return new Rotation2d(AngleUnit.normalizeRadians(Math.PI+Math.atan2(point.getY() - turretOffsetX*getHeading().getSin() - getPose().getY(), point.getX() - turretOffsetX*getHeading().getCos() - getPose().getX())));
     }
+    public void setOffset(Pose2d offset){
+        this.offset = offset;
+    }
+    public void relocalize(Translation2d newPose){
+        setOffset(new Pose2d(newPose.minus(getTranslation()), offset.getRotation()));
+    }
+
 }
 
 
