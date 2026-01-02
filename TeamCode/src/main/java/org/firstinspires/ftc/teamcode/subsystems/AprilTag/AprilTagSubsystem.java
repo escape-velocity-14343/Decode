@@ -147,34 +147,30 @@ public class AprilTagSubsystem extends SubsystemBase {
         if (relocTag == null || stale) {
             return null;
         }
-        double bearing = Math.atan(Math.tan(Math.toRadians(relocTag.ftcPose.bearing)) / Math.cos(cameraPitch.getRadians()));
+
         telemetry.addData("RELOC TAG: robot angle in radians", robotAngle.getRadians());
         telemetry.addData("RELOC TAG: turret angle in radians", turretAngle);
-        telemetry.addData("RELOC TAG: ground bearing in radians", Math.toRadians(bearing));
-        telemetry.addData("RELOC TAG: tag bearing in radians", Math.toRadians(relocTag.ftcPose.bearing));
+        telemetry.addData("RELOC TAG: bearing in radians", Math.toRadians(relocTag.ftcPose.bearing));
         telemetry.addData("RELOC TAG: distance", getDistance());
-        double theta = Math.PI - (Math.abs(robotAngle.getRadians()) - (Math.PI/2)) +turretAngle-Math.toRadians(relocTag.ftcPose.bearing);
-        telemetry.addData("RELOC TAG: total angle in radians", (theta/* + bearing*/));
-
+        telemetry.addData("RELOC TAG: total angle in radians", (robotAngle.getRadians() - Math.PI - turretAngle/* + bearing*/));
+        double bearing = Math.atan(Math.tan(Math.toRadians(relocTag.ftcPose.bearing)) / Math.cos(cameraPitch.getRadians()));
         //relative to camera
-        double x = 66 - Math.cos(theta)*getDistance();
-        double y = 66 - Math.sin(theta)*getDistance();
-
-        telemetry.addData("RELOC TAG: pos before offset", "x: " + x + ", y: " + y);
+        double x = /*-66 + */ Math.cos(/*robotAngle.getRadians() - Math.PI*/ - turretAngle + bearing)*getDistance();
+        double y = /*66 + */ Math.sin(/*robotAngle.getRadians() - Math.PI*/ - turretAngle + bearing)*getDistance();
 
         //camera pose from turret
         double camX = Math.cos(/*robotAngle.getRadians() - Math.PI */- turretAngle) * camToTurretDist;
         double camY = Math.sin(/*robotAngle.getRadians() - Math.PI*/ - turretAngle) * camToTurretDist;
 
         //turret pose from robot
-        double turretX = Math.sin(robotAngle.getRadians()) * turretToRobotDist;
-        double turretY = -Math.cos(robotAngle.getRadians()) * turretToRobotDist;
+        //double turretX = Math.sin(robotAngle.getRadians()) * turretToRobotDist;
+        //double turretY = -Math.cos(robotAngle.getRadians()) * turretToRobotDist;
 
-        telemetry.addData("RELOC TAG: offset X", camX + turretX);
-        telemetry.addData("RELOC TAG: offset Y", camY + turretY);
-        x += camX + turretToRobotDist + turretX;
-        y += camY + turretY;
-        Translation2d newPose = new Translation2d(x, y);
+        //telemetry.addData("RELOC TAG: offset X", camX + turretX);
+        //telemetry.addData("RELOC TAG: offset Y", camY + turretY);
+        x += camX + turretToRobotDist;// + turretX;
+        y += camY;// + turretY;
+        Pose2d newPose = new Pose2d(x, y, robotAngle);
         //AprilTagPoseFtc tag = relocTag.ftcPose;
         //Rotation2d turretRotation = Rotation2d.fromDegrees(AngleUnit.normalizeDegrees(180 - turretAngle));
         //telemetry.addData("Turret Angle", turretRotation.getDegrees());
@@ -190,9 +186,9 @@ public class AprilTagSubsystem extends SubsystemBase {
         //Translation2d robotPose = new Translation2d(tagDist * turretRotation.getCos() - tagSideways * turretRotation.getSin() - robotRelativeCameraPose.getX(), tagDist * turretRotation.getSin() + tagSideways * turretRotation.getCos() - robotRelativeCameraPose.getY());
         telemetry.addData("Robot Pose X", newPose.getX());
         telemetry.addData("Robot Pose Y", newPose.getY());
-        //new Translation2d()
-        //newPose = new Pose2d(newPose.getTranslation().rotateBy(robotAngle.times(-1)), robotAngle);
-        return newPose;
+
+        newPose = new Pose2d(newPose.getTranslation().rotateBy(robotAngle.times(-1)), robotAngle);
+        return newPose.getTranslation();
     }
     public void end() {
         visionPortal.close();
